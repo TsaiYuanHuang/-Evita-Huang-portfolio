@@ -101,8 +101,8 @@
   /* ABOUT */
   .about-strip { padding: 96px 5%; max-width: 800px; margin: 0 auto; }
   .about-label { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange); margin-bottom: 16px; }
-  .about-name { font-family: 'DM Serif Display', 'Noto Serif TC', serif; font-size: clamp(32px, 4vw, 52px); letter-spacing: -1px; line-height: 1.05; color: var(--ink); margin-bottom: 20px; }
-  body.lang-zh .about-name { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; }
+  .about-name { font-family: 'DM Serif Display', 'Noto Serif TC', serif; font-size: clamp(32px, 4vw, 52px); letter-spacing: -0.8px; line-height: 1.05; color: var(--ink); margin-bottom: 20px; font-weight: 400; }
+  body.lang-zh .about-name { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(32px, 4vw, 52px); }
   .about-bio { font-size: 17px; color: var(--ink-60); line-height: 1.8; max-width: 640px; margin-bottom: 32px; }
   .about-tags { display: flex; flex-wrap: wrap; gap: 8px; }
   .about-tag { font-size: 13px; font-weight: 500; color: var(--ink-60); border: 1px solid var(--ink-20); padding: 5px 12px; border-radius: var(--radius-pill); background: var(--white); }
@@ -298,7 +298,7 @@
 <!-- ABOUT -->
 <section class="about-strip" id="about">
   <div class="about-label"><span data-zh>關於我</span><span data-en>About</span></div>
-  <div class="about-name">黃采媛 Evita Huang</div>
+  <div class="about-name"><span data-zh>黃采媛</span><span data-en>Evita Huang</span></div>
   <p class="about-bio" data-zh>UX researcher，專注於混合研究方法設計，以及將複雜的使用者行為轉化為驅動產品決策的工具與框架。</p>
   <p class="about-bio" data-en>UX researcher specializes in mixed-method research and translating complex user behavior into tools and frameworks that drive product decisions.</p>
 </section>
