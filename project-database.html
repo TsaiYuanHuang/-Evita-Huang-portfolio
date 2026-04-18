@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecting a Scalable Insight Repository — Evita Huang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #E8622A; --orange-light: #FDF0EA; --orange-mid: #F5A07A; --orange-dark: #B84A1B;
+    --teal: #1D9E75; --teal-light: #E1F5EE;
+    --ink: #1C1A18; --ink-60: #6B6760; --ink-20: #E8E6E2;
+    --surface: #FAF9F7; --white: #FFFFFF;
+    --radius-sm: 8px; --radius-md: 14px; --radius-lg: 24px; --radius-pill: 999px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); line-height: 1.6; font-size: 16px; }
+  body.lang-zh { font-family: 'Noto Sans TC', 'DM Sans', sans-serif; }
+
+  [data-zh], [data-en] { display: none; }
+  span[data-zh], span[data-en] { display: none; }
+  body.lang-zh span[data-zh] { display: inline; }
+  body.lang-en span[data-en] { display: inline; }
+  p[data-zh], p[data-en], h1[data-zh], h1[data-en], h2[data-zh], h2[data-en],
+  h3[data-zh], h3[data-en], h4[data-zh], h4[data-en], li[data-zh], li[data-en],
+  div[data-zh], div[data-en] { display: none; }
+  body.lang-zh p[data-zh], body.lang-zh h1[data-zh], body.lang-zh h2[data-zh],
+  body.lang-zh h3[data-zh], body.lang-zh h4[data-zh], body.lang-zh li[data-zh],
+  body.lang-zh div[data-zh] { display: block; }
+  body.lang-en p[data-en], body.lang-en h1[data-en], body.lang-en h2[data-en],
+  body.lang-en h3[data-en], body.lang-en h4[data-en], body.lang-en li[data-en],
+  body.lang-en div[data-en] { display: block; }
+
+  nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 64px; background: rgba(250,249,247,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ink-20); }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ink-60); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .lang-toggle { display: flex; align-items: center; border: 1.5px solid var(--ink-20); border-radius: var(--radius-pill); overflow: hidden; }
+  .lang-btn { padding: 5px 13px; cursor: pointer; color: var(--ink-60); background: transparent; border: none; font-size: 13px; font-weight: 600; font-family: inherit; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+  .lang-btn.active { background: var(--orange); color: var(--white); }
+  .lang-btn:not(.active):hover { background: var(--ink-20); color: var(--ink); }
+
+  /* HERO */
+  .case-hero { padding: 72px 5% 64px; max-width: 1000px; margin: 0 auto; }
+  .case-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .case-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange-dark); background: var(--orange-light); padding: 4px 12px; border-radius: var(--radius-pill); }
+  .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
+  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
+  body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
+  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; max-width: 640px; margin-bottom: 40px; }
+  .case-kpis { display: flex; gap: 12px; flex-wrap: wrap; }
+  .kpi-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 22px; min-width: 130px; }
+  .kpi-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
+  .kpi-label { font-size: 12px; color: var(--ink-60); font-weight: 500; }
+
+  /* BODY */
+  .case-body { max-width: 1000px; margin: 0 auto; padding: 0 5% 96px; }
+  .case-section { margin-bottom: 72px; }
+  .section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+  .section-icon { width: 44px; height: 44px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .section-icon svg { width: 22px; height: 22px; }
+  .case-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
+  body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 30px); }
+  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
+  .case-section p:last-child { margin-bottom: 0; }
+  .case-section p strong { color: var(--ink); font-weight: 600; }
+  .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
+
+  /* PROBLEM CALLOUT */
+  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; max-width: 680px; }
+  .problem-callout p { color: var(--ink); font-size: 16px; line-height: 1.75; margin: 0; }
+  .problem-callout p strong { color: var(--orange-dark); }
+
+  /* BEFORE / AFTER */
+  .before-after { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; border-radius: var(--radius-lg); overflow: hidden; margin: 28px 0; }
+  .ba-col { padding: 28px 30px; }
+  .ba-col.before { background: #F0EEE9; }
+  .ba-col.after { background: var(--orange-light); }
+  .ba-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .ba-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .ba-col.before .ba-dot { background: #B4B2A9; }
+  .ba-col.after .ba-dot { background: var(--orange); }
+  .ba-title { font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; }
+  .ba-col.before .ba-title { color: var(--ink-60); }
+  .ba-col.after .ba-title { color: var(--orange-dark); }
+  .ba-subtitle { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: -0.3px; margin-bottom: 16px; color: var(--ink); }
+  body.lang-zh .ba-subtitle { font-family: 'Noto Serif TC', serif; font-size: 16px; font-weight: 600; letter-spacing: 0; }
+  .ba-group { margin-bottom: 16px; }
+  .ba-group-label { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink-60); margin-bottom: 6px; }
+  .ba-col.after .ba-group-label { color: var(--orange-dark); }
+  .ba-col ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .ba-col ul li { font-size: 13px; line-height: 1.55; padding-left: 18px; position: relative; }
+  .ba-col.before ul li { color: var(--ink-60); }
+  .ba-col.before ul li::before { content: ''; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: #C8C5BC; }
+  .ba-col.after ul li { color: var(--ink); }
+  .ba-col.after ul li::before { content: ''; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
+
+  /* THREE LAYERS */
+  .three-layers { display: flex; flex-direction: column; gap: 1px; border-radius: var(--radius-lg); overflow: hidden; margin: 28px 0; }
+  .layer-row { background: var(--white); padding: 22px 26px; display: flex; align-items: flex-start; gap: 20px; }
+  .layer-row:hover { background: #FEFDFB; }
+  .layer-badge { flex-shrink: 0; width: 36px; height: 36px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+  .layer-badge svg { width: 18px; height: 18px; }
+  .layer-content { flex: 1; }
+  .layer-num { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); margin-bottom: 4px; }
+  .layer-content h4 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; line-height: 1.3; }
+  body.lang-zh .layer-content h4 { font-size: 14px; }
+  .layer-content p { font-size: 13px; color: var(--ink-60); line-height: 1.6; margin: 0; }
+  .layer-separator { height: 1px; background: var(--ink-20); }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-lg); padding: 32px; margin: 28px 0; }
+  .highlight-box h3 { font-family: 'DM Serif Display', serif; font-size: 20px; letter-spacing: -0.3px; margin-bottom: 20px; color: var(--ink); }
+  body.lang-zh .highlight-box h3 { font-family: 'Noto Serif TC', serif; font-weight: 600; letter-spacing: 0; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .col-card { background: var(--surface); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 22px; }
+  .col-card-icon { width: 32px; height: 32px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+  .col-card-icon svg { width: 16px; height: 16px; }
+  .col-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+  body.lang-zh .col-card h4 { font-size: 13px; }
+  .col-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .col-card ul li { font-size: 13px; color: var(--ink-60); line-height: 1.55; padding-left: 16px; position: relative; }
+  .col-card ul li::before { content: '—'; position: absolute; left: 0; color: var(--orange-mid); }
+
+  /* CONTRIBUTION CARDS */
+  .contribution-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin: 24px 0; }
+  .contribution-card { background: var(--white); border: 1px solid var(--ink-20); border-top: 3px solid var(--orange); border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 22px; }
+  .c-label { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 0.5px; margin-bottom: 8px; }
+  .contribution-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 8px; line-height: 1.35; }
+  body.lang-zh .contribution-card h4 { font-size: 13px; }
+  .contribution-card p { font-size: 13px; color: var(--ink-60); line-height: 1.6; margin: 0; }
+
+  /* IMPACT LIST */
+  .impact-list { display: flex; flex-direction: column; gap: 10px; margin: 24px 0; max-width: 680px; }
+  .impact-item { display: flex; align-items: flex-start; gap: 14px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 20px; }
+  .impact-icon { width: 32px; height: 32px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .impact-icon svg { width: 16px; height: 16px; }
+  .impact-item p { font-size: 14px; color: var(--ink-60); line-height: 1.6; margin: 0; }
+  .impact-item p strong { color: var(--ink); font-weight: 600; }
+
+  /* REFLECTION */
+  .reflection-box { background: var(--ink); color: var(--white); border-radius: var(--radius-lg); padding: 40px; margin: 28px 0; }
+  .reflection-box .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-mid); margin-bottom: 16px; }
+  .reflection-box blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(20px, 2.5vw, 28px); line-height: 1.35; letter-spacing: -0.4px; color: var(--white); margin-bottom: 24px; font-style: italic; }
+  body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 600; letter-spacing: 0; }
+  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; max-width: 600px; }
+  .reflection-box p strong { color: rgba(255,255,255,0.9); font-weight: 600; }
+  .reflection-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 16px; max-width: 560px; }
+  .reflection-list li { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.6; padding-left: 18px; position: relative; }
+  .reflection-list li::before { content: ''; position: absolute; left: 0; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--orange-mid); }
+
+  /* NAV FOOTER */
+  .case-nav-footer { border-top: 1px solid var(--ink-20); padding: 40px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; max-width: 1000px; margin: 0 auto; }
+  .cnf-back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--ink-60); text-decoration: none; transition: color 0.2s; }
+  .cnf-back:hover { color: var(--ink); }
+  .cnf-next { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: var(--white); padding: 12px 24px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+  .cnf-next:hover { background: var(--orange-dark); }
+
+  @media (max-width: 700px) {
+    .two-col, .before-after { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body class="lang-en">
+
+<nav>
+  <a href="index.html" class="nav-logo">Evita Huang</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← <span data-zh>返回</span><span data-en>Back</span></a>
+    <div class="lang-toggle">
+      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中</button>
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="case-hero">
+  <div class="case-meta">
+    <span class="case-type">Research Ops</span>
+    <span class="case-role">
+      2024 · <span data-zh>工具規劃・資料架構・儀表板設計</span>
+      <span data-en>Tool Planning · Data Architecture · Dashboard Design</span>
+    </span>
+  </div>
+  <h1 data-zh>架構可規模化的洞察知識庫</h1>
+  <h1 data-en>Architecting a Scalable Insight Repository</h1>
+  <p class="subtitle" data-zh>將歷年散落的質性訪談資料，系統化轉化為可篩選、可視覺化、可供 AI 分析的消費洞察資產——讓過往研究不再沉睡。</p>
+  <p class="subtitle" data-en>Transforming fragmented qualitative interview data into a structured, filterable, and AI-ready consumer insight asset — making past research persistently valuable.</p>
+  <div class="case-kpis">
+    <div class="kpi-card"><div class="kpi-num">7 <span style="font-size:18px;">yrs</span></div><div class="kpi-label"><span data-zh>歷年研究資料整合</span><span data-en>of Research Integrated</span></div></div>
+    <div class="kpi-card"><div class="kpi-num">AI</div><div class="kpi-label"><span data-zh>輔助標籤分析流程</span><span data-en>Tagging Pipeline</span></div></div>
+    <div class="kpi-card"><div class="kpi-num">Airtable</div><div class="kpi-label"><span data-zh>多維度篩選儀表板</span><span data-en>Multi-dim Dashboard</span></div></div>
+  </div>
+</header>
+
+<div class="case-body">
+
+  <!-- CONTEXT -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>研究背景</span><span data-en>Context</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+    <h2 data-zh>七年的洞察，正在沉睡</h2>
+    <h2 data-en>Seven Years of Insight, Sitting Idle</h2>
+    <p data-zh>研究團隊自 2017 年起累積多元議題的質性研究，但這些珍貴的訪談逐字稿，長期以散落的紙本或個人資料夾形式保存。</p>
+    <p data-en>Since 2017, the research team had accumulated qualitative studies across diverse topics. But these valuable interview transcripts sat scattered across paper documents and individual folders.</p>
+    <div class="problem-callout">
+      <p data-zh>每次啟動新研究，研究員都需要重新從零開始——<strong>難以快速調閱歷年洞察、無法跨研究比對、知識無法累積，造成重複投入與資源浪費。</strong></p>
+      <p data-en>Every new research project meant starting from scratch — <strong>unable to quickly retrieve past insights, unable to compare across studies, knowledge failing to accumulate, leading to duplicated effort and wasted resources.</strong></p>
+    </div>
+    <p data-zh>這個專案的起點，是一個簡單的問題：<strong>怎麼讓過去的研究，繼續對未來有用？</strong></p>
+    <p data-en>The starting question was simple: <strong>how do we make past research continuously useful for the future?</strong></p>
+  </section>
+
+  <!-- BEFORE / AFTER -->
+  <div class="before-after">
+    <div class="ba-col before">
+      <div class="ba-header">
+        <div class="ba-dot"></div>
+        <div class="ba-title">Before</div>
+      </div>
+      <div class="ba-subtitle" data-zh>散落 · 難以調用</div>
+      <div class="ba-subtitle" data-en>Fragmented & Underutilized</div>
+      <div class="ba-group">
+        <div class="ba-group-label"><span data-zh>資料狀態</span><span data-en>Data State</span></div>
+        <ul>
+          <li data-zh>散落於紙本與個人資料夾</li>
+          <li data-en>Scattered across paper and personal folders</li>
+          <li data-zh>無統一欄位與分類方式</li>
+          <li data-en>No unified fields or classification</li>
+          <li data-zh>難以跨研究比對</li>
+          <li data-en>Cross-study comparison impossible</li>
+        </ul>
+      </div>
+      <div class="ba-group">
+        <div class="ba-group-label"><span data-zh>使用情境</span><span data-en>Usage Context</span></div>
+        <ul>
+          <li data-zh>需逐份翻找歷史資料</li>
+          <li data-en>Manual search through historical files</li>
+          <li data-zh>仰賴個人記憶與經驗</li>
+          <li data-en>Dependent on individual memory</li>
+          <li data-zh>新專案需重複整理資料</li>
+          <li data-en>Each new project re-organizes from scratch</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ba-col after">
+      <div class="ba-header">
+        <div class="ba-dot"></div>
+        <div class="ba-title">After</div>
+      </div>
+      <div class="ba-subtitle" data-zh>結構化 · 可行動</div>
+      <div class="ba-subtitle" data-en>Structured & Actionable</div>
+      <div class="ba-group">
+        <div class="ba-group-label"><span data-zh>資料狀態</span><span data-en>Data State</span></div>
+        <ul>
+          <li data-zh>結構化資料庫（標籤化 × 標準欄位）</li>
+          <li data-en>Structured database (tagged × standardized)</li>
+          <li data-zh>支援跨研究整合與比較</li>
+          <li data-en>Cross-study integration and comparison enabled</li>
+          <li data-zh>可視覺化呈現資料分布</li>
+          <li data-en>Visual distribution of data across dimensions</li>
+        </ul>
+      </div>
+      <div class="ba-group">
+        <div class="ba-group-label"><span data-zh>使用情境</span><span data-en>Usage Context</span></div>
+        <ul>
+          <li data-zh>即時篩選與多維度查詢</li>
+          <li data-en>Real-time filtering and multi-dimensional query</li>
+          <li data-zh>快速定位相關使用者情境</li>
+          <li data-en>Rapid location of relevant user contexts</li>
+          <li data-zh>支援研究規劃與決策分析</li>
+          <li data-en>Supports research planning and decision analysis</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- STRATEGY -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>設計策略</span><span data-en>Strategy</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+    <h2 data-zh>讓資料從「靜態存檔」升級為「動態洞察工具」</h2>
+    <h2 data-en>From Static Archive to Dynamic Insight Tool</h2>
+    <p data-zh>核心策略是以<strong>研究者的實際使用需求為核心</strong>規劃資料庫架構，而非以技術可行性為出發點。整體分為三個設計層次：</p>
+    <p data-en>The core strategy was to design the database architecture around <strong>researchers' actual usage needs</strong> — not technical feasibility. The design operated on three layers:</p>
+
+    <div class="three-layers">
+      <div class="layer-row">
+        <div class="layer-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+        <div class="layer-content">
+          <div class="layer-num">Layer 01</div>
+          <h4 data-zh>標準化資料欄位定義</h4>
+          <h4 data-en>Standardized Field Definition</h4>
+          <p data-zh>將訪談內容拆解為五大飲食歷程情境，設計可跨研究比對的規格化欄位——讓不同年份、不同研究計畫的資料說「同一種語言」。</p>
+          <p data-en>Decomposed interview content into five dietary journey contexts, designing standardized fields that work across studies — so data from different years and projects speaks the same language.</p>
+        </div>
+      </div>
+      <div class="layer-separator"></div>
+      <div class="layer-row">
+        <div class="layer-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+        <div class="layer-content">
+          <div class="layer-num">Layer 02</div>
+          <h4 data-zh>標籤化與量化</h4>
+          <h4 data-en>Tagging and Quantification</h4>
+          <p data-zh>與資策會數位轉型研究院合作，導入 AI 技術將質性文本轉換為可計數的標籤資料——讓質性資料得以統計、視覺化，並支援跨研究的量化比較。</p>
+          <p data-en>Collaborated with the Institute for Information Industry to introduce AI technology that transforms qualitative text into countable tag data — enabling qualitative data to be visualized and quantitatively compared across studies.</p>
+        </div>
+      </div>
+      <div class="layer-separator"></div>
+      <div class="layer-row">
+        <div class="layer-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <div class="layer-content">
+          <div class="layer-num">Layer 03</div>
+          <h4 data-zh>儀表板設計</h4>
+          <h4 data-en>Dashboard Design</h4>
+          <p data-zh>於 Airtable Interface 建置篩選式圖表儀表板，支援研究員以人口特徵、研究主題、食用情境等多維度切入分析——讓資料不只能存，更能被快速使用。</p>
+          <p data-en>Built a filter-based chart dashboard in Airtable Interface — enabling researchers to slice and analyze by demographic characteristics, research topics, consumption contexts, and more.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- EXECUTION -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>執行過程</span><span data-en>Execution</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+    <h2 data-zh>五個執行階段</h2>
+    <h2 data-en>Five Execution Phases</h2>
+
+    <div class="two-col">
+      <div class="col-card">
+        <div class="col-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <h4 data-zh>① 研究資產結構化</h4>
+        <h4 data-en>① Research Asset Structuring</h4>
+        <ul>
+          <li data-zh>盤點歷年資料格式與內容差異</li>
+          <li data-en>Audit historical data formats and content gaps</li>
+          <li data-zh>定義統一欄位架構</li>
+          <li data-en>Define unified field architecture</li>
+          <li data-zh>設計標準化資料模型（使用者特徵 × 情境脈絡 × 行為片段）</li>
+          <li data-en>Design standardized data model (user traits × context × behavior)</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <div class="col-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+        <h4 data-zh>② 資料轉譯與標籤化</h4>
+        <h4 data-en>② Data Transformation & Tagging</h4>
+        <ul>
+          <li data-zh>建立質性資料標籤體系</li>
+          <li data-en>Establish qualitative data tagging system</li>
+          <li data-zh>規劃標籤定義與分類邏輯，確保語意一致性</li>
+          <li data-en>Define tagging logic to ensure semantic consistency</li>
+          <li data-zh>協作外部技術單位導入 AI 輔助標註流程</li>
+          <li data-en>Coordinate with external tech team to implement AI tagging</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <div class="col-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <h4 data-zh>③ 儀表板介面設計</h4>
+        <h4 data-en>③ Dashboard & Interface Design</h4>
+        <ul>
+          <li data-zh>以研究者使用情境為核心設計查詢流程</li>
+          <li data-en>Design query flows centered on researcher use cases</li>
+          <li data-zh>建置 Airtable Interface 多維度篩選儀表板</li>
+          <li data-en>Build Airtable Interface multi-dimensional dashboard</li>
+          <li data-zh>優化資料存取體驗，降低使用門檻</li>
+          <li data-en>Optimize data access experience to lower usage barriers</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <div class="col-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg></div>
+        <h4 data-zh>④ AI 應用導入 + ⑤ 推廣與擴展</h4>
+        <h4 data-en>④ AI Enablement + ⑤ Adoption</h4>
+        <ul>
+          <li data-zh>測試 AI 輔助功能（摘要、情緒、關鍵內容提取）</li>
+          <li data-en>Test AI-assisted features (summarization, sentiment, extraction)</li>
+          <li data-zh>設計提示詞（prompt）規範，提升輸出一致性</li>
+          <li data-en>Design prompt guidelines to improve output consistency</li>
+          <li data-zh>撰寫使用文件，建立持續擴充機制</li>
+          <li data-en>Write usage documentation and establish ongoing expansion mechanism</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- KEY CONTRIBUTIONS -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>核心貢獻</span><span data-en>Key Contributions</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+    <h2 data-zh>研究影響與價值</h2>
+    <h2 data-en>Impact</h2>
+
+    <div class="contribution-grid">
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>貢獻 01</span><span data-en>Contribution 01</span></div>
+        <h4 data-zh>研究資產化</h4>
+        <h4 data-en>Research as Reusable Assets</h4>
+        <p data-zh>讓過往質性資料不再僅服務單一專案，而能持續支援後續研究與產品決策。</p>
+        <p data-en>Past qualitative data no longer serves only one project — it continuously supports future research and product decisions.</p>
+      </div>
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>貢獻 02</span><span data-en>Contribution 02</span></div>
+        <h4 data-zh>非結構化資料結構化</h4>
+        <h4 data-en>Structuring Unstructured Data</h4>
+        <p data-zh>建立跨研究的一致語言，使質性資料具備長期累積價值，不再因人員異動而流失。</p>
+        <p data-en>Established a consistent cross-research language, giving qualitative data long-term accumulation value that doesn't erode with personnel changes.</p>
+      </div>
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>貢獻 03</span><span data-en>Contribution 03</span></div>
+        <h4 data-zh>為研究者體驗而設計</h4>
+        <h4 data-en>Designing for Researcher Experience</h4>
+        <p data-zh>以研究者實際使用情境為核心，設計資料存取與分析流程，降低使用門檻並提升洞察產出速度。</p>
+        <p data-en>Designed data access and analysis flows around actual researcher use cases, lowering barriers and accelerating insight generation.</p>
+      </div>
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>貢獻 04</span><span data-en>Contribution 04</span></div>
+        <h4 data-zh>AI 輔助規模化</h4>
+        <h4 data-en>AI-enabled Scalability</h4>
+        <p data-zh>導入 AI 輔助分析流程，在有限人力下擴大研究資料的應用潛力，使大量文本資料可被快速轉化為可用資訊。</p>
+        <p data-en>Introduced AI-assisted analysis pipelines that expand research data's applicability under limited resources, enabling rapid conversion of large text volumes into usable information.</p>
+      </div>
+    </div>
+
+    <div class="impact-list">
+      <div class="impact-item">
+        <div class="impact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <p data-zh><strong>建立</strong>團隊首套可持續運作的質性資料庫，使歷年研究資料得以整合並持續累積</p>
+        <p data-en><strong>Established</strong> the team's first sustainable qualitative database, enabling historical research data to be integrated and continuously built upon</p>
+      </div>
+      <div class="impact-item">
+        <div class="impact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <p data-zh><strong>提升</strong>研究資料可檢索性與可比較性，縮短研究準備與分析時間</p>
+        <p data-en><strong>Improved</strong> data retrievability and comparability, reducing research preparation and analysis time</p>
+      </div>
+      <div class="impact-item">
+        <div class="impact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <p data-zh><strong>降低</strong>重複研究與資料遺失風險，提升整體研究資產使用效率</p>
+        <p data-en><strong>Reduced</strong> risk of duplicated research and knowledge loss, improving overall research asset utilization efficiency</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- REFLECTION -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>反思</span><span data-en>Reflection</span></div>
+    <div class="reflection-box">
+      <div class="eyebrow"><span data-zh>核心學習</span><span data-en>Key Learning</span></div>
+      <blockquote data-zh>「研究的價值不只在於產生洞察，而在於能否被持續使用與累積。」</blockquote>
+      <blockquote data-en>"The value of research lies not just in generating insights — but in whether those insights can be persistently used and accumulated."</blockquote>
+      <p data-zh>這個專案讓我意識到，<strong>研究本身也能夠產品化（productization）</strong>。過去的研究多半以報告作為最終交付，但我觀察到：即使內容有價值，仍難以在不同專案間被快速調用；知識往往隨時間與人員流動而流失。</p>
+      <p data-en>This project made me realize that <strong>research itself can be productized</strong>. Most research ends with a report — but I observed that even valuable content is hard to retrieve across projects, and knowledge tends to erode with time and personnel changes.</p>
+      <p data-zh>這也讓我從「單一研究專案思維」轉向「設計可長期運作的資料系統」——不只是解決當下問題，而是讓資料結構能持續擴充與應用。</p>
+      <p data-en>This shifted my thinking from "individual research project" to "designing systems that operate long-term" — not just solving today's problem, but building data structures that can continuously expand and be applied.</p>
+      <p data-zh><strong>未來若再優化：</strong></p>
+      <p data-en><strong>If I were to iterate:</strong></p>
+      <ul class="reflection-list">
+        <li data-zh>建立使用成效指標，追蹤資料庫實際被使用的頻率與影響</li>
+        <li data-en>Establish usage metrics to track how frequently and impactfully the database is actually used</li>
+        <li data-zh>持續調整標籤與 prompt，優化 AI 應用準確度</li>
+        <li data-en>Continuously refine tags and prompts to improve AI application accuracy</li>
+        <li data-zh>進一步串接產品開發或決策流程，深化資料應用場景</li>
+        <li data-en>Further connect the database to product development or decision-making flows to deepen application scenarios</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<div class="case-nav-footer">
+  <a href="project-athlete.html" class="cnf-back">← <span data-zh>上一個案例</span><span data-en>Previous Case</span></a>
+  <a href="index.html" class="cnf-next"><span data-zh>返回作品集 →</span><span data-en>Back to Portfolio →</span></a>
+</div>
+
+<script>
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Making Research Usable and Actionable — Evita Huang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #E8622A; --orange-light: #FDF0EA; --orange-mid: #F5A07A; --orange-dark: #B84A1B;
+    --teal: #1D9E75; --teal-light: #E1F5EE;
+    --ink: #1C1A18; --ink-60: #6B6760; --ink-20: #E8E6E2;
+    --surface: #FAF9F7; --white: #FFFFFF;
+    --radius-sm: 8px; --radius-md: 14px; --radius-lg: 24px; --radius-pill: 999px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); line-height: 1.6; font-size: 16px; }
+  body.lang-zh { font-family: 'Noto Sans TC', 'DM Sans', sans-serif; }
+
+  [data-zh], [data-en] { display: none; }
+  span[data-zh], span[data-en] { display: none; }
+  body.lang-zh span[data-zh] { display: inline; }
+  body.lang-en span[data-en] { display: inline; }
+  p[data-zh], p[data-en], h1[data-zh], h1[data-en], h2[data-zh], h2[data-en],
+  h3[data-zh], h3[data-en], h4[data-zh], h4[data-en], li[data-zh], li[data-en],
+  div[data-zh], div[data-en] { display: none; }
+  body.lang-zh p[data-zh], body.lang-zh h1[data-zh], body.lang-zh h2[data-zh],
+  body.lang-zh h3[data-zh], body.lang-zh h4[data-zh], body.lang-zh li[data-zh],
+  body.lang-zh div[data-zh] { display: block; }
+  body.lang-en p[data-en], body.lang-en h1[data-en], body.lang-en h2[data-en],
+  body.lang-en h3[data-en], body.lang-en h4[data-en], body.lang-en li[data-en],
+  body.lang-en div[data-en] { display: block; }
+
+  nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 64px; background: rgba(250,249,247,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ink-20); }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ink-60); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .lang-toggle { display: flex; align-items: center; border: 1.5px solid var(--ink-20); border-radius: var(--radius-pill); overflow: hidden; }
+  .lang-btn { padding: 5px 13px; cursor: pointer; color: var(--ink-60); background: transparent; border: none; font-size: 13px; font-weight: 600; font-family: inherit; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+  .lang-btn.active { background: var(--orange); color: var(--white); }
+  .lang-btn:not(.active):hover { background: var(--ink-20); color: var(--ink); }
+
+  .case-hero { padding: 72px 5% 64px; max-width: 1000px; margin: 0 auto; }
+  .case-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .case-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange-dark); background: var(--orange-light); padding: 4px 12px; border-radius: var(--radius-pill); }
+  .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
+  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
+  body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
+  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; max-width: 640px; margin-bottom: 40px; }
+  .case-kpis { display: flex; gap: 12px; flex-wrap: wrap; }
+  .kpi-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 22px; min-width: 130px; }
+  .kpi-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
+  .kpi-label { font-size: 12px; color: var(--ink-60); font-weight: 500; }
+
+  .case-body { max-width: 1000px; margin: 0 auto; padding: 0 5% 96px; }
+  .case-section { margin-bottom: 72px; }
+  .section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+  .section-icon { width: 44px; height: 44px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .section-icon svg { width: 22px; height: 22px; }
+  .case-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
+  body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 30px); }
+  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
+  .case-section p:last-child { margin-bottom: 0; }
+  .case-section p strong { color: var(--ink); font-weight: 600; }
+  .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
+
+  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; max-width: 680px; }
+  .problem-callout p { color: var(--ink); font-size: 16px; line-height: 1.75; margin: 0; }
+  .problem-callout p strong { color: var(--orange-dark); }
+
+  .strategy-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ink-20); border-radius: var(--radius-lg); overflow: hidden; margin: 28px 0; }
+  .strategy-step { background: var(--white); padding: 28px 22px; display: flex; flex-direction: column; gap: 10px; }
+  .strategy-step-icon { width: 40px; height: 40px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; }
+  .strategy-step-icon svg { width: 20px; height: 20px; }
+  .strategy-label { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); }
+  .strategy-step h4 { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: -0.3px; line-height: 1.2; color: var(--ink); margin: 0; }
+  body.lang-zh .strategy-step h4 { font-family: 'Noto Serif TC', serif; font-size: 16px; font-weight: 600; letter-spacing: 0; }
+  .strategy-step p { font-size: 13px; color: var(--ink-60); line-height: 1.6; margin: 0; max-width: none; }
+
+  .highlight-box { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-lg); padding: 32px; margin: 28px 0; }
+  .highlight-box h3 { font-family: 'DM Serif Display', serif; font-size: 20px; letter-spacing: -0.3px; margin-bottom: 20px; color: var(--ink); }
+  body.lang-zh .highlight-box h3 { font-family: 'Noto Serif TC', serif; font-weight: 600; letter-spacing: 0; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .col-card { background: var(--surface); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 22px; }
+  .col-card-icon { width: 32px; height: 32px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+  .col-card-icon svg { width: 16px; height: 16px; }
+  .col-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+  body.lang-zh .col-card h4 { font-size: 13px; }
+  .col-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .col-card ul li { font-size: 13px; color: var(--ink-60); line-height: 1.55; padding-left: 16px; position: relative; }
+  .col-card ul li::before { content: '—'; position: absolute; left: 0; color: var(--orange-mid); }
+
+  .persona-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 28px 0; }
+  .persona-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 20px; position: relative; overflow: hidden; }
+  .persona-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--orange); }
+  .persona-num { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); margin-bottom: 8px; }
+  .persona-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 8px; line-height: 1.3; }
+  body.lang-zh .persona-card h4 { font-size: 13px; }
+  .persona-card p { font-size: 13px; color: var(--ink-60); line-height: 1.55; margin: 0; }
+
+  .tools-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0; }
+  .tool-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-lg); padding: 28px; }
+  .tool-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .tool-icon { width: 44px; height: 44px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .tool-icon svg { width: 22px; height: 22px; }
+  .tool-card h3 { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: -0.3px; color: var(--ink); margin: 0; }
+  body.lang-zh .tool-card h3 { font-family: 'Noto Serif TC', serif; font-size: 16px; font-weight: 600; letter-spacing: 0; }
+  .tool-card p { font-size: 13px; color: var(--ink-60); line-height: 1.65; margin-bottom: 14px; }
+  .tool-card p:last-child { margin-bottom: 0; }
+  .tool-tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--orange-dark); background: var(--orange-light); padding: 3px 10px; border-radius: var(--radius-pill); margin-bottom: 10px; }
+
+  .process-flow-wrap { margin: 28px 0; overflow-x: auto; padding-bottom: 8px; }
+  .process-flow { display: flex; align-items: flex-start; gap: 0; min-width: 480px; }
+  .pf-step { flex: 1; display: flex; align-items: flex-start; }
+  .pf-node { flex: 1; background: var(--white); border: 1.5px solid var(--ink-20); border-radius: var(--radius-md); padding: 18px 14px 16px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; transition: border-color 0.2s; }
+  .pf-node:hover { border-color: var(--orange-mid); }
+  .pf-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); background: var(--orange-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .pf-icon svg { width: 18px; height: 18px; }
+  .pf-phase { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); }
+  .pf-node h4 { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; margin: 0; }
+  .pf-node p { font-size: 11px; color: var(--ink-60); line-height: 1.5; margin: 0; }
+  .pf-arrow { display: flex; align-items: center; padding: 0 2px; padding-top: 26px; flex-shrink: 0; color: var(--orange-mid); }
+  .pf-arrow svg { width: 22px; height: 22px; }
+
+  .stat-row { display: flex; gap: 14px; flex-wrap: wrap; margin: 24px 0; }
+  .stat-item { flex: 1; min-width: 100px; background: var(--surface); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 18px 20px; }
+  .stat-item .s-num { font-family: 'DM Serif Display', serif; font-size: 30px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
+  .stat-item .s-label { font-size: 12px; color: var(--ink-60); font-weight: 500; }
+
+  .contribution-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px 0; }
+  .contribution-card { background: var(--white); border: 1px solid var(--ink-20); border-top: 3px solid var(--orange); border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 22px; }
+  .c-label { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 0.5px; margin-bottom: 8px; }
+  .contribution-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 8px; line-height: 1.35; }
+  body.lang-zh .contribution-card h4 { font-size: 13px; }
+  .contribution-card p { font-size: 13px; color: var(--ink-60); line-height: 1.6; margin: 0; }
+
+  .reflection-box { background: var(--ink); color: var(--white); border-radius: var(--radius-lg); padding: 40px; margin: 28px 0; }
+  .reflection-box .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-mid); margin-bottom: 16px; }
+  .reflection-box blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(20px, 2.5vw, 28px); line-height: 1.35; letter-spacing: -0.4px; color: var(--white); margin-bottom: 24px; font-style: italic; }
+  body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 600; letter-spacing: 0; }
+  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; max-width: 600px; }
+  .reflection-box p strong { color: rgba(255,255,255,0.9); font-weight: 600; }
+
+  .case-nav-footer { border-top: 1px solid var(--ink-20); padding: 40px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; max-width: 1000px; margin: 0 auto; }
+  .cnf-back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--ink-60); text-decoration: none; transition: color 0.2s; }
+  .cnf-back:hover { color: var(--ink); }
+  .cnf-next { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: var(--white); padding: 12px 24px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+  .cnf-next:hover { background: var(--orange-dark); }
+
+  @media (max-width: 700px) {
+    .two-col, .tools-row, .strategy-flow { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body class="lang-en">
+
+<nav>
+  <a href="index.html" class="nav-logo">Evita Huang</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← <span data-zh>返回</span><span data-en>Back</span></a>
+    <div class="lang-toggle">
+      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中</button>
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<header class="case-hero">
+  <div class="case-meta">
+    <span class="case-type">UX Research</span>
+    <span class="case-role">
+      2024 · <span data-zh>UX 研究・人物誌設計・B2B 工作坊引導</span>
+      <span data-en>UX Research · Persona Development · B2B Workshop Design</span>
+    </span>
+  </div>
+  <h1 data-zh>將質性洞察轉譯為 B2B 設計工具</h1>
+  <h1 data-en>Making Research Usable and Actionable</h1>
+  <p class="subtitle" data-zh>從研究設計、洞察轉譯，到最終 B2B 共創機制的建立——將複雜的使用者行為洞察，轉化為業者可以直接用來做產品決策的工具與流程。</p>
+  <p class="subtitle" data-en>From research design to insight translation to B2B co-creation — transforming complex user behavior insights into tools and processes that food industry companies can directly apply to product decisions.</p>
+  <div class="case-kpis">
+    <div class="kpi-card"><div class="kpi-num">4</div><div class="kpi-label"><span data-zh>使用者分眾</span><span data-en>User Personas</span></div></div>
+    <div class="kpi-card"><div class="kpi-num">B2B</div><div class="kpi-label"><span data-zh>共創工作坊設計</span><span data-en>Co-creation Workshop</span></div></div>
+    <div class="kpi-card"><div class="kpi-num">17</div><div class="kpi-label"><span data-zh>家參與企業</span><span data-en>Companies</span></div></div>
+    <div class="kpi-card"><div class="kpi-num">4.83</div><div class="kpi-label"><span data-zh>工作坊滿意度 / 5</span><span data-en>Workshop Rating / 5</span></div></div>
+  </div>
+</header>
+
+<div class="case-body">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>研究背景</span><span data-en>Context</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <h2 data-zh>業者的困難不是「缺資料」</h2>
+    <h2 data-en>The Real Gap Wasn't Data — It Was Usability</h2>
+    <p data-zh>在「活躍老化」趨勢下，越來越多具運動習慣的中高齡族群開始重視蛋白質攝取。但多數食品業者仍停留在「知道重要，卻不知道怎麼做產品」的階段。</p>
+    <p data-en>As active aging becomes a mainstream trend, more middle-aged and older adults with exercise habits are paying attention to protein intake. Yet most food companies remained stuck: they knew protein mattered, but didn't know how to act on it.</p>
+    <div class="problem-callout">
+      <p data-zh>業者面臨的真正困難不是「缺資料」，而是：<strong>無法理解不同族群的本質差異、難以將洞察轉化為具體產品方向、缺乏讓團隊共同理解使用者並做決策的工具。</strong></p>
+      <p data-en>The real challenge wasn't missing data — it was: <strong>difficulty understanding meaningful differences between user groups, no clear path from insight to product direction, and no shared tool for cross-functional teams to align on users and make decisions together.</strong></p>
+    </div>
+    <p data-zh>這個專案的目標因此不只是「做研究報告」，而是設計出一套讓洞察可以被使用、被決策的工具與機制。</p>
+    <p data-en>The goal therefore wasn't just to produce a research report — it was to design tools and mechanisms that make insights actually usable in decision-making.</p>
+  </section>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>研究策略</span><span data-en>Strategy</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+    <h2 data-zh>三層轉譯鏈：從研究到行動</h2>
+    <h2 data-en>A Three-Layer Translation Chain</h2>
+    <p data-zh>專案拆解為三個遞進層次，每一層都是下一層的輸入，逐步建立「從研究到行動」的完整鏈路：</p>
+    <p data-en>The project was structured as three progressive layers — each one feeding the next — building a complete chain from raw research to product action:</p>
+    <div class="strategy-flow">
+      <div class="strategy-step">
+        <div class="strategy-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div class="strategy-label">Layer 01</div>
+        <h4 data-zh>了解行為 · What</h4>
+        <h4 data-en>Understand Behavior · What</h4>
+        <p data-zh>透過量化問卷建立目標族群輪廓，確認研究範圍與樣本基礎</p>
+        <p data-en>Quantitative survey to establish target group profiles and confirm research scope</p>
+      </div>
+      <div class="strategy-step">
+        <div class="strategy-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="strategy-label">Layer 02</div>
+        <h4 data-zh>挖掘動機 · Why</h4>
+        <h4 data-en>Uncover Motivation · Why</h4>
+        <p data-zh>深度訪談與質性分析，理解飲食行為背後的生活脈絡與決策邏輯</p>
+        <p data-en>In-depth interviews and qualitative analysis to understand life context and decision logic</p>
+      </div>
+      <div class="strategy-step">
+        <div class="strategy-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
+        <div class="strategy-label">Layer 03</div>
+        <h4 data-zh>賦能行動 · How</h4>
+        <h4 data-en>Enable Action · How</h4>
+        <p data-zh>將洞察轉化為可操作工具，設計共創流程讓業者實際應用於產品決策</p>
+        <p data-en>Translate insights into operable tools and co-creation processes for direct product application</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>執行過程</span><span data-en>Execution</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+    <h2 data-zh>從混合研究到洞察結構化</h2>
+    <h2 data-en>From Mixed-method Research to Structured Insight</h2>
+    <p data-zh>研究透過問卷篩選與深度訪談，識別四類族群分眾，並系統性地將訪談資料轉化為結構化洞察。</p>
+    <p data-en>The research used survey screening and in-depth interviews to identify four distinct user segments, systematically translating interview data into structured insights.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <div class="col-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <h4 data-zh>混合研究設計</h4>
+        <h4 data-en>Mixed-method Design</h4>
+        <ul>
+          <li data-zh>問卷篩選確認樣本</li>
+          <li data-en>Survey screening to confirm sample</li>
+          <li data-zh>半結構式訪談大綱，聚焦飲食與運動情境中的決策脈絡</li>
+          <li data-en>Semi-structured guide focused on dietary and exercise decision contexts</li>
+          <li data-zh>視覺化素材引導受訪者具體化抽象偏好</li>
+          <li data-en>Visual materials to help participants articulate abstract preferences</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <div class="col-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+        <h4 data-zh>質性分析架構</h4>
+        <h4 data-en>Qualitative Analysis</h4>
+        <ul>
+          <li data-zh>編碼架構：價值 ／ 行為 ／ 情境三大面向</li>
+          <li data-en>Coding scheme: value / behavior / context dimensions</li>
+          <li data-zh>逐字稿拆解為最小語意單位，提升分析精度</li>
+          <li data-en>Transcripts decomposed to minimum semantic units for precision</li>
+          <li data-zh>親和圖法進行資料群聚，辨識關鍵行為模式</li>
+          <li data-en>Affinity mapping for data clustering and pattern identification</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>洞察轉譯</span><span data-en>Insight Translation</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+    <h2 data-zh>設計讓業者可以操作的工具</h2>
+    <h2 data-en>Designing Tools Non-researchers Can Use</h2>
+    <p data-zh>研究分析完成後，最關鍵的挑戰是：<strong>如何讓沒有研究背景的行銷、研發、業務團隊，能夠真正理解並使用這些洞察？</strong>答案不是報告，而是工具。</p>
+    <p data-en>After completing the analysis, the critical challenge was: <strong>how do you get marketing, R&D, and sales teams — with no research background — to genuinely understand and use these insights?</strong> The answer wasn't a report. It was tools.</p>
+    <div class="tools-row">
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div>
+            <div class="tool-tag"><span data-zh>工具 01</span><span data-en>Tool 01</span></div>
+            <h3 data-zh>Persona 人物誌</h3>
+            <h3 data-en>Persona Cards</h3>
+          </div>
+        </div>
+        <p data-zh>以<strong>行為與生活脈絡</strong>為核心構建人物誌架構，而非僅依人口統計分類。四位人物誌各自描繪不同的飲食決策邏輯、運動情境與產品期待，凸顯族群間的本質差異。</p>
+        <p data-en>Built persona frameworks around <strong>behavior and life context</strong> rather than demographics alone. Four personas each capture distinct dietary decision logic, exercise contexts, and product expectations — highlighting meaningful differences between segments.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="9" height="9"/><rect x="13" y="2" width="9" height="9"/><rect x="13" y="13" width="9" height="9"/><rect x="2" y="13" width="9" height="9"/></svg></div>
+          <div>
+            <div class="tool-tag"><span data-zh>工具 02</span><span data-en>Tool 02</span></div>
+            <h3 data-zh>行為洞察卡片</h3>
+            <h3 data-en>Behavioral Insight Cards</h3>
+          </div>
+        </div>
+        <p data-zh>將零散的質性語料轉化為<strong>結構化卡片組</strong>，每張卡片對應一個具體的使用者行為情境與背後動機。設計目的是讓工作坊參與者能直接操作，降低從「理解洞察」到「產品發想」之間的摩擦。</p>
+        <p data-en>Transformed fragmented qualitative data into <strong>structured card sets</strong> — each card mapping a specific user behavior scenario and underlying motivation. Designed so workshop participants can physically handle them, reducing friction between "understanding insight" and "generating product ideas."</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>B2B 共創工作坊</span><span data-en>B2B Co-creation Workshop</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+    <h2 data-zh>讓研究洞察驅動產品決策</h2>
+    <h2 data-en>Turning Insight Into Product Decisions</h2>
+    <p data-zh>工作坊的設計邏輯不是「讓業者聽研究報告」，而是讓他們<strong>透過操作工具本身來理解使用者</strong>。Persona 卡和行為洞察卡在這個環境中不只是展示素材，而是引導討論、促進決策對齊的操作介面。</p>
+    <p data-en>The workshop wasn't designed to have companies "listen to research findings" — it was designed to let them <strong>understand users by physically working with the tools</strong>. Persona cards and insight cards function not as presentation materials but as operational interfaces that guide discussion and promote decision alignment.</p>
+    <div class="highlight-box">
+      <h3 data-zh>共創流程設計</h3>
+      <h3 data-en>Co-creation Process Design</h3>
+      <div class="process-flow-wrap">
+        <div class="process-flow">
+          <div class="pf-step">
+            <div class="pf-node">
+              <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+              <div class="pf-phase"><span data-zh>同理</span><span data-en>Empathize</span></div>
+              <h4 data-zh>使用者理解</h4><h4 data-en>User Understanding</h4>
+              <p data-zh>操作 Persona 卡</p><p data-en>Work with Persona cards</p>
+            </div>
+            <div class="pf-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#F5A07A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
+          <div class="pf-step">
+            <div class="pf-node">
+              <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+              <div class="pf-phase"><span data-zh>收斂</span><span data-en>Converge</span></div>
+              <h4 data-zh>需求定義</h4><h4 data-en>Need Definition</h4>
+              <p data-zh>行為洞察卡收斂</p><p data-en>Insight cards to focus</p>
+            </div>
+            <div class="pf-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#F5A07A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
+          <div class="pf-step">
+            <div class="pf-node">
+              <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+              <div class="pf-phase"><span data-zh>發散</span><span data-en>Diverge</span></div>
+              <h4 data-zh>概念發想</h4><h4 data-en>Ideation</h4>
+              <p data-zh>跨企業跨部門共創</p><p data-en>Cross-company ideation</p>
+            </div>
+            <div class="pf-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#F5A07A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
+          <div class="pf-step">
+            <div class="pf-node">
+              <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="pf-phase"><span data-zh>評估</span><span data-en>Evaluate</span></div>
+              <h4 data-zh>概念優先化</h4><h4 data-en>Prioritization</h4>
+              <p data-zh>依可行性與潛力評估</p><p data-en>Assess feasibility &amp; potential</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-item"><div class="s-num">17</div><div class="s-label"><span data-zh>家參與企業</span><span data-en>Companies</span></div></div>
+      <div class="stat-item"><div class="s-num">21</div><div class="s-label"><span data-zh>位跨職能參與者</span><span data-en>Participants</span></div></div>
+      <div class="stat-item"><div class="s-num">50%</div><div class="s-label"><span data-zh>行銷企劃背景</span><span data-en>Marketing</span></div></div>
+      <div class="stat-item"><div class="s-num">38%</div><div class="s-label"><span data-zh>產品研發背景</span><span data-en>R&D</span></div></div>
+      <div class="stat-item"><div class="s-num">4.83</div><div class="s-label"><span data-zh>整體滿意度 / 5</span><span data-en>Rating / 5</span></div></div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>核心貢獻</span><span data-en>Impact</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+    <h2 data-zh>研究影響與價值</h2>
+    <h2 data-en>Research Impact</h2>
+    <div class="contribution-grid">
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>貢獻 01</span><span data-en>Contribution 01</span></div>
+        <h4 data-zh>洞察 → 產品決策語言</h4>
+        <h4 data-en>Bridging Insight and Product</h4>
+        <p data-zh>成功將抽象使用者洞察轉化為業者可直接應用的產品發想工具，不停留在描述層。</p>
+        <p data-en>Successfully translated abstract user insights into directly applicable product ideation tools — moving beyond description to action.</p>
+      </div>
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>貢獻 02</span><span data-en>Contribution 02</span></div>
+        <h4 data-zh>為非研究者而設計</h4>
+        <h4 data-en>Designing for Non-researchers</h4>
+        <p data-zh>讓沒有研究背景的行銷、研發、業務等角色，能夠直接理解並應用使用者洞察。</p>
+        <p data-en>Enabled marketing, R&D, and sales teams without research backgrounds to directly understand and apply user insights.</p>
+      </div>
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>貢獻 03</span><span data-en>Contribution 03</span></div>
+        <h4 data-zh>可複製的共創框架</h4>
+        <h4 data-en>Scalable Framework</h4>
+        <p data-zh>建立可重複應用的工具組（Persona × 卡片 × 工作坊），成為後續專案的基礎方法論。</p>
+        <p data-en>Established a reusable toolkit (personas × cards × workshop) that became the foundational methodology for subsequent projects.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>反思</span><span data-en>Reflection</span></div>
+    <div class="reflection-box">
+      <div class="eyebrow"><span data-zh>核心學習</span><span data-en>Key Learning</span></div>
+      <blockquote data-zh>「真正有價值的研究，不只是產出 insight，而是讓 insight 能被使用、被決策、被轉化為產品。」</blockquote>
+      <blockquote data-en>"Valuable research isn't just about producing insights — it's about making insights usable, decisionable, and translatable into products."</blockquote>
+      <p data-zh>這個專案讓我意識到，研究者的角色不只是「產生知識」，更是設計知識的<strong>傳遞介面</strong>。報告是一種格式，但 Persona 卡和行為卡是另一種格式——它們能讓不同背景的人在同一張桌子上，對「使用者是誰」這件事達成共識。</p>
+      <p data-en>This project made me realize that a researcher's role isn't just to "generate knowledge" — it's to design the <strong>interface through which knowledge gets transferred</strong>. A report is one format, but persona cards and insight cards are another — they allow people from different backgrounds to reach shared understanding of "who the user is" around the same table.</p>
+      <p data-zh>未來若再優化，我會建立 workshop 成果與後續產品開發成效的長期追蹤機制，讓 insight → product KPI 的連結更加可見。</p>
+      <p data-en>If I were to iterate, I'd establish a longitudinal tracking mechanism connecting workshop outputs to downstream product development outcomes — making the insight → product KPI link more visible.</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="case-nav-footer">
+  <a href="project-caregiver.html" class="cnf-back">← <span data-zh>上一個案例</span><span data-en>Previous Case</span></a>
+  <a href="project-database.html" class="cnf-next"><span data-zh>下一個案例：洞察系統 →</span><span data-en>Next: Insight System →</span></a>
+</div>
+
+<script>
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YDA Web Redesign — Evita Huang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #E8622A; --orange-light: #FDF0EA; --orange-mid: #F5A07A; --orange-dark: #B84A1B;
+    --teal: #1D9E75; --teal-light: #E1F5EE;
+    --ink: #1C1A18; --ink-60: #6B6760; --ink-20: #E8E6E2;
+    --surface: #FAF9F7; --white: #FFFFFF;
+    --radius-sm: 8px; --radius-md: 14px; --radius-lg: 24px; --radius-pill: 999px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); line-height: 1.6; font-size: 16px; }
+  body.lang-zh { font-family: 'Noto Sans TC', 'DM Sans', sans-serif; }
+
+  [data-zh], [data-en] { display: none; }
+  span[data-zh], span[data-en] { display: none; }
+  body.lang-zh span[data-zh] { display: inline; }
+  body.lang-en span[data-en] { display: inline; }
+  p[data-zh], p[data-en], h1[data-zh], h1[data-en], h2[data-zh], h2[data-en],
+  h3[data-zh], h3[data-en], h4[data-zh], h4[data-en], li[data-zh], li[data-en],
+  div[data-zh], div[data-en] { display: none; }
+  body.lang-zh p[data-zh], body.lang-zh h1[data-zh], body.lang-zh h2[data-zh],
+  body.lang-zh h3[data-zh], body.lang-zh h4[data-zh], body.lang-zh li[data-zh],
+  body.lang-zh div[data-zh] { display: block; }
+  body.lang-en p[data-en], body.lang-en h1[data-en], body.lang-en h2[data-en],
+  body.lang-en h3[data-en], body.lang-en h4[data-en], body.lang-en li[data-en],
+  body.lang-en div[data-en] { display: block; }
+
+  nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 64px; background: rgba(250,249,247,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ink-20); }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ink-60); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .lang-toggle { display: flex; align-items: center; border: 1.5px solid var(--ink-20); border-radius: var(--radius-pill); overflow: hidden; }
+  .lang-btn { padding: 5px 13px; cursor: pointer; color: var(--ink-60); background: transparent; border: none; font-size: 13px; font-weight: 600; font-family: inherit; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+  .lang-btn.active { background: var(--orange); color: var(--white); }
+  .lang-btn:not(.active):hover { background: var(--ink-20); color: var(--ink); }
+
+  /* HERO */
+  .case-hero { padding: 72px 5% 64px; max-width: 1000px; margin: 0 auto; }
+  .case-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .case-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #0F6E56; background: var(--teal-light); padding: 4px 12px; border-radius: var(--radius-pill); }
+  .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
+  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
+  body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
+  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; max-width: 640px; margin-bottom: 32px; }
+
+  /* TEAM CREDIT */
+  .team-credit { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 40px; padding: 20px 24px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); max-width: 640px; }
+  .credit-group { display: flex; flex-direction: column; gap: 4px; }
+  .credit-label { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); }
+  .credit-value { font-size: 13px; color: var(--ink-60); line-height: 1.5; }
+  .credit-value strong { color: var(--ink); font-weight: 600; }
+
+  /* KPI */
+  .case-kpis { display: flex; gap: 12px; flex-wrap: wrap; }
+  .kpi-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 22px; min-width: 130px; }
+  .kpi-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
+  .kpi-label { font-size: 12px; color: var(--ink-60); font-weight: 500; }
+
+  /* BODY */
+  .case-body { max-width: 1000px; margin: 0 auto; padding: 0 5% 96px; }
+  .case-section { margin-bottom: 72px; }
+  .section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+  .section-icon { width: 44px; height: 44px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .section-icon svg { width: 22px; height: 22px; }
+  .case-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
+  body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 30px); }
+  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
+  .case-section p:last-child { margin-bottom: 0; }
+  .case-section p strong { color: var(--ink); font-weight: 600; }
+  .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
+
+  /* PROBLEM CALLOUT */
+  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; max-width: 680px; }
+  .problem-callout p { color: var(--ink); font-size: 16px; line-height: 1.75; margin: 0; }
+  .problem-callout p strong { color: var(--orange-dark); }
+
+  /* QUOTE */
+  .user-quote { background: var(--surface); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 18px 22px; margin: 10px 0; max-width: 640px; }
+  .user-quote p { font-size: 14px; color: var(--ink); line-height: 1.65; margin: 0; font-style: italic; }
+  .user-quote .quote-src { font-size: 12px; color: var(--ink-60); margin-top: 8px; font-style: normal; font-weight: 500; }
+
+  /* THREE PROBLEMS */
+  .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ink-20); border-radius: var(--radius-lg); overflow: hidden; margin: 28px 0; }
+  .problem-card { background: var(--white); padding: 24px 20px; display: flex; flex-direction: column; gap: 10px; }
+  .problem-card-icon { width: 36px; height: 36px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; }
+  .problem-card-icon svg { width: 18px; height: 18px; }
+  .problem-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); }
+  .problem-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.3; margin: 0; }
+  body.lang-zh .problem-card h4 { font-size: 13px; }
+  .problem-card p { font-size: 13px; color: var(--ink-60); line-height: 1.55; margin: 0; }
+
+  /* HMW */
+  .hmw-grid { display: flex; flex-direction: column; gap: 10px; margin: 28px 0; max-width: 680px; }
+  .hmw-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); }
+  .hmw-badge { flex-shrink: 0; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; background: var(--orange-light); color: var(--orange-dark); padding: 4px 8px; border-radius: var(--radius-sm); margin-top: 2px; white-space: nowrap; }
+  .hmw-item p { font-size: 14px; color: var(--ink); line-height: 1.6; margin: 0; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .col-card { background: var(--surface); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 22px; }
+  .col-card-icon { width: 32px; height: 32px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+  .col-card-icon svg { width: 16px; height: 16px; }
+  .col-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+  body.lang-zh .col-card h4 { font-size: 13px; }
+  .col-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .col-card ul li { font-size: 13px; color: var(--ink-60); line-height: 1.55; padding-left: 16px; position: relative; }
+  .col-card ul li::before { content: '—'; position: absolute; left: 0; color: var(--orange-mid); }
+
+  /* RESULT CARDS */
+  .result-row { display: flex; gap: 20px; flex-wrap: wrap; margin: 28px 0; }
+  .result-card { flex: 1; min-width: 140px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 22px; text-align: center; }
+  .result-before { font-size: 13px; color: var(--ink-60); margin-bottom: 8px; }
+  .result-arrow { font-size: 20px; color: var(--orange-mid); margin: 4px 0; }
+  .result-after { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
+  .result-label { font-size: 12px; color: var(--ink-60); font-weight: 500; }
+  .result-delta { font-size: 13px; font-weight: 600; color: var(--teal); margin-top: 4px; }
+
+  /* REFLECTION */
+  .reflection-box { background: var(--ink); color: var(--white); border-radius: var(--radius-lg); padding: 40px; margin: 28px 0; }
+  .reflection-box .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-mid); margin-bottom: 16px; }
+  .reflection-box blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(18px, 2.5vw, 26px); line-height: 1.35; letter-spacing: -0.4px; color: var(--white); margin-bottom: 24px; font-style: italic; }
+  body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 600; letter-spacing: 0; }
+  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; max-width: 600px; }
+
+  /* NAV FOOTER */
+  .case-nav-footer { border-top: 1px solid var(--ink-20); padding: 40px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; max-width: 1000px; margin: 0 auto; }
+  .cnf-back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--ink-60); text-decoration: none; transition: color 0.2s; }
+  .cnf-back:hover { color: var(--ink); }
+  .cnf-next { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: var(--white); padding: 12px 24px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+  .cnf-next:hover { background: var(--orange-dark); }
+
+  @media (max-width: 700px) {
+    .two-col, .problem-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body class="lang-en">
+
+<nav>
+  <a href="index.html" class="nav-logo">Evita Huang</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← <span data-zh>返回</span><span data-en>Back</span></a>
+    <div class="lang-toggle">
+      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中</button>
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<header class="case-hero">
+  <div class="case-meta">
+    <span class="case-type">Student Project</span>
+    <span class="case-role">2020 · PDIS Ray 4.0</span>
+  </div>
+  <h1 data-zh>教育部青年署官網數位體驗改善計畫</h1>
+  <h1 data-en>Youth Development Administration Web Redesign</h1>
+  <p class="subtitle" data-zh>針對青年署「拓展青年使用族群、提高探索活動意願」的改版需求，透過使用者研究與迭代設計，有效提升 SUS 易用性與整體使用滿意度。</p>
+  <p class="subtitle" data-en>For YDA's goal of expanding youth users and increasing activity participation, we conducted user research and iterative design — achieving significant improvements in usability and overall satisfaction.</p>
+
+  <div class="team-credit">
+    <div class="credit-group">
+      <div class="credit-label"><span data-zh>我的角色</span><span data-en>My Role</span></div>
+      <div class="credit-value"><strong>UX Design &amp; Visual Design</strong></div>
+    </div>
+    <div class="credit-group">
+      <div class="credit-label"><span data-zh>實習合作夥伴</span><span data-en>Internship Team</span></div>
+      <div class="credit-value">羅宛庭・簡巧恩・蔡蕙羽</div>
+    </div>
+    <div class="credit-group">
+      <div class="credit-label"><span data-zh>上線協作夥伴</span><span data-en>Launch Team</span></div>
+      <div class="credit-value">羅宛庭・楊博智・翁暄奇</div>
+    </div>
+    <div class="credit-group">
+      <div class="credit-label"><span data-zh>計畫</span><span data-en>Program</span></div>
+      <div class="credit-value">PDIS Ray 4.0</div>
+    </div>
+  </div>
+
+  <div class="case-kpis">
+    <div class="kpi-card"><div class="kpi-num">+42</div><div class="kpi-label">SUS <span data-zh>易用性提升</span><span data-en>Usability Score</span></div></div>
+    <div class="kpi-card"><div class="kpi-num">+75%</div><div class="kpi-label"><span data-zh>整體滿意度</span><span data-en>Satisfaction Rate</span></div></div>
+    <div class="kpi-card"><div class="kpi-num">3×</div><div class="kpi-label"><span data-zh>迭代設計週期</span><span data-en>Design Iterations</span></div></div>
+  </div>
+</header>
+
+<div class="case-body">
+
+  <!-- CONTEXT -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>問題背景</span><span data-en>Context</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+    <h2 data-zh>官網設計讓年輕人望而卻步</h2>
+    <h2 data-en>A Website That Was Pushing Youth Away</h2>
+    <p data-zh>教育部青年署希望「拓展青年使用族群、提高探索活動意願」，但現有官網的版面編排反而降低了青年的點擊意願與活動報名率。透過 9 位 18–25 歲青年的網站任務測試，以及 1 位青年署總機人員的訪談，我們識別出三個核心問題：</p>
+    <p data-en>YDA's goal was to expand its youth user base and increase activity participation — but the existing website's layout was actually driving youth away, reducing click rates and activity registrations. Through task testing with 9 users aged 18–25 and interviews with a YDA staff member, we identified three core problems:</p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="problem-tag"><span data-zh>問題 01 · 認知面</span><span data-en>Problem 01 · Perception</span></div>
+        <h4 data-zh>官網無法傳遞青年署的價值與服務</h4>
+        <h4 data-en>Website fails to convey YDA's value and services</h4>
+        <p data-zh>青年以為官網是政令宣導網站，不會主動造訪，直接去找活動的主題網站。</p>
+        <p data-en>Youth assumed the site was a government bulletin board and went directly to activity-specific sites instead.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+        <div class="problem-tag"><span data-zh>問題 02 · 資訊架構</span><span data-en>Problem 02 · IA</span></div>
+        <h4 data-zh>活動分類與使用者預期不符</h4>
+        <h4 data-en>Activity categorization doesn't match user mental models</h4>
+        <p data-zh>活動分類標籤命名太過相似，使用者不知道自己想找的活動在哪個分類下。</p>
+        <p data-en>Category labels were too similar to each other; users couldn't identify which category their target activity fell under.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.13 11.91 19.79 19.79 0 0 1 1.06 3.28 2 2 0 0 1 3.05 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 15z"/></svg></div>
+        <div class="problem-tag"><span data-zh>問題 03 · 報名流程</span><span data-en>Problem 03 · Registration</span></div>
+        <h4 data-zh>使用者無法快速完成活動報名</h4>
+        <h4 data-en>Users can't complete activity registration efficiently</h4>
+        <p data-zh>報名連結埋在公文字海中，學生只好打電話給總機詢問如何報名。</p>
+        <p data-en>Registration links were buried in document text, forcing students to call the YDA helpline for assistance.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- STRATEGY -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>設計策略</span><span data-en>Design Strategy</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+    <h2 data-zh>三個 HMW，對應三個核心問題</h2>
+    <h2 data-en>Three HMWs Addressing Three Core Problems</h2>
+    <p data-zh>鎖定「無特定目標、不熟悉官網的青年族群」，以 How Might We 框架定義設計機會：</p>
+    <p data-en>Targeting youth with no specific goal and unfamiliar with the website, we framed design opportunities using How Might We questions:</p>
+
+    <div class="hmw-grid">
+      <div class="hmw-item">
+        <span class="hmw-badge">HMW 01</span>
+        <p data-zh>我們如何讓使用者一進到首頁，就能了解青年署提供的資源？</p>
+        <p data-en>How might we ensure users understand YDA's resources and value as soon as they land on the homepage?</p>
+      </div>
+      <div class="hmw-item">
+        <span class="hmw-badge">HMW 02</span>
+        <p data-zh>我們如何透過更有效的活動分類，讓使用者更容易找到目標？</p>
+        <p data-en>How might we make it easier for users to find their target activities through more effective categorization?</p>
+      </div>
+      <div class="hmw-item">
+        <span class="hmw-badge">HMW 03</span>
+        <p data-zh>我們如何提供更順暢的網站報名流程？</p>
+        <p data-en>How might we provide a smoother, more intuitive activity registration experience?</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- EXECUTION -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>設計執行</span><span data-en>Design Execution</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
+    <h2 data-zh>三個方向的設計改善</h2>
+    <h2 data-en>Design Improvements Across Three Directions</h2>
+
+    <div class="two-col">
+      <div class="col-card">
+        <div class="col-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg></div>
+        <h4 data-zh>① 建立年輕形象認知</h4>
+        <h4 data-en>① Establishing a Youthful Image</h4>
+        <ul>
+          <li data-zh>善用首頁橫幅區塊，以圖像與文字傳遞青年署的服務與價值</li>
+          <li data-en>Leveraged hero banner to convey YDA's services and value through imagery and copy</li>
+          <li data-zh>以活動卡片取代條列公文，提高近期活動曝光度</li>
+          <li data-en>Replaced document lists with activity cards to increase recent activity visibility</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <div class="col-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+        <h4 data-zh>② 優化直覺資訊層級</h4>
+        <h4 data-en>② Optimizing Information Hierarchy</h4>
+        <ul>
+          <li data-zh>透過封閉式卡片分類法，以使用者習慣重新整理活動分類</li>
+          <li data-en>Used closed card sorting to reorganize activity categories based on user mental models</li>
+          <li data-zh>活動卡片呈現讓使用者不必猜測活動名稱，一目了然活動屬性</li>
+          <li data-en>Activity cards let users grasp activity attributes at a glance without guessing from titles</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <div class="col-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <h4 data-zh>③ 提供順暢報名流程</h4>
+        <h4 data-en>③ Streamlining Registration</h4>
+        <ul>
+          <li data-zh>將公文資訊以使用者友善的內容區塊呈現</li>
+          <li data-en>Restructured document content into user-friendly content blocks</li>
+          <li data-zh>在活動頁頂部與底部放置明確的報名 CTA，無須在公文中搜尋</li>
+          <li data-en>Placed clear registration CTAs at top and bottom of event pages, eliminating document hunting</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <div class="col-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h4 data-zh>迭代驗證方式</h4>
+        <h4 data-en>Iterative Validation</h4>
+        <ul>
+          <li data-zh>進行 3 輪原型設計與易用性測試</li>
+          <li data-en>Conducted 3 rounds of prototyping and usability testing</li>
+          <li data-zh>每輪測試後根據反饋調整設計方向</li>
+          <li data-en>Adjusted design direction based on feedback after each round</li>
+          <li data-zh>以 SUS 量表與滿意度問卷量化成效</li>
+          <li data-en>Measured outcomes using SUS scale and satisfaction questionnaire</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- RESULTS -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>設計成果</span><span data-en>Results</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+    <h2 data-zh>易用性與滿意度的顯著提升</h2>
+    <h2 data-en>Significant Improvements in Usability and Satisfaction</h2>
+    <p data-zh>重新調整活動分類、建立年輕形象、提供流暢探索與報名流程後，新版官網有效提升了易用性與使用滿意度：</p>
+    <p data-en>After revising categorization, establishing a youthful image, and creating a streamlined exploration and registration experience, the redesigned website achieved measurable improvements:</p>
+
+    <div class="result-row">
+      <div class="result-card">
+        <div class="result-before">SUS Before: 33</div>
+        <div class="result-arrow">↓</div>
+        <div class="result-after">75</div>
+        <div class="result-label">SUS Score After</div>
+        <div class="result-delta">+42 points</div>
+      </div>
+      <div class="result-card">
+        <div class="result-before"><span data-zh>滿意度 Before: 4.4 / 10</span><span data-en>Satisfaction Before: 4.4 / 10</span></div>
+        <div class="result-arrow">↓</div>
+        <div class="result-after">7.6</div>
+        <div class="result-label"><span data-zh>滿意度 After（/ 10）</span><span data-en>Satisfaction After (/ 10)</span></div>
+        <div class="result-delta">+75%</div>
+      </div>
+      <div class="result-card">
+        <div class="result-before" style="opacity:0">—</div>
+        <div class="result-arrow" style="opacity:0">↓</div>
+        <div class="result-after" style="font-size:22px;padding-top:8px;"><span data-zh>上線</span><span data-en>Live</span></div>
+        <div class="result-label"><span data-zh>與教育部青年署協作推動上線</span><span data-en>Launched in collaboration with YDA</span></div>
+        <div class="result-delta" style="opacity:0">—</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- REFLECTION -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>反思</span><span data-en>Reflection</span></div>
+    <div class="reflection-box">
+      <div class="eyebrow"><span data-zh>核心學習</span><span data-en>Key Learning</span></div>
+      <blockquote data-zh>「設計不只是讓東西『好看』，而是讓使用者在對的時間找到對的資訊。」</blockquote>
+      <blockquote data-en>"Design isn't about making things look good — it's about helping users find the right information at the right moment."</blockquote>
+      <p data-zh>這個專案是我第一次在真實政府服務的情境下做 UX 設計。從訪談到任務測試，我學到了如何在有真實使用者、真實利害關係人的環境下迭代設計——不是追求完美的原型，而是在每一輪測試中找到最關鍵的改善點。</p>
+      <p data-en>This was my first UX design project in a real government service context. From interviews to task testing, I learned how to iterate design with real users and real stakeholders — not pursuing a perfect prototype, but finding the most critical improvement in each testing round.</p>
+      <p data-zh>這個經驗也讓我意識到「資訊架構」的重要性不亞於視覺設計——使用者在哪裡迷路，往往不是因為設計不好看，而是因為分類邏輯與他們的預期不符。</p>
+      <p data-en>This experience also taught me that information architecture matters as much as visual design — users get lost not because the design looks bad, but because the categorization logic doesn't match their mental model.</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="case-nav-footer">
+  <a href="index.html" class="cnf-back">← <span data-zh>返回作品集</span><span data-en>Back to Portfolio</span></a>
+  <a href="project-invisible.html" class="cnf-next"><span data-zh>下一個：隱性特殊需求 →</span><span data-en>Next: Invisible Disabilities →</span></a>
+</div>
+
+<script>
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  }
+</script>
+</body>
+</html>

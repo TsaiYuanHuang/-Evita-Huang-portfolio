@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invisible Disabilities Resource Guide — Evita Huang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #E8622A; --orange-light: #FDF0EA; --orange-mid: #F5A07A; --orange-dark: #B84A1B;
+    --teal: #1D9E75; --teal-light: #E1F5EE;
+    --ink: #1C1A18; --ink-60: #6B6760; --ink-20: #E8E6E2;
+    --surface: #FAF9F7; --white: #FFFFFF;
+    --radius-sm: 8px; --radius-md: 14px; --radius-lg: 24px; --radius-pill: 999px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); line-height: 1.6; font-size: 16px; }
+  body.lang-zh { font-family: 'Noto Sans TC', 'DM Sans', sans-serif; }
+
+  [data-zh], [data-en] { display: none; }
+  span[data-zh], span[data-en] { display: none; }
+  body.lang-zh span[data-zh] { display: inline; }
+  body.lang-en span[data-en] { display: inline; }
+  p[data-zh], p[data-en], h1[data-zh], h1[data-en], h2[data-zh], h2[data-en],
+  h3[data-zh], h3[data-en], h4[data-zh], h4[data-en], li[data-zh], li[data-en],
+  div[data-zh], div[data-en] { display: none; }
+  body.lang-zh p[data-zh], body.lang-zh h1[data-zh], body.lang-zh h2[data-zh],
+  body.lang-zh h3[data-zh], body.lang-zh h4[data-zh], body.lang-zh li[data-zh],
+  body.lang-zh div[data-zh] { display: block; }
+  body.lang-en p[data-en], body.lang-en h1[data-en], body.lang-en h2[data-en],
+  body.lang-en h3[data-en], body.lang-en h4[data-en], body.lang-en li[data-en],
+  body.lang-en div[data-en] { display: block; }
+
+  /* Override display:flex on spectrum li */
+  body.lang-zh .spectrum-card ul li[data-zh] { display: flex; }
+  body.lang-en .spectrum-card ul li[data-en] { display: flex; }
+  body.lang-zh .spectrum-card ul li[data-en] { display: none; }
+  body.lang-en .spectrum-card ul li[data-zh] { display: none; }
+
+  nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 64px; background: rgba(250,249,247,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ink-20); }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ink-60); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .lang-toggle { display: flex; align-items: center; border: 1.5px solid var(--ink-20); border-radius: var(--radius-pill); overflow: hidden; }
+  .lang-btn { padding: 5px 13px; cursor: pointer; color: var(--ink-60); background: transparent; border: none; font-size: 13px; font-weight: 600; font-family: inherit; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+  .lang-btn.active { background: var(--orange); color: var(--white); }
+  .lang-btn:not(.active):hover { background: var(--ink-20); color: var(--ink); }
+
+  .case-hero { padding: 72px 5% 64px; max-width: 1000px; margin: 0 auto; }
+  .case-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .case-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #0F6E56; background: var(--teal-light); padding: 4px 12px; border-radius: var(--radius-pill); }
+  .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
+  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
+  body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
+  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; max-width: 640px; margin-bottom: 32px; }
+
+  .team-credit { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 40px; padding: 20px 24px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); max-width: 680px; }
+  .credit-group { display: flex; flex-direction: column; gap: 4px; }
+  .credit-label { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); }
+  .credit-value { font-size: 13px; color: var(--ink-60); line-height: 1.5; }
+  .credit-value strong { color: var(--ink); font-weight: 600; }
+
+  .case-kpis { display: flex; gap: 12px; flex-wrap: wrap; }
+  .kpi-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 22px; min-width: 130px; }
+  .kpi-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
+  .kpi-label { font-size: 12px; color: var(--ink-60); font-weight: 500; }
+
+  .case-body { max-width: 1000px; margin: 0 auto; padding: 0 5% 96px; }
+  .case-section { margin-bottom: 72px; }
+  .section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+  .section-icon { width: 44px; height: 44px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .section-icon svg { width: 22px; height: 22px; }
+  .case-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
+  body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 30px); }
+  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
+  .case-section p:last-child { margin-bottom: 0; }
+  .case-section p strong { color: var(--ink); font-weight: 600; }
+  .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
+
+  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; max-width: 680px; }
+  .problem-callout p { color: var(--ink); font-size: 16px; line-height: 1.75; margin: 0; }
+  .problem-callout p strong { color: var(--orange-dark); }
+
+  /* STAKEHOLDER GRID */
+  .stakeholder-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--ink-20); border-radius: var(--radius-lg); overflow: hidden; margin: 28px 0; }
+  .stakeholder-card { background: var(--white); padding: 22px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .stakeholder-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); }
+  .stakeholder-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.3; margin: 0; }
+  body.lang-zh .stakeholder-card h4 { font-size: 13px; }
+  .stakeholder-card p { font-size: 13px; color: var(--ink-60); line-height: 1.55; margin: 0; font-style: italic; }
+
+  /* USER SPECTRUM */
+  .spectrum-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0; }
+  .spectrum-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 22px; }
+  .spectrum-label { font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+  .spectrum-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .spectrum-card ul li { font-size: 13px; color: var(--ink-60); line-height: 1.55; padding-left: 16px; position: relative; display: flex; align-items: flex-start; gap: 0; }
+  .spectrum-card ul li::before { content: '↔'; position: absolute; left: 0; color: var(--orange-mid); font-size: 11px; top: 1px; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .col-card { background: var(--surface); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 22px; }
+  .col-card-icon { width: 32px; height: 32px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+  .col-card-icon svg { width: 16px; height: 16px; }
+  .col-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+  body.lang-zh .col-card h4 { font-size: 13px; }
+  .col-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .col-card ul li { font-size: 13px; color: var(--ink-60); line-height: 1.55; padding-left: 16px; position: relative; }
+  .col-card ul li::before { content: '—'; position: absolute; left: 0; color: var(--orange-mid); }
+
+  /* DELIVERABLE CARDS */
+  .deliverable-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0; }
+  .deliverable-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-lg); padding: 28px; }
+  .deliverable-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .deliverable-icon { width: 44px; height: 44px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .deliverable-icon svg { width: 22px; height: 22px; }
+  .deliverable-tag { font-size: 11px; font-weight: 700; color: var(--orange-dark); background: var(--orange-light); padding: 3px 10px; border-radius: var(--radius-pill); margin-bottom: 6px; display: inline-block; }
+  .deliverable-card h3 { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: -0.3px; color: var(--ink); margin: 0; }
+  body.lang-zh .deliverable-card h3 { font-family: 'Noto Serif TC', serif; font-size: 16px; font-weight: 600; letter-spacing: 0; }
+  .deliverable-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
+  .deliverable-card ul li { font-size: 13px; color: var(--ink-60); line-height: 1.55; padding-left: 16px; position: relative; }
+  .deliverable-card ul li::before { content: '—'; position: absolute; left: 0; color: var(--orange-mid); }
+
+  /* IMPACT */
+  .impact-stat-row { display: flex; gap: 16px; flex-wrap: wrap; margin: 28px 0; }
+  .impact-stat { flex: 1; min-width: 140px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 22px; text-align: center; }
+  .impact-stat .i-num { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--orange); line-height: 1; margin-bottom: 6px; }
+  .impact-stat .i-label { font-size: 12px; color: var(--ink-60); font-weight: 500; line-height: 1.4; }
+
+  /* REFLECTION */
+  .reflection-box { background: var(--ink); color: var(--white); border-radius: var(--radius-lg); padding: 40px; margin: 28px 0; }
+  .reflection-box .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-mid); margin-bottom: 16px; }
+  .reflection-box blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(18px, 2.5vw, 26px); line-height: 1.35; letter-spacing: -0.4px; color: var(--white); margin-bottom: 24px; font-style: italic; }
+  body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 600; letter-spacing: 0; }
+  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; max-width: 600px; }
+
+  .case-nav-footer { border-top: 1px solid var(--ink-20); padding: 40px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; max-width: 1000px; margin: 0 auto; }
+  .cnf-back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--ink-60); text-decoration: none; transition: color 0.2s; }
+  .cnf-back:hover { color: var(--ink); }
+  .cnf-next { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: var(--white); padding: 12px 24px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+  .cnf-next:hover { background: var(--orange-dark); }
+
+  @media (max-width: 700px) {
+    .two-col, .stakeholder-grid, .spectrum-row, .deliverable-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body class="lang-en">
+
+<nav>
+  <a href="index.html" class="nav-logo">Evita Huang</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← <span data-zh>返回</span><span data-en>Back</span></a>
+    <div class="lang-toggle">
+      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中</button>
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<header class="case-hero">
+  <div class="case-meta">
+    <span class="case-type">Student Project</span>
+    <span class="case-role">2020 · <span data-zh>社會設計</span><span data-en>Social Design</span></span>
+  </div>
+  <h1 data-zh>國小學童隱性特殊需求資源指南</h1>
+  <h1 data-en>Invisible Disabilities Resource Guide for Elementary Students</h1>
+  <p class="subtitle" data-zh>透過社會設計與參與式工作坊，促進隱性特殊生家長與學校教師間的相互理解，設計出紙本與網頁雙版本的資源指南，打造更自在安心的校園學習環境。</p>
+  <p class="subtitle" data-en>Through social design and participatory workshops, we bridged the understanding gap between parents of children with invisible disabilities and their school teachers — producing a dual-format resource guide distributed across 151 Taipei elementary schools.</p>
+
+  <div class="team-credit">
+    <div class="credit-group">
+      <div class="credit-label"><span data-zh>我的角色</span><span data-en>My Role</span></div>
+      <div class="credit-value"><strong>User Research &amp; Design</strong></div>
+    </div>
+    <div class="credit-group">
+      <div class="credit-label"><span data-zh>協作成員</span><span data-en>Collaborated With</span></div>
+      <div class="credit-value">石玉華・蔡縈綸・彭宣玶・林安柔<br>鄭嘉榛・陳睿奕・梁鈞為・何沛蓉</div>
+    </div>
+  </div>
+
+  <div class="case-kpis" style="display:none;"></div>
+</header>
+
+<div class="case-body">
+
+  <!-- CONTEXT -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>問題背景</span><span data-en>Context</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <h2 data-zh>看不見的障礙，說不清楚的壓力</h2>
+    <h2 data-en>Invisible Disabilities, Unspoken Pressures</h2>
+    <p data-zh>隱性特殊需求學生（自閉症、過動症、學習障礙等）外表看似正常，但其特質可能影響學業表現，對老師形成挑戰。從家長角度，擔心社會標籤，同時擔心孩子在普通班是否被理解和接納，帶來龐大壓力。</p>
+    <p data-en>Students with invisible disabilities — autism, ADHD, learning disabilities — appear normal on the outside, but their traits can affect academic performance and challenge teachers. From parents' perspective, concerns about social stigma and whether their child will be understood in a mainstream classroom create enormous pressure.</p>
+
+    <div class="problem-callout">
+      <p data-zh>核心問題是：<strong>家長與教師各自面對壓力，卻缺乏一個共同溝通與理解的橋梁。</strong>家長不知道有哪些資源、教師不知道如何第一時間回應、不同體系（醫療、教育、心輔）間的差異更加深了困惑。</p>
+      <p data-en>The core problem: <strong>parents and teachers both face pressure in isolation, with no shared bridge for communication and understanding.</strong> Parents don't know what resources exist; teachers don't know how to respond in the moment; and fragmentation across systems (medical, educational, counseling) deepens the confusion.</p>
+    </div>
+
+    <p data-zh>我們透過邀請專家分享、參與議題相關活動，深入了解四個端點的困境：</p>
+    <p data-en>We engaged deeply with the problem space through expert talks and issue events, mapping challenges across four stakeholder groups:</p>
+
+    <div class="stakeholder-grid">
+      <div class="stakeholder-card">
+        <div class="stakeholder-tag"><span data-zh>民間團體端</span><span data-en>NGO Perspective</span></div>
+        <h4 data-zh>學生行為改善是雙向動態</h4>
+        <h4 data-en>Behavioral improvement is a two-way dynamic</h4>
+        <p data-zh>受霸凌學生不受歡迎行為的改進，與同儕包容力的增加，需要雙向互相調整。</p>
+        <p data-en>Reducing unwelcome behaviors and increasing peer inclusiveness are mutually reinforcing forces that require adjustment on both sides.</p>
+      </div>
+      <div class="stakeholder-card">
+        <div class="stakeholder-tag"><span data-zh>政府機構端</span><span data-en>Government Perspective</span></div>
+        <h4 data-zh>特教老師是最好的橋梁角色</h4>
+        <h4 data-en>Special ed teachers are the ideal bridge</h4>
+        <p data-zh>教育局直接介入親師關係存在身份矛盾，讓具相關知識的特教老師擔任橋梁是更好的選擇。</p>
+        <p data-en>Direct bureau intervention creates role conflicts; special education teachers with relevant knowledge are better positioned as mediators.</p>
+      </div>
+      <div class="stakeholder-card">
+        <div class="stakeholder-tag"><span data-zh>校園端</span><span data-en>School Perspective</span></div>
+        <h4 data-zh>老師與家長的「準備程度」落差</h4>
+        <h4 data-en>A gap in "readiness" between teachers and parents</h4>
+        <p data-zh>老師被期待在學期開始前就「已經準備好」，而家長往往在「完全沒準備」的情況下就必須面對壓力。</p>
+        <p data-en>Teachers are expected to be ready from day one; parents often face the situation with no preparation at all.</p>
+      </div>
+      <div class="stakeholder-card">
+        <div class="stakeholder-tag"><span data-zh>醫療端</span><span data-en>Medical Perspective</span></div>
+        <h4 data-zh>跨體系的語言差異造成困惑</h4>
+        <h4 data-en>Cross-system language gaps create confusion</h4>
+        <p data-zh>醫療、教育、心輔三個體系之間的差異，讓家長在尋求協助時感到困惑與無所適從。</p>
+        <p data-en>Differences between medical, educational, and counseling systems leave parents confused and unsupported when seeking help.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- IDEATION -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>設計流程</span><span data-en>Design Process</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+    <h2 data-zh>理解使用者的多元樣貌，避免一刀切設計</h2>
+    <h2 data-en>Understanding User Diversity to Avoid One-Size-Fits-All Design</h2>
+    <p data-zh>在發想階段，我們系統性地拆解家長與老師各自的多元樣貌——因為這兩個族群並不是同質的，設計必須同時服務不同情境下的不同使用者：</p>
+    <p data-en>In the ideation phase, we systematically mapped the diversity within both parent and teacher groups — because these aren't homogeneous populations, and design must serve different users in different situations:</p>
+
+    <div class="spectrum-row">
+      <div class="spectrum-card">
+        <div class="spectrum-label"><span data-zh>家長光譜</span><span data-en>Parent Spectrum</span></div>
+        <ul>
+          <li data-zh>願意相信孩子病症 vs 不願相信的父母</li>
+          <li data-en>Parents who accept vs. deny the diagnosis</li>
+          <li data-zh>主動查詢資源 vs 被動且無法閱讀龐雜文字的父母</li>
+          <li data-en>Proactive information seekers vs. those overwhelmed by dense text</li>
+          <li data-zh>相信自己判斷 vs 十分依賴老師的父母</li>
+          <li data-en>Parents who trust their own judgment vs. those highly dependent on teachers</li>
+        </ul>
+      </div>
+      <div class="spectrum-card">
+        <div class="spectrum-label"><span data-zh>老師光譜</span><span data-en>Teacher Spectrum</span></div>
+        <ul>
+          <li data-zh>能因應緊急情況 vs 有自己 SOP 但較沒彈性的老師</li>
+          <li data-en>Adaptable to emergencies vs. procedure-bound and less flexible</li>
+          <li data-zh>願意手把手幫助孩子 vs 認為應交給特教老師的老師</li>
+          <li data-en>Hands-on helpers vs. those who defer entirely to special ed staff</li>
+          <li data-zh>期待父母有病識感 vs 有耐心頻繁叮囑父母的老師</li>
+          <li data-en>Expecting parental awareness vs. patiently guiding parents repeatedly</li>
+        </ul>
+      </div>
+    </div>
+
+    <p data-zh>為了避免設計受限於團隊內部觀點，我們舉辦了<strong>方案發想及測試工作坊</strong>，邀請醫師、家長、設計師、教師、一般民眾共同發想、參與測試並給予回饋，確保方案能服務複數族群並提高落地可能性。</p>
+    <p data-en>To avoid solutions constrained by team-internal perspectives, we organized a <strong>participatory ideation and testing workshop</strong> — inviting physicians, parents, designers, teachers, and general public to co-ideate, test, and give feedback, ensuring solutions could serve diverse groups and have real-world viability.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- DESIGN -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>設計成果</span><span data-en>Design Deliverables</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+    <h2 data-zh>紙本 × 網頁，雙版本資源指南</h2>
+    <h2 data-en>A Dual-Format Resource Guide: Print + Web</h2>
+    <p data-zh>最終設計成果為紙本與網頁雙版本，兩者各自針對不同的使用情境與接觸時機：</p>
+    <p data-en>The final design delivered two complementary formats, each optimized for different contexts and touchpoints:</p>
+
+    <div class="deliverable-grid">
+      <div class="deliverable-card">
+        <div class="deliverable-card-header">
+          <div class="deliverable-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+          <div>
+            <div class="deliverable-tag"><span data-zh>成果 01</span><span data-en>Deliverable 01</span></div>
+            <h3 data-zh>紙本資源指南</h3>
+            <h3 data-en>Print Resource Guide</h3>
+          </div>
+        </div>
+        <p data-zh>老師可於新生入學時發放，讓家長能自我評估並即早尋求資源。分為四個區塊：</p>
+        <p data-en>Distributed by teachers at student enrollment, enabling parents to self-assess and seek early intervention. Organized into four sections:</p>
+        <ul>
+          <li data-zh>初期評估與觀察：快速判斷孩子是否有隱性障礙特質</li>
+          <li data-en>Early Assessment: Quick evaluation of potential invisible disability traits</li>
+          <li data-zh>就診須知：了解就醫流程，減少就醫過程的焦慮感</li>
+          <li data-en>Medical Consultation Guide: Reduce anxiety around the diagnosis process</li>
+          <li data-zh>其他資源：社福、特教、心理諮商等各類資源管道</li>
+          <li data-en>Additional Resources: Social welfare, special education, counseling pathways</li>
+          <li data-zh>家長社群：非官方資源提供教養經驗交流與心情支持</li>
+          <li data-en>Parent Community: Peer support and parenting experience exchange</li>
+        </ul>
+      </div>
+      <div class="deliverable-card">
+        <div class="deliverable-card-header">
+          <div class="deliverable-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <div>
+            <div class="deliverable-tag"><span data-zh>成果 02</span><span data-en>Deliverable 02</span></div>
+            <h3 data-zh>網頁資源指南</h3>
+            <h3 data-en>Web Resource Guide</h3>
+          </div>
+        </div>
+        <p data-zh>訪談發現通訊軟體已成為老師與家長最即時的溝通工具，因此同步推出網頁版，提供：</p>
+        <p data-en>Interviews revealed messaging apps are the most immediate communication tool between teachers and parents, prompting a parallel web version offering:</p>
+        <ul>
+          <li data-zh>清晰的說明指引：一頁式網頁提供步驟指引</li>
+          <li data-en>Clear step-by-step guidance in a single-page format</li>
+          <li data-zh>一鍵下載最需要的資源指引</li>
+          <li data-en>One-click download of essential resource guides</li>
+          <li data-zh>情境化標題：將常見痛點以情境式問題呈現，讓使用者快速找到所需資訊</li>
+          <li data-en>Contextualized headings framed as common pain points, enabling quick information retrieval</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- IMPACT -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>社會影響</span><span data-en>Impact</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+    <h2 data-zh>從台北出發，持續擴大影響力</h2>
+    <h2 data-en>Starting from Taipei, Growing Outward</h2>
+
+    <div class="impact-stat-row">
+      <div class="impact-stat">
+        <div class="i-num"><span data-zh>15萬</span><span data-en>150K</span></div>
+        <div class="i-label"><span data-zh>份紙本資源指南</span><span data-en>print copies distributed</span></div>
+      </div>
+      <div class="impact-stat">
+        <div class="i-num">151</div>
+        <div class="i-label"><span data-zh>所台北市國小</span><span data-en>Taipei elementary schools</span></div>
+      </div>
+      <div class="impact-stat">
+        <div class="i-num">5,708</div>
+        <div class="i-label"><span data-zh>次網頁不重複點擊</span><span data-en>unique website clicks</span></div>
+      </div>
+      <div class="impact-stat">
+        <div class="i-num">2023</div>
+        <div class="i-label"><span data-zh>台南市教育局來信洽談擴展</span><span data-en>Tainan City Education Bureau reached out for local expansion</span></div>
+      </div>
+    </div>
+
+    <p data-zh>2022 年成果正式發行後，2023 年收到台南市教育局的來信，接洽製作台南版本——這代表這份指南的價值被跨城市認可，並成為一個可複製推廣的社會設計模板。</p>
+    <p data-en>After the 2022 launch, the Tainan City Education Bureau reached out in 2023 to discuss creating a Tainan version — demonstrating that the guide's value was recognized across cities, and that it had become a replicable social design template.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- REFLECTION -->
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>反思</span><span data-en>Reflection</span></div>
+    <div class="reflection-box">
+      <div class="eyebrow"><span data-zh>核心學習</span><span data-en>Key Learning</span></div>
+      <blockquote data-zh>「社會設計的難處不在於找到解法，而在於讓解法真的能被需要它的人接觸到。」</blockquote>
+      <blockquote data-en>"The challenge of social design isn't finding the solution — it's making sure the solution actually reaches the people who need it."</blockquote>
+      <p data-zh>這個專案讓我第一次認真思考「設計的觸達問題」。一份再好的資源指南，如果家長拿不到、不知道從哪找，就沒有任何意義。「老師在新生入學時發放」這個分發機制，是整個專案最關鍵的設計決策之一——不是設計本身，而是觸達路徑的設計。</p>
+      <p data-en>This project made me seriously think about "design reachability" for the first time. The best resource guide means nothing if parents can't access it. The distribution mechanism — "teachers distribute at enrollment" — was one of the project's most critical design decisions. It wasn't the design itself, but the design of how it reaches people.</p>
+      <p data-zh>參與式工作坊也讓我看見：當設計過程納入醫師、家長、老師等不同角色時，所產出的方案會更貼近真實需求，也更容易在現有系統中落地。</p>
+      <p data-en>The participatory workshop also showed me: when the design process includes physicians, parents, and teachers, the resulting solutions better reflect real needs and are more likely to work within existing systems.</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="case-nav-footer">
+  <a href="project-pdis.html" class="cnf-back">← <span data-zh>上一個：青年署官網</span><span data-en>Previous: YDA Redesign</span></a>
+  <a href="index.html" class="cnf-next"><span data-zh>返回作品集 →</span><span data-en>Back to Portfolio →</span></a>
+</div>
+
+<script>
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  }
+</script>
+</body>
+</html>

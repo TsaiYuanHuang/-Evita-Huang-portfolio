@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>消費者行為熱力圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    /* Claude warm palette — Coral + Amber + Gray */
+    --bg:#F7F5F2;--surface:#FFFFFF;--surface2:#F1EFE8;--surface3:#EAE7DF;
+    --border:#D3D1C7;--border2:#B4B2A9;
+    --accent:#D85A30;--accent2:#BA7517;--accent-light:#FAECE7;--accent-mid:#F0997B;
+    --amber:#BA7517;--amber2:#EF9F27;--amber-light:#FAEEDA;
+    --gray:#5F5E5A;--gray2:#888780;--gray3:#444441;
+    --text:#2C2C2A;--text2:#5F5E5A;--text3:#888780;
+    --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+    --radius:6px;--radius-lg:10px;
+  }
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+
+  .app-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 28px;border-bottom:1px solid var(--border);
+    background:var(--surface);
+  }
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo-mark{
+    width:28px;height:28px;background:var(--accent);border-radius:4px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:11px;font-weight:500;color:#fff;letter-spacing:-.5px;
+  }
+  .logo-text{font-family:var(--mono);font-size:13px;color:var(--text2);letter-spacing:.04em;}
+  .header-meta{font-family:var(--mono);font-size:11px;color:var(--text3);}
+
+  /* ── MAIN LAYOUT ── */
+  .app-body{
+    display:grid;
+    grid-template-columns:var(--left-w, 200px) 1fr var(--right-w, 220px);
+    min-height:calc(100vh - 56px);
+    transition:grid-template-columns .25s ease;
+  }
+
+  /* ── PANEL COLLAPSE ── */
+  .panel-left, .panel-right{position:relative;transition:padding .25s ease;}
+
+  .panel-toggle{
+    position:absolute;top:18px;
+    width:20px;height:20px;
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    z-index:10;transition:background .15s, border-color .15s;
+  }
+  .panel-toggle:hover{background:var(--accent-light);border-color:var(--accent-mid);}
+  .panel-toggle svg{transition:transform .25s ease;}
+
+  .panel-left .panel-toggle{right:-10px;}
+  .panel-right .panel-toggle{left:-10px;}
+
+  .panel-left.collapsed{padding:16px 0;overflow:hidden;}
+  .panel-right.collapsed{padding:16px 0;overflow:hidden;}
+
+  .panel-left.collapsed .panel-content{opacity:0;pointer-events:none;transition:opacity .15s;}
+  .panel-right.collapsed .panel-content{opacity:0;pointer-events:none;transition:opacity .15s;}
+  .panel-left .panel-content{opacity:1;transition:opacity .2s .08s;}
+  .panel-right .panel-content{opacity:1;transition:opacity .2s .08s;}
+
+  .panel-left.collapsed .panel-toggle svg{transform:rotate(180deg);}
+  .panel-right.collapsed .panel-toggle svg{transform:rotate(180deg);}
+
+  /* ── LEFT PANEL ── */
+  .panel-left{
+    border-right:1px solid var(--border);padding:20px 16px;
+    display:flex;flex-direction:column;gap:20px;background:var(--surface);
+  }
+  .panel-section-label{
+    font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.12em;
+    text-transform:uppercase;margin-bottom:8px;
+  }
+  .visitor-list{display:flex;flex-direction:column;gap:3px;}
+  .visitor-item{
+    display:flex;align-items:center;gap:8px;padding:5px 8px;
+    border-radius:var(--radius);cursor:pointer;transition:background .15s;
+    border:1px solid transparent;
+  }
+  .visitor-item:hover{background:var(--surface2);border-color:var(--border);}
+  .visitor-item input[type=checkbox]{
+    appearance:none;width:13px;height:13px;border:1px solid var(--border2);
+    border-radius:3px;background:var(--surface);cursor:pointer;
+    flex-shrink:0;position:relative;transition:all .15s;
+  }
+  .visitor-item input[type=checkbox]:checked{background:var(--accent);border-color:var(--accent);}
+  .visitor-item input[type=checkbox]:checked::after{
+    content:'';position:absolute;left:3px;top:1px;
+    width:5px;height:8px;border:2px solid #fff;
+    border-top:none;border-left:none;transform:rotate(40deg);
+  }
+  .visitor-label{font-family:var(--mono);font-size:11px;color:var(--text2);}
+  .visitor-item.checked .visitor-label{color:var(--accent);}
+
+  .btn-select-all{
+    width:100%;padding:7px;background:transparent;border:1px solid var(--border2);
+    border-radius:var(--radius);color:var(--text2);font-family:var(--mono);font-size:11px;
+    cursor:pointer;transition:all .15s;letter-spacing:.04em;
+  }
+  .btn-select-all:hover{background:var(--accent-light);border-color:var(--accent-mid);color:var(--accent);}
+
+  /* ── CENTER CANVAS AREA ── */
+  .panel-center{
+    display:flex;flex-direction:column;align-items:center;
+    padding:24px;gap:16px;overflow:auto;background:var(--bg);
+  }
+  .canvas-wrapper{
+    position:relative;border:1px solid var(--border);
+    border-radius:var(--radius-lg);overflow:hidden;
+    box-shadow:0 4px 24px rgba(44,44,42,.1);
+  }
+  #sketch-container canvas{display:block !important;}
+
+  /* ── RIGHT PANEL ── */
+  .panel-right{
+    border-left:1px solid var(--border);padding:20px 16px;
+    display:flex;flex-direction:column;gap:20px;background:var(--surface);
+  }
+
+  /* ── VIEW MODE TABS ── */
+  .tab-group{display:flex;flex-direction:column;gap:3px;}
+  .tab-item{
+    display:flex;align-items:center;gap:10px;padding:8px 10px;
+    border-radius:var(--radius);cursor:pointer;
+    border:1px solid transparent;transition:all .15s;
+  }
+  .tab-item:hover{background:var(--surface2);}
+  .tab-item.active{background:var(--accent-light);border-color:var(--accent-mid);}
+  .tab-item.disabled{opacity:.3;pointer-events:none;}
+  .tab-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;transition:background .15s;}
+  .tab-item.active .tab-dot{background:var(--accent);}
+  .tab-item:not(.active) .tab-dot{background:var(--border2);}
+  .tab-label{font-family:var(--mono);font-size:11px;color:var(--text2);}
+  .tab-item.active .tab-label{color:var(--accent);}
+
+  /* ── BEHAVIOR FILTERS ── */
+  .filter-group{display:flex;flex-direction:column;gap:3px;}
+  .filter-item{
+    display:flex;align-items:center;gap:10px;padding:6px 10px;
+    border-radius:var(--radius);cursor:pointer;transition:background .15s;
+  }
+  .filter-item:hover{background:var(--surface2);}
+  .filter-radio{
+    appearance:none;width:13px;height:13px;border:1px solid var(--border2);
+    border-radius:50%;background:var(--surface);cursor:pointer;flex-shrink:0;
+    position:relative;transition:all .15s;
+  }
+  .filter-radio:checked{border-color:var(--accent);}
+  .filter-radio:checked::after{
+    content:'';position:absolute;left:3px;top:3px;
+    width:5px;height:5px;border-radius:50%;background:var(--accent);
+  }
+  .filter-label{font-family:var(--mono);font-size:11px;color:var(--text2);}
+
+  /* ── LEGEND ── */
+  .legend{display:flex;flex-direction:column;gap:6px;}
+  .legend-item{display:flex;align-items:center;gap:8px;}
+  .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .legend-text{font-family:var(--mono);font-size:11px;color:var(--text3);}
+
+  /* ── STATUS BAR ── */
+  .status-bar{
+    width:100%;display:flex;align-items:center;justify-content:space-between;
+    padding:8px 16px;background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);font-family:var(--mono);font-size:11px;color:var(--text3);
+  }
+  .status-badge{
+    background:var(--accent-light);color:var(--accent);
+    padding:2px 8px;border-radius:3px;font-size:10px;border:1px solid var(--accent-mid);
+  }
+
+  /* ── DIVIDER ── */
+  .divider{height:1px;background:var(--border);margin:4px 0;}
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar{width:4px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="logo">
+    <div class="logo-mark">HM</div>
+    <span class="logo-text">behavior heatmap — supermarket study</span>
+  </div>
+  <span class="header-meta">n=10 · anonymized</span>
+</header>
+
+<div class="app-body">
+
+  <!-- LEFT: Visitor selector -->
+  <aside class="panel-left" id="panel-left">
+    <button class="panel-toggle" id="toggle-left" title="收合面板">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+        <path d="M7 5L3 2M7 5L3 8" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="panel-content">
+    <div>
+      <div class="panel-section-label">Visitors</div>
+      <div class="visitor-list" id="visitor-list"></div>
+    </div>
+    <button class="btn-select-all" id="btn-select-all">select / deselect all</button>
+    <div class="divider"></div>
+    <div>
+      <div class="panel-section-label">Legend</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#D85A30"></div><span class="legend-text">purchased</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#BA7517"></div><span class="legend-text">inspected</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div><span class="legend-text">stopped</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#888780"></div><span class="legend-text">put back</span></div>
+      </div>
+    </div>
+    </div>
+  </aside>
+
+  <!-- CENTER: Canvas -->
+  <main class="panel-center">
+    <div class="status-bar" id="status-bar">
+      <span id="status-text">select visitors to begin</span>
+      <span class="status-badge" id="status-badge">0 selected</span>
+    </div>
+    <div class="canvas-wrapper">
+      <div id="sketch-container"></div>
+    </div>
+  </main>
+
+  <!-- RIGHT: Controls -->
+  <aside class="panel-right" id="panel-right">
+    <button class="panel-toggle" id="toggle-right" title="收合面板">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+        <path d="M3 5L7 2M3 5L7 8" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="panel-content">
+    <div>
+      <div class="panel-section-label">View Mode</div>
+      <div class="tab-group" id="view-mode-group"></div>
+    </div>
+    <div class="divider"></div>
+    <div>
+      <div class="panel-section-label">Filter</div>
+      <div class="filter-group" id="filter-group"></div>
+    </div>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+// ===================================================================
+// 1. 虛構資料 — 保留超市採買場景，區域與商品名稱全部替換
+// ===================================================================
+
+// 虛構的貨架區域（與真實研究完全不同的分區邏輯）
+const zoneData = [
+  { name: 'Zone A\n常溫飲品', x1:6,  y1:1, x2:10, y2:2, color:'rgba(186,117,23,0.10)',  stroke:'rgba(186,117,23,0.45)'  },
+  { name: 'Zone B\n補充品',   x1:11, y1:1, x2:14, y2:2, color:'rgba(216,90,48,0.08)',   stroke:'rgba(216,90,48,0.40)'   },
+  { name: 'Zone C\n機能食品', x1:15, y1:1, x2:18, y2:3, color:'rgba(239,159,39,0.12)',  stroke:'rgba(239,159,39,0.50)'  },
+  { name: 'Zone D\n常溫熟食', x1:6,  y1:4, x2:14, y2:5, color:'rgba(216,90,48,0.08)',   stroke:'rgba(216,90,48,0.35)'   },
+  { name: 'Zone E\n即食料理', x1:6,  y1:8, x2:16, y2:8, color:'rgba(186,117,23,0.10)',  stroke:'rgba(186,117,23,0.40)'  },
+  { name: 'Zone F\n冷藏品',   x1:2,  y1:9, x2:13, y2:9, color:'rgba(95,94,90,0.06)',    stroke:'rgba(95,94,90,0.30)'    },
+];
+
+// 虛構商品名稱 pool（按食品類別，無法推回真實品牌）
+const productNames = {
+  drink:      ['植物蛋白飲','植物蛋白飲','燕麥奶','豆漿飲料','保久乳','綜合蔬果汁','高纖穀物奶'],
+  supplement: ['複合蛋白粉','乳清蛋白','植物精粹飲','機能補給粉','穀物補給液'],
+  functional: ['軟質主食包','軟肉餐包','蒸蔬菜豆包','烘烤豆製品','機能調理包','軟質便當'],
+  hotfood:    ['海鮮粥','雜糧粥','燕麥粥','軟質燉飯','地瓜燉粥','機能粥品'],
+  readymeal:  ['滷肉軟排','燉雞腿排','魚肉軟食','蒸蔬菜套','豆腐鍋包','香菇肉燥'],
+  chilled:    ['希臘優格','原味優格','鮮乳品','乳酪點心','低糖奶酪','木耳飲','水果凍'],
+};
+
+// 亂數抽商品名
+function pickProduct(cat, seed) {
+  const pool = productNames[cat] || productNames.drink;
+  return pool[seed % pool.length];
+}
+
+// 根據座標推測類別
+function guessCategory(x, y) {
+  if (y<=2 && x>=6  && x<=10) return 'drink';
+  if (y<=2 && x>=11 && x<=14) return 'supplement';
+  if (y<=3 && x>=15)           return 'functional';
+  if (y>=4 && y<=5)            return 'hotfood';
+  if (y===8)                    return 'readymeal';
+  if (y===9)                    return 'chilled';
+  return 'drink';
+}
+
+// 生成虛構受訪者資料（保留互動結構，替換所有識別資訊）
+function makeVisitor(id, rawInteractions) {
+  return {
+    info: { id: `V${String(id).padStart(2,'0')}` },
+    mapSize: { w:20, h:11 },
+    interactions: rawInteractions.map((r,i) => ({
+      seq: r.seq, id: r.id,
+      behavior: r.behavior,
+      x: r.x, y: r.y,
+      name: pickProduct(guessCategory(r.x, r.y), r.id + i)
+    }))
+  };
+}
+
+// 原始座標資料（僅保留行為結構，名稱已移除）
+const rawData = [
+  // V01 — 22 interactions
+  [ {seq:1,id:1,behavior:'purchased',x:6,y:8},{seq:2,id:2,behavior:'purchased',x:7,y:8},
+    {seq:3,id:3,behavior:'stopped',x:8,y:8},{seq:4,id:4,behavior:'stopped',x:16,y:8},
+    {seq:5,id:5,behavior:'purchased',x:10,y:9},{seq:6,id:6,behavior:'inspected',x:12,y:9},
+    {seq:7,id:7,behavior:'purchased',x:12,y:9},{seq:8,id:8,behavior:'purchased',x:2,y:9},
+    {seq:9,id:9,behavior:'stopped',x:10,y:5},{seq:10,id:10,behavior:'inspected',x:16,y:5},
+    {seq:11,id:11,behavior:'inspected',x:18,y:3},{seq:12,id:12,behavior:'purchased',x:18,y:3},
+    {seq:13,id:13,behavior:'inspected',x:12,y:1},{seq:14,id:14,behavior:'purchased',x:8,y:1},
+    {seq:15,id:15,behavior:'purchased',x:9,y:1},{seq:16,id:16,behavior:'inspected',x:16,y:1},
+    {seq:17,id:17,behavior:'purchased',x:16,y:1},{seq:18,id:18,behavior:'inspected',x:18,y:2},
+    {seq:19,id:19,behavior:'purchased',x:18,y:2},{seq:20,id:20,behavior:'purchased',x:18,y:3},
+    {seq:21,id:21,behavior:'purchased',x:18,y:3},{seq:22,id:22,behavior:'purchased',x:14,y:5} ],
+  // V02 — 28 interactions
+  [ {seq:1,id:1,behavior:'stopped',x:7,y:1},{seq:2,id:2,behavior:'stopped',x:7,y:4},
+    {seq:3,id:3,behavior:'stopped',x:9,y:4},{seq:4,id:4,behavior:'stopped',x:7,y:5},
+    {seq:5,id:5,behavior:'inspected',x:7,y:5},{seq:6,id:6,behavior:'purchased',x:11,y:8},
+    {seq:7,id:7,behavior:'inspected',x:14,y:8},{seq:8,id:8,behavior:'inspected',x:15,y:8},
+    {seq:9,id:9,behavior:'purchased',x:15,y:8},{seq:10,id:10,behavior:'stopped',x:10,y:9},
+    {seq:11,id:11,behavior:'stopped',x:11,y:9},{seq:12,id:12,behavior:'stopped',x:12,y:9},
+    {seq:13,id:13,behavior:'stopped',x:13,y:9},{seq:14,id:14,behavior:'stopped',x:6,y:9},
+    {seq:15,id:15,behavior:'stopped',x:7,y:9},{seq:16,id:16,behavior:'stopped',x:8,y:9},
+    {seq:17,id:17,behavior:'purchased',x:6,y:9},{seq:18,id:18,behavior:'stopped',x:5,y:9},
+    {seq:19,id:19,behavior:'stopped',x:9,y:4},{seq:20,id:20,behavior:'stopped',x:10,y:4},
+    {seq:21,id:21,behavior:'stopped',x:8,y:4},{seq:22,id:22,behavior:'purchased',x:9,y:4},
+    {seq:23,id:23,behavior:'inspected',x:18,y:3},{seq:24,id:24,behavior:'inspected',x:18,y:3},
+    {seq:25,id:25,behavior:'purchased',x:18,y:3},{seq:26,id:26,behavior:'stopped',x:18,y:2},
+    {seq:27,id:27,behavior:'purchased',x:18,y:2},{seq:28,id:28,behavior:'purchased',x:9,y:4} ],
+  // V03 — 21 interactions
+  [ {seq:1,id:1,behavior:'inspected',x:18,y:3},{seq:2,id:2,behavior:'purchased',x:18,y:3},
+    {seq:3,id:3,behavior:'inspected',x:18,y:3},{seq:4,id:4,behavior:'purchased',x:18,y:3},
+    {seq:5,id:5,behavior:'purchased',x:13,y:1},{seq:6,id:6,behavior:'inspected',x:15,y:1},
+    {seq:7,id:7,behavior:'inspected',x:8,y:1},{seq:8,id:8,behavior:'purchased',x:7,y:1},
+    {seq:9,id:9,behavior:'inspected',x:7,y:4},{seq:10,id:10,behavior:'purchased',x:7,y:4},
+    {seq:11,id:11,behavior:'purchased',x:9,y:4},{seq:12,id:12,behavior:'purchased',x:13,y:4},
+    {seq:13,id:13,behavior:'purchased',x:14,y:5},{seq:14,id:14,behavior:'inspected',x:7,y:8},
+    {seq:15,id:15,behavior:'purchased',x:7,y:8},{seq:16,id:16,behavior:'inspected',x:6,y:8},
+    {seq:17,id:17,behavior:'purchased',x:6,y:8},{seq:18,id:18,behavior:'purchased',x:7,y:8},
+    {seq:19,id:19,behavior:'purchased',x:15,y:8},{seq:20,id:20,behavior:'stopped',x:2,y:9},
+    {seq:21,id:21,behavior:'putBack',x:13,y:1} ],
+  // V04 — 35 interactions
+  [ {seq:1,id:1,behavior:'inspected',x:10,y:8},{seq:2,id:2,behavior:'inspected',x:15,y:8},
+    {seq:3,id:3,behavior:'inspected',x:16,y:8},{seq:4,id:4,behavior:'stopped',x:8,y:8},
+    {seq:5,id:5,behavior:'purchased',x:7,y:8},{seq:6,id:6,behavior:'purchased',x:7,y:8},
+    {seq:7,id:7,behavior:'purchased',x:6,y:8},{seq:8,id:8,behavior:'stopped',x:4,y:9},
+    {seq:9,id:9,behavior:'stopped',x:5,y:9},{seq:10,id:10,behavior:'stopped',x:5,y:9},
+    {seq:11,id:11,behavior:'stopped',x:5,y:9},{seq:12,id:12,behavior:'purchased',x:5,y:9},
+    {seq:13,id:13,behavior:'stopped',x:3,y:9},{seq:14,id:14,behavior:'stopped',x:2,y:9},
+    {seq:15,id:15,behavior:'purchased',x:3,y:9},{seq:16,id:16,behavior:'purchased',x:2,y:9},
+    {seq:17,id:17,behavior:'purchased',x:6,y:5},{seq:18,id:18,behavior:'stopped',x:7,y:5},
+    {seq:19,id:19,behavior:'stopped',x:10,y:5},{seq:20,id:20,behavior:'purchased',x:10,y:5},
+    {seq:21,id:21,behavior:'stopped',x:8,y:5},{seq:22,id:22,behavior:'purchased',x:8,y:5},
+    {seq:23,id:23,behavior:'stopped',x:7,y:4},{seq:24,id:24,behavior:'inspected',x:9,y:4},
+    {seq:25,id:25,behavior:'inspected',x:11,y:4},{seq:26,id:26,behavior:'inspected',x:13,y:4},
+    {seq:27,id:27,behavior:'stopped',x:15,y:4},{seq:28,id:28,behavior:'stopped',x:12,y:4},
+    {seq:29,id:29,behavior:'purchased',x:12,y:4},{seq:30,id:30,behavior:'putBack',x:10,y:5},
+    {seq:31,id:31,behavior:'purchased',x:12,y:4},{seq:32,id:32,behavior:'inspected',x:18,y:3},
+    {seq:33,id:33,behavior:'purchased',x:18,y:3},{seq:34,id:34,behavior:'purchased',x:18,y:2},
+    {seq:35,id:35,behavior:'purchased',x:18,y:2} ],
+  // V05 — 27 interactions
+  [ {seq:1,id:1,behavior:'purchased',x:16,y:8},{seq:2,id:2,behavior:'inspected',x:13,y:8},
+    {seq:3,id:3,behavior:'inspected',x:15,y:8},{seq:4,id:4,behavior:'purchased',x:15,y:8},
+    {seq:5,id:5,behavior:'purchased',x:14,y:8},{seq:6,id:6,behavior:'inspected',x:11,y:8},
+    {seq:7,id:7,behavior:'inspected',x:10,y:8},{seq:8,id:8,behavior:'purchased',x:11,y:8},
+    {seq:9,id:9,behavior:'purchased',x:10,y:8},{seq:10,id:10,behavior:'stopped',x:9,y:8},
+    {seq:11,id:11,behavior:'inspected',x:8,y:8},{seq:12,id:12,behavior:'inspected',x:7,y:8},
+    {seq:13,id:13,behavior:'purchased',x:7,y:8},{seq:14,id:14,behavior:'purchased',x:8,y:8},
+    {seq:15,id:15,behavior:'purchased',x:4,y:9},{seq:16,id:16,behavior:'inspected',x:2,y:9},
+    {seq:17,id:17,behavior:'purchased',x:2,y:9},{seq:18,id:18,behavior:'inspected',x:6,y:5},
+    {seq:19,id:19,behavior:'purchased',x:6,y:5},{seq:20,id:20,behavior:'inspected',x:14,y:5},
+    {seq:21,id:21,behavior:'purchased',x:14,y:5},{seq:22,id:22,behavior:'inspected',x:15,y:4},
+    {seq:23,id:23,behavior:'purchased',x:15,y:4},{seq:24,id:24,behavior:'inspected',x:18,y:2},
+    {seq:25,id:25,behavior:'purchased',x:18,y:2},{seq:26,id:26,behavior:'inspected',x:18,y:3},
+    {seq:27,id:27,behavior:'inspected',x:18,y:3} ],
+  // V06 — 30 interactions
+  [ {seq:1,id:1,behavior:'stopped',x:16,y:8},{seq:2,id:2,behavior:'stopped',x:15,y:8},
+    {seq:3,id:3,behavior:'stopped',x:16,y:8},{seq:4,id:4,behavior:'stopped',x:15,y:8},
+    {seq:5,id:5,behavior:'stopped',x:14,y:8},{seq:6,id:6,behavior:'stopped',x:13,y:8},
+    {seq:7,id:7,behavior:'purchased',x:13,y:8},{seq:8,id:8,behavior:'purchased',x:14,y:8},
+    {seq:9,id:9,behavior:'stopped',x:10,y:8},{seq:10,id:10,behavior:'stopped',x:9,y:8},
+    {seq:11,id:11,behavior:'purchased',x:8,y:8},{seq:12,id:12,behavior:'purchased',x:6,y:8},
+    {seq:13,id:13,behavior:'inspected',x:7,y:8},{seq:14,id:14,behavior:'purchased',x:6,y:8},
+    {seq:15,id:15,behavior:'inspected',x:6,y:5},{seq:16,id:16,behavior:'inspected',x:7,y:5},
+    {seq:17,id:17,behavior:'inspected',x:8,y:5},{seq:18,id:18,behavior:'inspected',x:10,y:5},
+    {seq:19,id:19,behavior:'purchased',x:8,y:5},{seq:20,id:20,behavior:'inspected',x:11,y:5},
+    {seq:21,id:21,behavior:'inspected',x:9,y:5},{seq:22,id:22,behavior:'purchased',x:9,y:5},
+    {seq:23,id:23,behavior:'purchased',x:11,y:5},{seq:24,id:24,behavior:'stopped',x:15,y:5},
+    {seq:25,id:25,behavior:'purchased',x:15,y:4},{seq:26,id:26,behavior:'stopped',x:9,y:4},
+    {seq:27,id:27,behavior:'inspected',x:9,y:4},{seq:28,id:28,behavior:'purchased',x:9,y:4},
+    {seq:29,id:29,behavior:'purchased',x:18,y:2},{seq:30,id:30,behavior:'purchased',x:2,y:9} ],
+  // V07 — 28 interactions
+  [ {seq:1,id:1,behavior:'inspected',x:15,y:8},{seq:2,id:2,behavior:'inspected',x:10,y:8},
+    {seq:3,id:3,behavior:'inspected',x:12,y:8},{seq:4,id:4,behavior:'inspected',x:10,y:8},
+    {seq:5,id:5,behavior:'inspected',x:11,y:8},{seq:6,id:6,behavior:'inspected',x:8,y:8},
+    {seq:7,id:7,behavior:'inspected',x:6,y:8},{seq:8,id:8,behavior:'stopped',x:7,y:9},
+    {seq:9,id:9,behavior:'stopped',x:12,y:9},{seq:10,id:10,behavior:'stopped',x:4,y:9},
+    {seq:11,id:11,behavior:'stopped',x:2,y:9},{seq:12,id:12,behavior:'purchased',x:6,y:8},
+    {seq:13,id:13,behavior:'purchased',x:12,y:8},{seq:14,id:14,behavior:'inspected',x:9,y:4},
+    {seq:15,id:15,behavior:'purchased',x:9,y:5},{seq:16,id:16,behavior:'inspected',x:11,y:5},
+    {seq:17,id:17,behavior:'inspected',x:10,y:5},{seq:18,id:18,behavior:'inspected',x:9,y:1},
+    {seq:19,id:19,behavior:'purchased',x:11,y:1},{seq:20,id:20,behavior:'inspected',x:12,y:1},
+    {seq:21,id:21,behavior:'purchased',x:18,y:2},{seq:22,id:22,behavior:'inspected',x:18,y:3},
+    {seq:23,id:23,behavior:'inspected',x:18,y:3},{seq:24,id:24,behavior:'inspected',x:18,y:3},
+    {seq:25,id:25,behavior:'inspected',x:18,y:3},{seq:26,id:26,behavior:'purchased',x:14,y:8},
+    {seq:27,id:27,behavior:'purchased',x:8,y:8},{seq:28,id:28,behavior:'purchased',x:3,y:9} ],
+  // V08 — 24 interactions
+  [ {seq:1,id:1,behavior:'purchased',x:15,y:8},{seq:2,id:2,behavior:'purchased',x:10,y:8},
+    {seq:3,id:3,behavior:'purchased',x:9,y:8},{seq:4,id:4,behavior:'stopped',x:6,y:8},
+    {seq:5,id:5,behavior:'purchased',x:7,y:8},{seq:6,id:6,behavior:'stopped',x:8,y:8},
+    {seq:7,id:7,behavior:'stopped',x:7,y:4},{seq:8,id:8,behavior:'stopped',x:9,y:4},
+    {seq:9,id:9,behavior:'stopped',x:12,y:4},{seq:10,id:10,behavior:'stopped',x:13,y:4},
+    {seq:11,id:11,behavior:'stopped',x:15,y:4},{seq:12,id:12,behavior:'purchased',x:18,y:2},
+    {seq:13,id:13,behavior:'stopped',x:18,y:2},{seq:14,id:14,behavior:'stopped',x:18,y:3},
+    {seq:15,id:15,behavior:'purchased',x:18,y:3},{seq:16,id:16,behavior:'inspected',x:18,y:3},
+    {seq:17,id:17,behavior:'stopped',x:12,y:1},{seq:18,id:18,behavior:'stopped',x:10,y:1},
+    {seq:19,id:19,behavior:'stopped',x:8,y:1},{seq:20,id:20,behavior:'stopped',x:14,y:1},
+    {seq:21,id:21,behavior:'purchased',x:14,y:1},{seq:22,id:22,behavior:'inspected',x:8,y:5},
+    {seq:23,id:23,behavior:'purchased',x:8,y:5},{seq:24,id:24,behavior:'purchased',x:8,y:1} ],
+  // V09 — 22 interactions
+  [ {seq:1,id:1,behavior:'stopped',x:14,y:1},{seq:2,id:2,behavior:'purchased',x:14,y:1},
+    {seq:3,id:3,behavior:'purchased',x:14,y:1},{seq:4,id:4,behavior:'purchased',x:18,y:3},
+    {seq:5,id:5,behavior:'stopped',x:13,y:4},{seq:6,id:6,behavior:'purchased',x:9,y:4},
+    {seq:7,id:7,behavior:'purchased',x:6,y:4},{seq:8,id:8,behavior:'purchased',x:8,y:5},
+    {seq:9,id:9,behavior:'purchased',x:8,y:5},{seq:10,id:10,behavior:'inspected',x:10,y:5},
+    {seq:11,id:11,behavior:'purchased',x:14,y:5},{seq:12,id:12,behavior:'purchased',x:14,y:8},
+    {seq:13,id:13,behavior:'purchased',x:11,y:8},{seq:14,id:14,behavior:'purchased',x:6,y:8},
+    {seq:15,id:15,behavior:'purchased',x:7,y:8},{seq:16,id:16,behavior:'purchased',x:8,y:8},
+    {seq:17,id:17,behavior:'purchased',x:3,y:9},{seq:18,id:18,behavior:'purchased',x:2,y:9},
+    {seq:19,id:19,behavior:'purchased',x:2,y:9},{seq:20,id:20,behavior:'inspected',x:10,y:9},
+    {seq:21,id:21,behavior:'inspected',x:10,y:9},{seq:22,id:22,behavior:'inspected',x:12,y:9} ],
+  // V10 — 35 interactions
+  [ {seq:1,id:1,behavior:'stopped',x:16,y:8},{seq:2,id:2,behavior:'stopped',x:15,y:8},
+    {seq:3,id:3,behavior:'stopped',x:14,y:8},{seq:4,id:4,behavior:'stopped',x:16,y:8},
+    {seq:5,id:5,behavior:'stopped',x:15,y:8},{seq:6,id:6,behavior:'stopped',x:13,y:8},
+    {seq:7,id:7,behavior:'stopped',x:12,y:8},{seq:8,id:8,behavior:'stopped',x:11,y:8},
+    {seq:9,id:9,behavior:'stopped',x:7,y:8},{seq:10,id:10,behavior:'stopped',x:6,y:8},
+    {seq:11,id:11,behavior:'stopped',x:7,y:5},{seq:12,id:12,behavior:'inspected',x:10,y:5},
+    {seq:13,id:13,behavior:'inspected',x:7,y:5},{seq:14,id:14,behavior:'inspected',x:9,y:5},
+    {seq:15,id:15,behavior:'inspected',x:12,y:5},{seq:16,id:16,behavior:'inspected',x:11,y:5},
+    {seq:17,id:17,behavior:'inspected',x:15,y:4},{seq:18,id:18,behavior:'inspected',x:12,y:4},
+    {seq:19,id:19,behavior:'inspected',x:13,y:4},{seq:20,id:20,behavior:'inspected',x:9,y:4},
+    {seq:21,id:21,behavior:'inspected',x:7,y:4},{seq:22,id:22,behavior:'inspected',x:9,y:1},
+    {seq:23,id:23,behavior:'inspected',x:8,y:1},{seq:24,id:24,behavior:'inspected',x:18,y:2},
+    {seq:25,id:25,behavior:'inspected',x:18,y:3},{seq:26,id:26,behavior:'purchased',x:18,y:2},
+    {seq:27,id:27,behavior:'purchased',x:18,y:3},{seq:28,id:28,behavior:'purchased',x:8,y:1},
+    {seq:29,id:29,behavior:'purchased',x:7,y:5},{seq:30,id:30,behavior:'purchased',x:8,y:5},
+    {seq:31,id:31,behavior:'purchased',x:16,y:5},{seq:32,id:32,behavior:'purchased',x:6,y:8},
+    {seq:33,id:33,behavior:'purchased',x:8,y:8},{seq:34,id:34,behavior:'purchased',x:11,y:8},
+    {seq:35,id:35,behavior:'purchased',x:2,y:9} ],
+];
+
+const allShoppers = rawData.map((d,i) => makeVisitor(i+1, d));
+
+// ===================================================================
+// 2. 全域變數
+// ===================================================================
+let grid=[]; const cellSize=38;
+let currentShopperData; let currentFilter='all'; let mapSize;
+let collisionGrid=[];
+let hoveredCellX=-1; let hoveredCellY=-1;
+let expansionState={activeCellX:-1,activeCellY:-1,progress:0,isExpanding:false};
+let singleShopperViewMode='sequence';
+let checkedVisitors = new Set();
+
+// ===================================================================
+// 3. DOM SETUP
+// ===================================================================
+function buildUI() {
+  // Visitor checkboxes
+  const list = document.getElementById('visitor-list');
+  allShoppers.forEach((s,i) => {
+    const item = document.createElement('div');
+    item.className = 'visitor-item';
+    item.dataset.idx = i;
+    const cb = document.createElement('input');
+    cb.type='checkbox'; cb.id=`v${i}`;
+    cb.addEventListener('change', () => {
+      if(cb.checked) checkedVisitors.add(i); else checkedVisitors.delete(i);
+      item.classList.toggle('checked', cb.checked);
+      updateData(); updateStatus();
+    });
+    const lbl = document.createElement('label');
+    lbl.className='visitor-label'; lbl.htmlFor=`v${i}`;
+    lbl.textContent = s.info.id;
+    item.appendChild(cb); item.appendChild(lbl);
+    item.addEventListener('click', e => { if(e.target!==cb) cb.click(); });
+    list.appendChild(item);
+  });
+
+  // Select all
+  document.getElementById('btn-select-all').addEventListener('click', () => {
+    const allChecked = checkedVisitors.size === allShoppers.length;
+    document.querySelectorAll('#visitor-list input[type=checkbox]').forEach((cb,i) => {
+      cb.checked = !allChecked;
+      cb.closest('.visitor-item').classList.toggle('checked', !allChecked);
+      if(!allChecked) checkedVisitors.add(i); else checkedVisitors.delete(i);
+    });
+    updateData(); updateStatus();
+  });
+
+  // View mode tabs
+  const viewModes = [
+    {id:'sequence',label:'interaction sequence',sub:'single visitor only'},
+    {id:'count',   label:'interaction count',  sub:'heatmap'},
+    {id:'conversion',label:'purchase rate',    sub:'heatmap'},
+    {id:'consideration',label:'consideration depth',sub:'heatmap'},
+  ];
+  const vmg = document.getElementById('view-mode-group');
+  viewModes.forEach(vm => {
+    const tab = document.createElement('div');
+    tab.className = 'tab-item' + (vm.id==='sequence'?' active':'');
+    tab.dataset.mode = vm.id;
+    tab.innerHTML = `<div class="tab-dot"></div><span class="tab-label">${vm.label}</span>`;
+    tab.addEventListener('click', () => {
+      if(tab.classList.contains('disabled')) return;
+      document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      singleShopperViewMode = vm.id;
+      updateData();
+    });
+    vmg.appendChild(tab);
+  });
+
+  // Behavior filters
+  const filters = [
+    {id:'all',label:'all behaviors'},
+    {id:'purchased',label:'purchased'},
+    {id:'inspected',label:'inspected'},
+    {id:'putBack',label:'put back'},
+    {id:'stopped',label:'stopped'},
+  ];
+  const fg = document.getElementById('filter-group');
+  filters.forEach(f => {
+    const row = document.createElement('div');
+    row.className = 'filter-item';
+    const radio = document.createElement('input');
+    radio.type='radio'; radio.className='filter-radio'; radio.name='behavior';
+    radio.value=f.id; if(f.id==='all') radio.checked=true;
+    radio.addEventListener('change', () => { currentFilter=f.id; updateData(); });
+    const lbl = document.createElement('label');
+    lbl.className='filter-label'; lbl.textContent=f.label;
+    row.appendChild(radio); row.appendChild(lbl);
+    row.addEventListener('click', e => { if(e.target!==radio) { radio.checked=true; currentFilter=f.id; updateData(); }});
+    fg.appendChild(row);
+  });
+
+  // (path toggle removed)
+}
+
+function updateStatus() {
+  const n = checkedVisitors.size;
+  document.getElementById('status-badge').textContent = `${n} selected`;
+  document.getElementById('status-text').textContent =
+    n===0 ? 'select visitors to begin' :
+    n===1 ? `showing data for 1 visitor` :
+    `aggregated data for ${n} visitors`;
+
+  // Update tab disabled state
+  const tabs = document.querySelectorAll('.tab-item');
+  tabs.forEach(t => {
+    const m = t.dataset.mode;
+    t.classList.toggle('disabled', n===0 || (n===1 && m!=='sequence' && false) || (n>1 && m==='sequence'));
+  });
+  if (n>1 && singleShopperViewMode==='sequence') {
+    singleShopperViewMode='count';
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.mode==='count'));
+  }
+}
+
+// ===================================================================
+// 4. P5.JS
+// ===================================================================
+function setup() {
+  mapSize = allShoppers[0].mapSize;
+  const cnv = createCanvas(mapSize.w*cellSize, mapSize.h*cellSize);
+  cnv.parent('sketch-container');
+  buildUI();
+  createCollisionGrid();
+  updateData();
+}
+
+function draw() {
+  const speed=0.1;
+  if(expansionState.isExpanding) expansionState.progress=lerp(expansionState.progress,1,speed);
+  else expansionState.progress=lerp(expansionState.progress,0,speed);
+  if(!expansionState.isExpanding&&expansionState.progress<0.01){
+    expansionState.activeCellX=-1; expansionState.activeCellY=-1;
+  }
+  background(247,245,242);
+  drawGrid();
+  drawZones();
+  if(currentShopperData&&currentShopperData.interactions.length>0){
+    drawGridContent();
+  }
+  handleTooltip();
+}
+
+function drawGrid() {
+  stroke(211,209,199); strokeWeight(0.5);
+  for(let x=0;x<mapSize.w;x++) for(let y=0;y<mapSize.h;y++){
+    noFill(); rect(x*cellSize,y*cellSize,cellSize,cellSize);
+  }
+}
+
+function drawZones() {
+  for(const z of zoneData){
+    const x=z.x1*cellSize, y=z.y1*cellSize;
+    const w=(z.x2-z.x1+1)*cellSize, h=(z.y2-z.y1+1)*cellSize;
+    noStroke(); fill(z.color); rect(x,y,w,h);
+    // Border
+    stroke(z.stroke); strokeWeight(1); noFill(); rect(x,y,w,h);
+    // Label — split by \n
+    noStroke();
+    const lines = z.name.split('\n');
+    if(lines.length===1){
+      fill(95,94,90,180); textSize(9); textAlign(CENTER,CENTER);
+      text(z.name, x+w/2, y+h/2);
+    } else {
+      fill(136,135,128,160); textSize(8); textAlign(CENTER,CENTER);
+      text(lines[0], x+w/2, y+h/2-6);
+      fill(68,68,65,200); textSize(9);
+      text(lines[1], x+w/2, y+h/2+5);
+    }
+  }
+  strokeWeight(1);
+}
+
+function updateData() {
+  currentFilter = document.querySelector('input[name=behavior]:checked')?.value || 'all';
+  const selected = [...checkedVisitors].map(i => allShoppers[i]);
+  const agg = selected.reduce((acc,s)=>acc.concat(s.interactions),[]);
+  currentShopperData = {interactions:agg, selectedCount:selected.length};
+  setupGrid(currentShopperData);
+}
+
+function setupGrid(data){
+  grid=[];
+  for(let i=0;i<mapSize.w;i++){grid[i]=[];for(let j=0;j<mapSize.h;j++)grid[i][j]=[];}
+  for(const item of data.interactions){
+    if(item.x<mapSize.w&&item.y<mapSize.h&&grid[item.x]&&grid[item.x][item.y])
+      grid[item.x][item.y].push(item);
+  }
+}
+
+function createCollisionGrid(){
+  for(let i=0;i<mapSize.w;i++){collisionGrid[i]=[];for(let j=0;j<mapSize.h;j++)collisionGrid[i][j]=true;}
+  for(const z of zoneData) for(let x=z.x1;x<=z.x2;x++) for(let y=z.y1;y<=z.y2;y++) if(collisionGrid[x]) collisionGrid[x][y]=false;
+}
+
+function drawPaths(){
+  if(!currentShopperData) return;
+  const pbs={};
+  for(const interaction of currentShopperData.interactions){
+    let si=allShoppers.find(s=>s.interactions.some(i=>i===interaction));
+    if(si){const id=si.info.id;if(!pbs[id])pbs[id]=[];pbs[id].push(interaction);}
+  }
+  const pc=[color(255,180,50,160),color(100,200,255,160),color(130,255,160,160)];
+  let ci=0;
+  for(const id in pbs){
+    let sp=pbs[id]; sp.sort((a,b)=>a.seq-b.seq);
+    stroke(pc[ci%pc.length]); strokeWeight(1.5); noFill();
+    for(let i=0;i<sp.length-1;i++){
+      const p=findPath({x:round(sp[i].x),y:round(sp[i].y)},{x:round(sp[i+1].x),y:round(sp[i+1].y)});
+      if(p){
+        beginShape();
+        for(const pt of p) vertex(pt.x*cellSize+cellSize/2,pt.y*cellSize+cellSize/2);
+        endShape();
+        if(p.length>=2){
+          const lp=p[p.length-1],slp=p[p.length-2];
+          const tx=lp.x*cellSize+cellSize/2,ty=lp.y*cellSize+cellSize/2;
+          const ang=atan2(lp.y-slp.y,lp.x-slp.x);
+          push();translate(tx-10*cos(ang),ty-10*sin(ang));rotate(ang);
+          fill(pc[ci%pc.length]);noStroke();triangle(0,0,-7,3.5,-7,-3.5);pop();
+        }
+      }
+    }
+    ci++;
+  }
+  strokeWeight(1);
+}
+
+function findPath(start,end){
+  let openSet=[],closedSet=[],path=[];
+  function Node(x,y){this.x=x;this.y=y;this.f=0;this.g=0;this.h=0;this.parent=null;this.neighbors=[];
+    this.addNeighbors=function(g){if(this.x<mapSize.w-1)this.neighbors.push(g[this.x+1][this.y]);if(this.x>0)this.neighbors.push(g[this.x-1][this.y]);if(this.y<mapSize.h-1)this.neighbors.push(g[this.x][this.y+1]);if(this.y>0)this.neighbors.push(g[this.x][this.y-1]);};}
+  let ng=[];
+  for(let i=0;i<mapSize.w;i++){ng[i]=[];for(let j=0;j<mapSize.h;j++)ng[i][j]=new Node(i,j);}
+  for(let i=0;i<mapSize.w;i++)for(let j=0;j<mapSize.h;j++)ng[i][j].addNeighbors(ng);
+  let sn=ng[start.x][start.y],en=ng[end.x][end.y];
+  if(!collisionGrid[start.x][start.y]||!collisionGrid[end.x][end.y])return null;
+  openSet.push(sn);
+  while(openSet.length>0){
+    let w=0;for(let i=1;i<openSet.length;i++)if(openSet[i].f<openSet[w].f)w=i;
+    let cur=openSet[w];
+    if(cur===en){let t=cur;path.push(t);while(t.parent){path.push(t.parent);t=t.parent;}return path.reverse();}
+    openSet.splice(w,1);closedSet.push(cur);
+    for(let nb of cur.neighbors){
+      if(!closedSet.includes(nb)&&collisionGrid[nb.x][nb.y]){
+        let tg=cur.g+1,np=false;
+        if(openSet.includes(nb)){if(tg<nb.g){nb.g=tg;np=true;}}else{nb.g=tg;np=true;openSet.push(nb);}
+        if(np){nb.h=abs(nb.x-en.x)+abs(nb.y-en.y);nb.f=nb.g+nb.h;nb.parent=cur;}
+      }
+    }
+  }
+  return null;
+}
+
+function handleTooltip(){
+  if(!grid.length) return;
+  const hx=floor(mouseX/cellSize),hy=floor(mouseY/cellSize);
+  if(hx>=0&&hx<grid.length&&hy>=0&&hy<grid[0].length){
+    hoveredCellX=hx; hoveredCellY=hy;
+    const prod=grid[hx][hy].filter(p=>currentFilter==='all'||p.behavior===currentFilter);
+    if(currentShopperData.selectedCount===1&&singleShopperViewMode==='sequence'&&prod.length>1&&(hx!==expansionState.activeCellX||hy!==expansionState.activeCellY)){
+      expansionState.isExpanding=true;expansionState.activeCellX=hx;expansionState.activeCellY=hy;
+    }
+    if(prod.length>0) drawTooltip(prod);
+  } else { hoveredCellX=-1; hoveredCellY=-1; }
+  if((hoveredCellX!==expansionState.activeCellX||hoveredCellY!==expansionState.activeCellY)&&expansionState.activeCellX!==-1) expansionState.isExpanding=false;
+}
+
+function drawTooltip(products){
+  const bt={'purchased':'purchased','inspected':'inspected','stopped':'stopped','putBack':'put back'};
+  const pbn={};
+  for(const p of products){if(!pbn[p.name])pbn[p.name]=[];pbn[p.name].push(p);}
+  let lines=[];
+  for(const name in pbn){
+    const ints=pbn[name],bc={};
+    for(const i of ints){if(!bc[i.behavior])bc[i.behavior]={count:0,seq:i.seq};bc[i.behavior].count++;}
+    const sb=Object.keys(bc).sort((a,b)=>bc[a].seq-bc[b].seq);
+    let line=name;
+    for(const bh of sb) line+=`  ${bt[bh]||bh} ×${bc[bh].count}`;
+    lines.push(line);
+  }
+  const textStr=lines.join('\n');
+  const pad=10; textSize(11); textFont('DM Mono');
+  const tw=textWidth(textStr),th=lines.length*15;
+  let bx=mouseX+16,by=mouseY-8;
+  if(bx+tw+pad*2>width) bx=mouseX-16-tw-pad*2;
+  if(by+th+pad*2>height) by=height-th-pad*2;
+  fill(44,44,42,235); stroke(180,178,169); strokeWeight(1);
+  rect(bx,by,tw+pad*2,th+pad*2,4);
+  fill(247,245,242); noStroke();
+  textAlign(LEFT,TOP); text(textStr,bx+pad,by+pad+2);
+}
+
+function drawGridContent(){
+  const useHeatmap = currentShopperData.selectedCount>1;
+  const vm = singleShopperViewMode;
+
+  // Mode A: sequence
+  if(vm==='sequence'&&!useHeatmap){
+    for(let x=0;x<grid.length;x++) for(let y=0;y<grid[x].length;y++){
+      const prod=grid[x][y].filter(p=>currentFilter==='all'||p.behavior===currentFilter);
+      if(!prod.length) continue;
+      const isH=(x===hoveredCellX&&y===hoveredCellY);
+      const isE=(x===expansionState.activeCellX&&y===expansionState.activeCellY);
+      for(let k=0;k<prod.length;k++){
+        const p=prod[k];
+        const alpha=(hoveredCellX===-1||isH)?220:40;
+        const ta=(hoveredCellX===-1||isH)?255:60;
+        const cx=x*cellSize+cellSize/2,cy=y*cellSize+cellSize/2;
+        const so=3,tsh=(prod.length-1)*so;
+        const sx=cx,sy=cy-tsh/2+k*so;
+        const er=cellSize*0.33,ang=k*TWO_PI/prod.length-HALF_PI;
+        const ex=cx+cos(ang)*er,ey=cy+sin(ang)*er;
+        const prog=isE?expansionState.progress:0;
+        const px=lerp(sx,ex,prog),py=lerp(sy,ey,prog);
+        if(p.behavior==='purchased') fill(216,90,48,alpha);
+        else if(p.behavior==='inspected') fill(186,117,23,alpha);
+        else if(p.behavior==='putBack') fill(136,135,128,alpha);
+        else fill(239,159,39,alpha);
+        noStroke(); ellipse(px,py,16,16);
+        fill(255,ta); textAlign(CENTER,CENTER); textFont('DM Mono'); textSize(9); text(p.id,px,py);
+      }
+    }
+  }
+  // Mode B: count
+  else if(vm==='count'){
+    let maxI=0;
+    for(let x=0;x<grid.length;x++) for(let y=0;y<grid[x].length;y++){
+      const c=grid[x][y].filter(p=>currentFilter==='all'||p.behavior===currentFilter).length;
+      if(c>maxI) maxI=c;
+    }
+    for(let x=0;x<grid.length;x++) for(let y=0;y<grid[x].length;y++){
+      const prod=grid[x][y].filter(p=>currentFilter==='all'||p.behavior===currentFilter);
+      if(!prod.length) continue;
+      let bc={};for(const p of prod) bc[p.behavior]=(bc[p.behavior]||0)+1;
+      let dom='all',mx=0;for(const b in bc)if(bc[b]>mx){mx=bc[b];dom=b;}
+      const isH=(x===hoveredCellX&&y===hoveredCellY);
+      const ta=(hoveredCellX===-1||isH)?255:60;
+      const ratio=maxI<=1?0:map(prod.length,1,maxI,0,1);
+      let r,g,b;
+      if(dom==='purchased'){r=lerp(250,216,ratio);g=lerp(235,90,ratio);b=lerp(230,48,ratio);}
+      else if(dom==='inspected'){r=lerp(250,186,ratio);g=lerp(235,117,ratio);b=lerp(210,23,ratio);}
+      else if(dom==='stopped'){r=lerp(250,239,ratio);g=lerp(235,159,ratio);b=lerp(200,39,ratio);}
+      else{r=lerp(220,95,ratio);g=lerp(218,94,ratio);b=lerp(215,90,ratio);}
+      const a=(hoveredCellX!==-1&&!isH)?50:200;
+      fill(r,g,b,a); noStroke();
+      if(useHeatmap) rect(x*cellSize,y*cellSize,cellSize,cellSize);
+      else ellipse(x*cellSize+cellSize/2,y*cellSize+cellSize/2,20,20);
+      fill(brightness(color(r,g,b,a))<60?color(255,ta):color(44,44,42,ta));
+      textAlign(CENTER,CENTER); textFont('DM Mono'); textSize(10);
+      text(prod.length,x*cellSize+cellSize/2,y*cellSize+cellSize/2);
+    }
+  }
+  // Mode C: conversion
+  else if(vm==='conversion'){
+    for(let x=0;x<grid.length;x++) for(let y=0;y<grid[x].length;y++){
+      const prod=grid[x][y].filter(p=>currentFilter==='all'||p.behavior===currentFilter);
+      if(!prod.length) continue;
+      const ratio=prod.filter(p=>p.behavior==='purchased').length/prod.length;
+      const isH=(x===hoveredCellX&&y===hoveredCellY);
+      const a=(hoveredCellX!==-1&&!isH)?40:200;
+      const ta=(hoveredCellX===-1||isH)?255:60;
+      fill(lerp(250,216,ratio),lerp(235,90,ratio),lerp(230,48,ratio),a);
+      noStroke(); rect(x*cellSize,y*cellSize,cellSize,cellSize);
+      fill(ratio>0.5?color(255,ta):color(44,44,42,ta)); textAlign(CENTER,CENTER); textFont('DM Mono'); textSize(9);
+      text(`${round(ratio*100)}%`,x*cellSize+cellSize/2,y*cellSize+cellSize/2);
+    }
+  }
+  // Mode D: consideration
+  else if(vm==='consideration'){
+    for(let x=0;x<grid.length;x++) for(let y=0;y<grid[x].length;y++){
+      const prod=grid[x][y].filter(p=>currentFilter==='all'||p.behavior===currentFilter);
+      if(!prod.length) continue;
+      const ratio=prod.filter(p=>p.behavior==='inspected'||p.behavior==='putBack').length/prod.length;
+      const isH=(x===hoveredCellX&&y===hoveredCellY);
+      const a=(hoveredCellX!==-1&&!isH)?40:200;
+      const ta=(hoveredCellX===-1||isH)?255:60;
+      fill(lerp(250,186,ratio),lerp(235,117,ratio),lerp(200,23,ratio),a);
+      noStroke(); rect(x*cellSize,y*cellSize,cellSize,cellSize);
+      fill(ratio>0.5?color(255,ta):color(44,44,42,ta)); textAlign(CENTER,CENTER); textFont('DM Mono'); textSize(9);
+      text(`${round(ratio*100)}%`,x*cellSize+cellSize/2,y*cellSize+cellSize/2);
+    }
+  }
+  strokeWeight(1);
+}
+
+// ── Panel collapse logic ──
+(function(){
+  const body    = document.querySelector('.app-body');
+  const leftEl  = document.getElementById('panel-left');
+  const rightEl = document.getElementById('panel-right');
+  const btnL    = document.getElementById('toggle-left');
+  const btnR    = document.getElementById('toggle-right');
+
+  let leftOpen  = true;
+  let rightOpen = true;
+
+  const COLLAPSED = '32px';
+  const LEFT_OPEN = '200px';
+  const RIGHT_OPEN= '220px';
+
+  function updateGrid(){
+    body.style.gridTemplateColumns =
+      `${leftOpen ? LEFT_OPEN : COLLAPSED} 1fr ${rightOpen ? RIGHT_OPEN : COLLAPSED}`;
+  }
+
+  btnL.addEventListener('click', ()=>{
+    leftOpen = !leftOpen;
+    leftEl.classList.toggle('collapsed', !leftOpen);
+    updateGrid();
+  });
+
+  btnR.addEventListener('click', ()=>{
+    rightOpen = !rightOpen;
+    rightEl.classList.toggle('collapsed', !rightOpen);
+    updateGrid();
+  });
+})();
+</script>
+</body>
+</html>

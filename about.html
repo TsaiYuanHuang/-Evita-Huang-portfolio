@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Evita Huang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #E8622A; --orange-light: #FDF0EA; --orange-mid: #F5A07A; --orange-dark: #B84A1B;
+    --teal: #1D9E75; --teal-light: #E1F5EE;
+    --ink: #1C1A18; --ink-60: #6B6760; --ink-20: #E8E6E2;
+    --surface: #FAF9F7; --white: #FFFFFF;
+    --radius-sm: 8px; --radius-md: 14px; --radius-lg: 24px; --radius-pill: 999px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); line-height: 1.6; font-size: 16px; }
+  body.lang-zh { font-family: 'Noto Sans TC', 'DM Sans', sans-serif; }
+
+  [data-zh], [data-en] { display: none; }
+  span[data-zh], span[data-en] { display: none; }
+  body.lang-zh span[data-zh] { display: inline; }
+  body.lang-en span[data-en] { display: inline; }
+  p[data-zh], p[data-en], h1[data-zh], h1[data-en], h2[data-zh], h2[data-en],
+  h3[data-zh], h3[data-en], h4[data-zh], h4[data-en], li[data-zh], li[data-en],
+  div[data-zh], div[data-en] { display: none; }
+  body.lang-zh p[data-zh], body.lang-zh h1[data-zh], body.lang-zh h2[data-zh],
+  body.lang-zh h3[data-zh], body.lang-zh h4[data-zh], body.lang-zh li[data-zh],
+  body.lang-zh div[data-zh] { display: block; }
+  body.lang-en p[data-en], body.lang-en h1[data-en], body.lang-en h2[data-en],
+  body.lang-en h3[data-en], body.lang-en h4[data-en], body.lang-en li[data-en],
+  body.lang-en div[data-en] { display: block; }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 64px; background: rgba(250,249,247,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ink-20); }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
+  .nav-right { display: flex; align-items: center; gap: 24px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 14px; color: var(--ink-60); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+  .lang-toggle { display: flex; align-items: center; border: 1.5px solid var(--ink-20); border-radius: var(--radius-pill); overflow: hidden; }
+  .lang-btn { padding: 5px 13px; cursor: pointer; color: var(--ink-60); background: transparent; border: none; font-size: 13px; font-weight: 600; font-family: inherit; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+  .lang-btn.active { background: var(--orange); color: var(--white); }
+  .lang-btn:not(.active):hover { background: var(--ink-20); color: var(--ink); }
+  .nav-cta { background: var(--orange); color: var(--white) !important; padding: 8px 20px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--orange-dark); }
+
+  /* HERO */
+  .about-hero { padding: 80px 5% 64px; max-width: 1000px; margin: 0 auto; }
+  .hero-left {}
+  .about-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange); margin-bottom: 16px; }
+  .about-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 56px); line-height: 1.05; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 24px; }
+  body.lang-zh .about-hero h1 { font-family: 'Noto Serif TC', serif; font-weight: 600; letter-spacing: 0; font-size: clamp(28px, 4vw, 44px); }
+  .about-hero .bio { font-size: 17px; color: var(--ink-60); line-height: 1.8; margin-bottom: 28px; max-width: 520px; }
+  .about-hero .bio strong { color: var(--ink); font-weight: 600; }
+  .contact-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .contact-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--ink); text-decoration: none; border: 1.5px solid var(--ink-20); padding: 9px 18px; border-radius: var(--radius-pill); transition: border-color 0.2s; }
+  .contact-link:hover { border-color: var(--ink-60); }
+  .contact-link svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .btn-primary-sm { background: var(--orange); color: var(--white) !important; border-color: var(--orange) !important; }
+  .btn-primary-sm:hover { background: var(--orange-dark); border-color: var(--orange-dark) !important; }
+
+  /* QUICK STATS */
+  .hero-right { display: flex; flex-direction: column; gap: 12px; padding-top: 8px; }
+  .stat-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 18px 22px; display: flex; align-items: center; gap: 16px; }
+  .stat-icon { width: 36px; height: 36px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .stat-icon svg { width: 18px; height: 18px; }
+  .stat-text { flex: 1; }
+  .stat-text .s-val { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.2; }
+  .stat-text .s-desc { font-size: 12px; color: var(--ink-60); margin-top: 2px; }
+
+  /* BODY */
+  .about-body { max-width: 1000px; margin: 0 auto; padding: 0 5% 96px; }
+  .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
+  .section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); margin-bottom: 20px; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 34px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 32px; color: var(--ink); }
+  body.lang-zh .section-title { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 28px); }
+
+  /* EXPERIENCE TIMELINE */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .timeline-item { display: grid; grid-template-columns: 200px 1fr; gap: 32px; padding: 32px 0; border-bottom: 1px solid var(--ink-20); }
+  .timeline-item:last-child { border-bottom: none; }
+  .tl-left { display: flex; flex-direction: column; gap: 6px; padding-top: 3px; }
+  .tl-period { font-size: 13px; font-weight: 600; color: var(--ink-60); }
+  .tl-org { font-size: 12px; color: var(--ink-60); line-height: 1.4; }
+  .tl-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 3px 9px; border-radius: var(--radius-pill); margin-top: 4px; }
+  .tl-badge.work { background: var(--orange-light); color: var(--orange-dark); }
+  .tl-badge.intern { background: var(--teal-light); color: #0F6E56; }
+  .tl-right {}
+  .tl-title { font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 10px; line-height: 1.3; }
+  body.lang-zh .tl-title { font-size: 16px; }
+  .tl-bullets { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .tl-bullets li { font-size: 14px; color: var(--ink-60); line-height: 1.65; padding-left: 18px; position: relative; }
+  .tl-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--orange-mid); }
+  .tl-bullets li strong { color: var(--ink); font-weight: 600; }
+
+  /* EDUCATION */
+  .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .edu-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-lg); padding: 28px; }
+  .edu-card-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+  .edu-icon { width: 40px; height: 40px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .edu-icon svg { width: 20px; height: 20px; }
+  .edu-degree { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.3; margin-bottom: 4px; }
+  body.lang-zh .edu-degree { font-size: 14px; }
+  .edu-school { font-size: 13px; color: var(--ink-60); }
+  .edu-period { font-size: 12px; font-weight: 600; color: var(--orange); margin-top: 8px; }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .skill-group { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 22px; }
+  .skill-group-icon { width: 32px; height: 32px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+  .skill-group-icon svg { width: 16px; height: 16px; }
+  .skill-group h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 10px; letter-spacing: 0.2px; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .skill-tag { font-size: 12px; color: var(--ink-60); background: var(--surface); border: 1px solid var(--ink-20); padding: 4px 10px; border-radius: var(--radius-pill); }
+
+  @media (max-width: 768px) {
+    .about-hero { grid-template-columns: 1fr; gap: 40px; }
+    .hero-right { display: none; }
+    .timeline-item { grid-template-columns: 1fr; gap: 8px; }
+    .edu-grid, .skills-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .nav-cta { display: none; }
+  }
+</style>
+</head>
+<body class="lang-en">
+
+<nav>
+  <a href="index.html" class="nav-logo">Evita Huang</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="index.html#work"><span data-zh>作品</span><span data-en>Work</span></a></li>
+      <li><a href="about.html" class="active"><span data-zh>關於我</span><span data-en>About</span></a></li>
+    </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中</button>
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="mailto:evita.tyh@gmail.com" class="nav-cta">
+      <span data-zh>聯絡我</span><span data-en>Get in Touch</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="about-hero">
+  <div class="hero-left">
+    <div class="about-eyebrow"><span data-zh>關於我</span><span data-en>About</span></div>
+    <h1 data-zh>黃采媛</h1>
+    <h1 data-en>Evita Huang</h1>
+
+    <p class="bio" data-zh>具 2+ 年使用者研究與產品洞察經驗，專長於將使用者行為與情境轉化為可執行的產品策略與設計方向。曾主導端對端研究專案，涵蓋問題定義、研究設計、洞察分析到設計驗證，並透過共創工作坊驅動產品與服務設計方向。具備<strong>設計背景與資訊設計碩士</strong>專業，能整合質性與量化資料，並結合 AI 工具提升研究效率與洞察產出，具備跨 UX 研究與產品思維的整合能力。</p>
+    <p class="bio" data-en>UX researcher with 2+ years of experience in user research and consumer insights. I specialize in translating user behavior and context into actionable product strategy and design direction — leading end-to-end research projects from problem framing to design validation, and facilitating co-creation workshops that drive product decisions. With a background in <strong>Information Design (M.Des., NTUST)</strong>, I integrate qualitative and quantitative data, and leverage AI tools to scale research efficiency and insight output.</p>
+
+    <div class="contact-row">
+      <a href="mailto:evita.tyh@gmail.com" class="contact-link btn-primary-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        evita.tyh@gmail.com
+      </a>
+    </div>
+  </div>
+
+</section>
+
+<div class="about-body">
+
+  <!-- WORK EXPERIENCE -->
+  <section>
+    <div class="section-eyebrow"><span data-zh>工作經歷</span><span data-en>Work Experience</span></div>
+    <h2 class="section-title" data-zh>從研究到決策，全鏈路的產品洞察實踐</h2>
+    <h2 class="section-title" data-en>End-to-End Research Practice, from Insight to Decision</h2>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="tl-left">
+          <div class="tl-period">2024.02 – <span data-zh>至今</span><span data-en>Present</span></div>
+          <div class="tl-org"><span data-zh>財團法人食品工業發展研究所</span><span data-en>Food Industry Research and Development Institute</span></div>
+          <span class="tl-badge work"><span data-zh>全職</span><span data-en>Full-time</span></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title" data-zh>研究員・市場與消費洞察</div>
+          <div class="tl-title" data-en>Researcher, Consumer Insights</div>
+          <ul class="tl-bullets">
+            <li data-zh><strong>混合研究法實踐：</strong>整合深度訪談、問卷調查與情境觀測，建構族群行為決策模型，為產品進入市場提供數據支撐與設計建議</li>
+            <li data-en><strong>Mixed-method research:</strong> Integrated in-depth interviews, surveys, and behavioral observation to build group decision models and provide market-entry data support and design recommendations</li>
+            <li data-zh><strong>洞察轉譯與產品化：</strong>研發 Persona 與行為卡片工具，將研究發現轉化為產品規格模組設計，成功導入跨職能團隊（行銷／研發）之產品開發決策流程</li>
+            <li data-en><strong>Insight translation:</strong> Developed Persona and behavioral card tools to convert research findings into product specification modules, successfully adopted by cross-functional teams (marketing/R&D)</li>
+            <li data-zh><strong>主持策略共創工作坊：</strong>引導利害關係人從使用者需求出發，收斂模糊問題並定義具體的產品功能開發重點</li>
+            <li data-en><strong>Co-creation workshop facilitation:</strong> Led stakeholders from user needs to converged product priorities, defining concrete development focus areas</li>
+            <li data-zh><strong>優化研究營運：</strong>整合 Airtable 及協作 AI Tagging 系統，將非結構化訪談轉化為結構化洞察資料庫，大幅提升研究資料重用率</li>
+            <li data-en><strong>Research operations:</strong> Integrated Airtable and AI tagging systems to transform unstructured interviews into a structured insight database, significantly improving research reuse rate</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- INTERNSHIP -->
+  <section>
+    <div class="section-eyebrow"><span data-zh>實習經歷</span><span data-en>Internship</span></div>
+    <h2 class="section-title" data-zh>政府數位服務與企業視覺設計的實戰經驗</h2>
+    <h2 class="section-title" data-en>Government Digital Services and Enterprise Visual Design</h2>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="tl-left">
+          <div class="tl-period">2020.07 – 2020.08</div>
+          <div class="tl-org"><span data-zh>行政院唐鳳政務委員辦公室 PDIS RAY 4.0</span><span data-en>PDIS RAY 4.0, Executive Yuan</span></div>
+          <span class="tl-badge intern"><span data-zh>實習</span><span data-en>Internship</span></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title" data-zh>設計研究實習生</div>
+          <div class="tl-title" data-en>Design Research Intern</div>
+          <ul class="tl-bullets">
+            <li data-zh>規劃並執行 10+ 場利害關係人訪談，釐清數位服務轉型需求並定義產品問題</li>
+            <li data-en>Planned and conducted 10+ stakeholder interviews to clarify digital service transformation needs and define product problems</li>
+            <li data-zh>進行 15 場易用性測試並迭代 3 次網頁設計原型，優化關鍵使用流程</li>
+            <li data-en>Conducted 15 usability tests and iterated 3 rounds of web design prototypes to optimize key user flows</li>
+            <li data-zh>與教育部青年署協作推動產品改版，SUS 易用性提升 42 分、整體滿意度提升 75%，成功上線</li>
+            <li data-en>Collaborated with the Youth Development Administration on a website redesign — SUS usability +42 points, overall satisfaction +75%, successfully launched</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-left">
+          <div class="tl-period">2019.07 – 2019.08</div>
+          <div class="tl-org">Trend Micro <span data-zh>趨勢科技</span></div>
+          <span class="tl-badge intern"><span data-zh>實習</span><span data-en>Internship</span></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title" data-zh>視覺設計實習生</div>
+          <div class="tl-title" data-en>Visual Design Intern</div>
+          <ul class="tl-bullets">
+            <li data-zh>與 UX 研究員合作，設計資安風險視覺化介面，提升使用者對威脅等級的理解與判讀效率</li>
+            <li data-en>Collaborated with UX researchers to design cybersecurity risk visualization interfaces, improving users' ability to understand and interpret threat levels</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- EDUCATION -->
+  <section>
+    <div class="section-eyebrow"><span data-zh>學歷</span><span data-en>Education</span></div>
+    <h2 class="section-title" data-zh>設計與資訊的跨域背景</h2>
+    <h2 class="section-title" data-en>A Cross-disciplinary Design Background</h2>
+
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div class="edu-card-top">
+          <div class="edu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+          <div>
+            <div class="edu-degree" data-zh>碩士・設計所 資訊設計組</div>
+            <div class="edu-degree" data-en>M.Des. · Information Design</div>
+            <div class="edu-school"><span data-zh>國立臺灣科技大學</span><span data-en>National Taiwan University of Science and Technology</span></div>
+          </div>
+        </div>
+        <div class="edu-period">2021 – 2023</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-card-top">
+          <div class="edu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+          <div>
+            <div class="edu-degree" data-zh>學士・設計系 商業設計組</div>
+            <div class="edu-degree" data-en>B.Des. · Commercial Design</div>
+            <div class="edu-school"><span data-zh>國立臺灣科技大學</span><span data-en>National Taiwan University of Science and Technology</span></div>
+          </div>
+        </div>
+        <div class="edu-period">2017 – 2021</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- SKILLS -->
+  <section>
+    <div class="section-eyebrow"><span data-zh>核心技能</span><span data-en>Skills</span></div>
+    <h2 class="section-title" data-zh>研究・轉譯・協作・系統</h2>
+    <h2 class="section-title" data-en>Research · Translation · Facilitation · Systems</h2>
+
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+        <h4 data-zh>用戶研究方法</h4>
+        <h4 data-en>User Research Methods</h4>
+        <div class="skill-tags">
+          <span class="skill-tag"><span data-zh>深度訪談</span><span data-en>In-depth Interviews</span></span>
+          <span class="skill-tag"><span data-zh>情境觀測</span><span data-en>Contextual Observation</span></span>
+          <span class="skill-tag"><span data-zh>易用性測試</span><span data-en>Usability Testing</span></span>
+          <span class="skill-tag"><span data-zh>概念驗證</span><span data-en>Concept Validation</span></span>
+          <span class="skill-tag">A/B Testing</span>
+          <span class="skill-tag"><span data-zh>混合研究設計</span><span data-en>Mixed-method Design</span></span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <h4 data-zh>洞察轉譯與策略</h4>
+        <h4 data-en>Insight Translation</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Persona</span>
+          <span class="skill-tag"><span data-zh>用戶旅程地圖</span><span data-en>Customer Journey Map</span></span>
+          <span class="skill-tag">User Flow</span>
+          <span class="skill-tag"><span data-zh>痛點分析</span><span data-en>Pain Point Analysis</span></span>
+          <span class="skill-tag"><span data-zh>行為洞察卡片</span><span data-en>Insight Cards</span></span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h4 data-zh>協作引導與跨部門對齊</h4>
+        <h4 data-en>Facilitation & Alignment</h4>
+        <div class="skill-tags">
+          <span class="skill-tag"><span data-zh>共創工作坊設計</span><span data-en>Co-creation Workshop</span></span>
+          <span class="skill-tag"><span data-zh>利害關係人溝通</span><span data-en>Stakeholder Communication</span></span>
+          <span class="skill-tag"><span data-zh>跨團隊共識</span><span data-en>Cross-team Alignment</span></span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h4 data-zh>工具與技術</h4>
+        <h4 data-en>Tools & Technology</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">Airtable</span>
+          <span class="skill-tag">Illustrator</span>
+          <span class="skill-tag">p5.js</span>
+          <span class="skill-tag">Vibe Coding</span>
+          <span class="skill-tag">AI Prompt Engineering</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer style="background:var(--ink);color:var(--white);padding:48px 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+  <div>
+    <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--white);margin-bottom:6px;">Evita Huang</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <a href="mailto:evita.tyh@gmail.com" style="font-size:14px;color:rgba(255,255,255,0.6);text-decoration:none;">evita.tyh@gmail.com</a>
+    <a href="mailto:evita.tyh@gmail.com" style="background:var(--orange);color:var(--white);padding:10px 22px;border-radius:var(--radius-pill);font-size:14px;font-weight:600;text-decoration:none;">
+      <span data-zh>聯絡我 →</span><span data-en>Let's Talk →</span>
+    </a>
+  </div>
+  <div style="width:100%;border-top:1px solid rgba(255,255,255,0.1);margin-top:24px;padding-top:20px;display:flex;justify-content:flex-end;">
+    <p style="font-size:12px;color:rgba(255,255,255,0.3);">Portfolio design inspired by <a href="https://lovable.dev/templates/websites/portfolio/compound-content-strategist-portfolio-website-template" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.4);text-decoration:underline;text-underline-offset:3px;">Compound</a> via Lovable</p>
+  </div>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  }
+</script>
+</body>
+</html>
