@@ -146,6 +146,11 @@
   @media (max-width: 700px) {
     .two-col, .stakeholder-grid, .spectrum-row, .deliverable-grid { grid-template-columns: 1fr; }
   }
+
+  /* IMAGE STYLES */
+  .img-full { width: 100%; border-radius: var(--radius-lg); overflow: hidden; margin: 28px 0; border: 1px solid var(--ink-20); }
+  .img-full img { width: 100%; display: block; }
+  .img-caption { font-size: 13px; color: var(--ink-60); margin-top: 10px; font-style: italic; line-height: 1.5; }
 </style>
 </head>
 <body class="lang-en">
@@ -184,6 +189,12 @@
 
   <div class="case-kpis" style="display:none;"></div>
 </header>
+
+<div style="max-width:1000px;margin:0 auto;padding:0 5% 0;">
+  <div class="img-full">
+    <img src="images/invisible-web-hero.png" alt="Invisible Disabilities Resource Guide web version">
+  </div>
+</div>
 
 <div class="case-body">
 
@@ -331,11 +342,25 @@
         </ul>
       </div>
     </div>
+
+    <div class="img-full">
+      <img src="images/invisible-paper.png" alt="Print resource guide full layout">
+    </div>
+    <p class="img-caption" data-zh>▲ 紙本資源指南完整版面——分為初期評估、就診須知、其他資源、家長社群四個區塊，可於新生入學時由老師發放給家長</p>
+    <p class="img-caption" data-en>▲ Full print resource guide layout — four sections covering early assessment, medical consultation, additional resources, and parent community; distributed by teachers at enrollment</p>
+
+    <div class="img-full">
+      <img src="images/invisible-paper-explanation.png" alt="Print resource guide with design explanation annotations">
+    </div>
+    <p class="img-caption" data-zh>▲ 紙本指南設計說明——每個區塊對應不同的家長使用情境與需求，設計邏輯以「降低資訊焦慮、引導逐步行動」為核心</p>
+    <p class="img-caption" data-en>▲ Print guide design rationale — each section addresses distinct parental use cases, designed around the principle of reducing information anxiety and guiding step-by-step action</p>
+
+    <div class="img-full">
+      <img src="images/invisible-web-explanation.png" alt="Web resource guide with design explanation annotations">
+    </div>
+    <p class="img-caption" data-zh>▲ 網頁版指南設計說明——以情境化問題為導引、一鍵下載為核心功能，搭配清晰的步驟指引，讓家長能隨時在手機上快速取得所需資源</p>
+    <p class="img-caption" data-en>▲ Web guide design rationale — contextualized questions as entry points, one-click downloads as the core function, with clear step-by-step guidance for parents to quickly access resources on mobile</p>
   </section>
-
-  <hr class="divider">
-
-  <!-- IMPACT -->
   <section class="case-section">
     <div class="section-eyebrow"><span data-zh>社會影響</span><span data-en>Impact</span></div>
     <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
