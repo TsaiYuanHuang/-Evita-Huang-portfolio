@@ -141,6 +141,15 @@
   @media (max-width: 700px) {
     .two-col, .problem-grid { grid-template-columns: 1fr; }
   }
+
+  /* IMAGE STYLES */
+  .img-full { width: 100%; border-radius: var(--radius-lg); overflow: hidden; margin: 28px 0; border: 1px solid var(--ink-20); }
+  .img-full img { width: 100%; display: block; }
+  .img-caption { font-size: 13px; color: var(--ink-60); margin-top: 10px; font-style: italic; line-height: 1.5; }
+  .img-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 28px 0; }
+  .img-two .img-item { border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--ink-20); }
+  .img-two .img-item img { width: 100%; display: block; }
+  @media (max-width: 600px) { .img-two { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body class="lang-en">
@@ -192,6 +201,13 @@
   </div>
 </header>
 
+<!-- HERO IMAGE -->
+<div style="max-width:1000px;margin:0 auto;padding:0 5% 0;">
+  <div class="img-full">
+    <img src="images/pdis-hero.png" alt="YDA website redesign final design displayed on laptop">
+  </div>
+</div>
+
 <div class="case-body">
 
   <!-- CONTEXT -->
@@ -229,18 +245,35 @@
         <p data-en>Registration links were buried in document text, forcing students to call the YDA helpline for assistance.</p>
       </div>
     </div>
+
+    <div class="img-full">
+      <img src="images/pdis-before-after.png" alt="YDA website before and after redesign comparison">
+    </div>
+    <p class="img-caption" data-zh>▲ 改版前後對比——從條列式政令宣導風格，到以活動卡片為核心的年輕化設計</p>
+    <p class="img-caption" data-en>▲ Before and after — from a bulletin-board layout to an activity-card-centered youthful design</p>
   </section>
 
   <hr class="divider">
 
-  <!-- STRATEGY -->
   <section class="case-section">
     <div class="section-eyebrow"><span data-zh>設計策略</span><span data-en>Design Strategy</span></div>
     <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
     <h2 data-zh>三個 HMW，對應三個核心問題</h2>
     <h2 data-en>Three HMWs Addressing Three Core Problems</h2>
-    <p data-zh>鎖定「無特定目標、不熟悉官網的青年族群」，以 How Might We 框架定義設計機會：</p>
-    <p data-en>Targeting youth with no specific goal and unfamiliar with the website, we framed design opportunities using How Might We questions:</p>
+    <p data-zh>首先透過使用者旅程地圖釐清使用者在哪個階段遇到阻礙，再以 How Might We 框架定義設計機會：</p>
+    <p data-en>We first mapped the user journey to identify where friction occurred, then framed design opportunities using How Might We questions:</p>
+
+    <div class="img-full">
+      <img src="images/pdis-cjm.png" alt="User story and customer journey map">
+    </div>
+    <p class="img-caption" data-zh>▲ 使用者旅程地圖——從產生參加活動的想法，到最終完成報名，識別各階段的痛點與設計機會</p>
+    <p class="img-caption" data-en>▲ Customer journey map — from idea to enrollment, identifying pain points and design opportunities at each stage</p>
+
+    <div class="img-full">
+      <img src="images/pdis-hmw.png" alt="Five-layer design framework mapped to HMW questions">
+    </div>
+    <p class="img-caption" data-zh>▲ 以五層設計架構（戰略層到表現層）對應三個 HMW，確保設計決策有明確的問題根據</p>
+    <p class="img-caption" data-en>▲ Five-layer design framework (strategy to surface) mapped to three HMWs</p>
 
     <div class="hmw-grid">
       <div class="hmw-item">
@@ -318,6 +351,23 @@
         </ul>
       </div>
     </div>
+
+    <div class="img-full">
+      <img src="images/pdis-design-process.png" alt="Design process: card sorting, wireframe, lo-fi prototype, hi-fi prototype">
+    </div>
+    <p class="img-caption" data-zh>▲ 設計迭代流程——從卡片分類、線框稿到 Lo-fi／Hi-fi 原型，每輪測試後持續收斂設計方向</p>
+    <p class="img-caption" data-en>▲ Iterative design process — from card sorting and wireframes to Lo-fi/Hi-fi prototypes, refining direction after each testing round</p>
+
+    <div class="img-two">
+      <div class="img-item">
+        <img src="images/pdis-testing-1.png" alt="Usability testing session photo 1">
+      </div>
+      <div class="img-item">
+        <img src="images/pdis-testing-2.png" alt="Usability testing session photo 2">
+      </div>
+    </div>
+    <p class="img-caption" data-zh>▲ 易用性測試現場——邀請 18–25 歲青年執行網站任務測試，記錄操作過程與反應</p>
+    <p class="img-caption" data-en>▲ Usability testing sessions — youth aged 18–25 completing website task tests while we observed and recorded their interactions</p>
   </section>
 
   <hr class="divider">
