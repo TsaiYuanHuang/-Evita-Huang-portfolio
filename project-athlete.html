@@ -114,16 +114,16 @@
   .tool-tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--orange-dark); background: var(--orange-light); padding: 3px 10px; border-radius: var(--radius-pill); margin-bottom: 10px; }
 
   .process-flow-wrap { margin: 28px 0; overflow-x: auto; padding-bottom: 8px; }
-  .process-flow { display: flex; align-items: flex-start; gap: 0; min-width: 480px; }
-  .pf-step { flex: 1; display: flex; align-items: flex-start; }
-  .pf-node { flex: 1; background: var(--white); border: 1.5px solid var(--ink-20); border-radius: var(--radius-md); padding: 18px 14px 16px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; transition: border-color 0.2s; }
+  .process-flow { display: flex; align-items: stretch; gap: 0; min-width: 480px; }
+  .pf-step { flex: 1; display: flex; align-items: stretch; }
+  .pf-node { flex: 1; background: var(--white); border: 1.5px solid var(--ink-20); border-radius: var(--radius-md); padding: 18px 14px 16px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
   .pf-node:hover { border-color: var(--orange-mid); }
   .pf-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); background: var(--orange-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .pf-icon svg { width: 18px; height: 18px; }
   .pf-phase { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); }
   .pf-node h4 { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; margin: 0; }
-  .pf-node p { font-size: 11px; color: var(--ink-60); line-height: 1.5; margin: 0; }
-  .pf-arrow { display: flex; align-items: center; padding: 0 2px; padding-top: 26px; flex-shrink: 0; color: var(--orange-mid); }
+  .pf-node p { font-size: 11px; color: var(--ink-60); line-height: 1.5; margin: 0; flex: 1; }
+  .pf-arrow { display: flex; align-items: center; align-self: center; padding: 0 2px; flex-shrink: 0; color: var(--orange-mid); }
   .pf-arrow svg { width: 22px; height: 22px; }
 
   .stat-row { display: flex; gap: 14px; flex-wrap: wrap; margin: 24px 0; }
