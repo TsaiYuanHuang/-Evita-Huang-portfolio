@@ -50,9 +50,9 @@
   .case-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
   .case-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange-dark); background: var(--orange-light); padding: 4px 12px; border-radius: var(--radius-pill); }
   .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
-  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
+  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; }
   body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
-  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; max-width: 640px; margin-bottom: 40px; }
+  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; margin-bottom: 40px; }
   .case-kpis { display: flex; gap: 12px; flex-wrap: wrap; }
   .kpi-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 22px; min-width: 140px; }
   .kpi-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
@@ -66,7 +66,7 @@
   .section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
   .case-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
   body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 30px); }
-  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
+  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; }
   .case-section p:last-child { margin-bottom: 0; }
   .case-section p strong { color: var(--ink); font-weight: 600; }
 
@@ -74,7 +74,7 @@
   .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
 
   /* PROBLEM CALLOUT */
-  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; max-width: 680px; }
+  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; }
   .problem-callout p { color: var(--ink); font-size: 16px; line-height: 1.75; margin: 0; font-style: italic; }
   .problem-callout p strong { color: var(--orange-dark); }
 
@@ -160,7 +160,7 @@
   .reflection-box .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-mid); margin-bottom: 16px; }
   .reflection-box blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(20px, 2.5vw, 28px); line-height: 1.35; letter-spacing: -0.4px; color: var(--white); margin-bottom: 24px; font-style: italic; }
   body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 600; letter-spacing: 0; }
-  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; max-width: 600px; }
+  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; }
 
   /* NAV FOOTER */
   .case-nav-footer { border-top: 1px solid var(--ink-20); padding: 40px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; max-width: 1000px; margin: 0 auto; }
@@ -334,7 +334,7 @@
 
     <div class="insight-grid">
       <div class="insight-card">
-        <div class="ic-num">維度 01 · Dimension 01</div>
+        <div class="ic-num"><span data-zh>維度 01</span><span data-en>Dimension 01</span></div>
         <div style="font-size:24px;margin:6px 0 10px;">📍</div>
         <h4 data-zh>互動次數<br>Interaction Count</h4>
         <h4 data-en>Interaction Count</h4>
@@ -342,7 +342,7 @@
         <p data-en>Attention hotspots by shelf position — reflects visibility and accessibility of display location, not purchase intent.</p>
       </div>
       <div class="insight-card">
-        <div class="ic-num">維度 02 · Dimension 02</div>
+        <div class="ic-num"><span data-zh>維度 02</span><span data-en>Dimension 02</span></div>
         <div style="font-size:24px;margin:6px 0 10px;">🛒</div>
         <h4 data-zh>購買轉換率<br>Purchase Rate</h4>
         <h4 data-en>Purchase Rate</h4>
@@ -350,7 +350,7 @@
         <p data-en>Product's persuasive power — high interaction + low purchase rate is a "high traffic, low conversion" signal worth investigating.</p>
       </div>
       <div class="insight-card">
-        <div class="ic-num">維度 03 · Dimension 03</div>
+        <div class="ic-num"><span data-zh>維度 03</span><span data-en>Dimension 03</span></div>
         <div style="font-size:24px;margin:6px 0 10px;">🤔</div>
         <h4 data-zh>考慮深度<br>Consideration Depth</h4>
         <h4 data-en>Consideration Depth</h4>

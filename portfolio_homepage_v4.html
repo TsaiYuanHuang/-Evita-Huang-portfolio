@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黃采媛 Evita Huang — UX Research & Product</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #E8622A; --orange-light: #FDF0EA; --orange-mid: #F5A07A; --orange-dark: #B84A1B;
+    --teal: #1D9E75; --teal-light: #E1F5EE;
+    --ink: #1C1A18; --ink-60: #6B6760; --ink-20: #E8E6E2;
+    --surface: #FAF9F7; --white: #FFFFFF;
+    --radius-sm: 8px; --radius-md: 14px; --radius-lg: 24px; --radius-pill: 999px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Noto Sans TC', 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); line-height: 1.6; font-size: 16px; }
+  body.lang-en { font-family: 'DM Sans', 'Noto Sans TC', sans-serif; }
+
+  /* Lang system */
+  [data-zh], [data-en] { display: none; }
+  body.lang-zh [data-zh] { display: revert; }
+  body.lang-en [data-en] { display: revert; }
+  span[data-zh], span[data-en] { display: none; }
+  body.lang-zh span[data-zh] { display: inline; }
+  body.lang-en span[data-en] { display: inline; }
+  p[data-zh], p[data-en], h1[data-zh], h1[data-en], h2[data-zh], h2[data-en],
+  h3[data-zh], h3[data-en], h4[data-zh], h4[data-en] { display: none; }
+  body.lang-zh p[data-zh], body.lang-zh h1[data-zh], body.lang-zh h2[data-zh],
+  body.lang-zh h3[data-zh], body.lang-zh h4[data-zh] { display: block; }
+  body.lang-en p[data-en], body.lang-en h1[data-en], body.lang-en h2[data-en],
+  body.lang-en h3[data-en], body.lang-en h4[data-en] { display: block; }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 64px; background: rgba(250,249,247,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ink-20); }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
+  .nav-right { display: flex; align-items: center; gap: 24px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 14px; color: var(--ink-60); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--ink); }
+  .lang-toggle { display: flex; align-items: center; border: 1.5px solid var(--ink-20); border-radius: var(--radius-pill); overflow: hidden; }
+  .lang-btn { padding: 5px 13px; cursor: pointer; color: var(--ink-60); background: transparent; border: none; font-size: 13px; font-weight: 600; font-family: inherit; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+  .lang-btn.active { background: var(--orange); color: var(--white); }
+  .lang-btn:not(.active):hover { background: var(--ink-20); color: var(--ink); }
+  .nav-cta { background: var(--orange); color: var(--white) !important; padding: 8px 20px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+  .nav-cta:hover { background: var(--orange-dark); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero { padding: 96px 5% 80px; max-width: 1100px; margin: 0 auto; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--orange-light); color: var(--orange-dark); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: var(--radius-pill); margin-bottom: 28px; letter-spacing: 0.2px; }
+  .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--orange); border-radius: 50%; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(42px, 6vw, 72px); line-height: 1.08; letter-spacing: -1.5px; color: var(--ink); margin-bottom: 28px; }
+  body.lang-zh .hero h1 { font-family: 'Noto Serif TC', serif; letter-spacing: -0.5px; font-size: clamp(36px, 5vw, 62px); font-weight: 600; }
+  .hero h1 em { font-style: italic; color: var(--orange); }
+  body.lang-zh .hero h1 em { font-style: normal; }
+  .hero-desc { font-size: 18px; color: var(--ink-60); line-height: 1.75; margin-bottom: 40px; font-weight: 400; }
+  .hero-desc strong { color: var(--ink); font-weight: 600; }
+  .hero-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: var(--white); padding: 14px 28px; border-radius: var(--radius-pill); font-size: 15px; font-weight: 600; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+  .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--ink); padding: 13px 26px; border-radius: var(--radius-pill); font-size: 15px; font-weight: 500; text-decoration: none; border: 1.5px solid var(--ink-20); transition: border-color 0.2s, transform 0.15s; }
+  .btn-secondary:hover { border-color: var(--ink-60); transform: translateY(-2px); }
+
+  /* PROJECTS */
+  .projects { padding: 0 5% 96px; max-width: 1100px; margin: 0 auto; }
+  .section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 36px; flex-wrap: wrap; gap: 16px; }
+  .section-tag { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange); margin-bottom: 8px; }
+  .section-header h2 { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 3.5vw, 42px); letter-spacing: -0.8px; line-height: 1.1; }
+  body.lang-zh .section-header h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; }
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .project-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-lg); padding: 28px; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
+  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--orange); transform: scaleX(0); transition: transform 0.2s; transform-origin: left; }
+  .project-card:hover { border-color: var(--orange-mid); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(232,98,42,0.08); }
+  .project-card:hover::before { transform: scaleX(1); }
+  .project-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+  .project-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange-dark); background: var(--orange-light); padding: 4px 10px; border-radius: var(--radius-pill); }
+  .project-type.student { color: #0F6E56; background: var(--teal-light); }
+  .project-arrow { font-size: 18px; color: var(--ink-60); transition: transform 0.2s, color 0.2s; }
+  .project-card:hover .project-arrow { transform: translate(3px, -3px); color: var(--orange); }
+  .project-card h3 { font-family: 'DM Serif Display', serif; font-size: 22px; letter-spacing: -0.3px; line-height: 1.2; margin-bottom: 10px; color: var(--ink); }
+  body.lang-zh .project-card h3 { font-family: 'Noto Serif TC', serif; font-size: 18px; letter-spacing: 0; line-height: 1.4; font-weight: 600; }
+  .project-card p { font-size: 14px; color: var(--ink-60); line-height: 1.65; flex: 1; margin-bottom: 24px; }
+  .project-metrics { display: flex; gap: 10px; flex-wrap: wrap; }
+  .metric-badge { background: var(--surface); border: 1px solid var(--ink-20); border-radius: var(--radius-sm); padding: 6px 12px; font-size: 12px; font-weight: 600; color: var(--orange-dark); display: flex; flex-direction: column; gap: 1px; }
+  .metric-badge span { font-size: 11px; color: var(--ink-60); font-weight: 400; }
+  .view-case { display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; font-size: 13px; font-weight: 600; color: var(--orange); }
+
+  /* SKILLS */
+  .skills { background: var(--white); border-top: 1px solid var(--ink-20); border-bottom: 1px solid var(--ink-20); padding: 72px 0; }
+  .skills-inner { max-width: 1100px; margin: 0 auto; padding: 0 5%; }
+  .skills-title { font-family: 'DM Serif Display', serif; font-size: clamp(28px,3.5vw,42px); letter-spacing: -0.8px; line-height: 1.1; margin-top: 8px; }
+  body.lang-zh .skills-title { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 40px; }
+  .skill-item { border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 20px 22px; background: var(--surface); display: flex; flex-direction: column; }
+  .skill-item p { flex: 1; }
+  .skill-item { border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 20px 22px; background: var(--surface); }
+  .skill-icon { width: 36px; height: 36px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 16px; }
+  .skill-item h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+  .skill-item p { font-size: 13px; color: var(--ink-60); line-height: 1.55; }
+
+  /* ABOUT */
+  .about-strip { padding: 96px 5%; max-width: 1100px; margin: 0 auto; }
+  .about-label { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange); margin-bottom: 16px; }
+  .about-name { font-family: 'DM Serif Display', 'Noto Serif TC', serif; font-size: clamp(32px, 4vw, 52px); letter-spacing: -0.8px; line-height: 1.05; color: var(--ink); margin-bottom: 20px; font-weight: 400; }
+  body.lang-zh .about-name { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(32px, 4vw, 52px); }
+  .about-bio { font-size: 17px; color: var(--ink-60); line-height: 1.8; margin-bottom: 32px; }
+  .about-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .about-tag { font-size: 13px; font-weight: 500; color: var(--ink-60); border: 1px solid var(--ink-20); padding: 5px 12px; border-radius: var(--radius-pill); background: var(--white); }
+
+  /* FOOTER */
+  footer { background: var(--ink); color: var(--white); padding: 48px 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+  .footer-left .logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--white); margin-bottom: 6px; }
+  .footer-left p { font-size: 13px; color: rgba(255,255,255,0.5); }
+  .footer-right { display: flex; align-items: center; gap: 16px; }
+  .footer-link { font-size: 14px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+  .footer-link:hover { color: var(--white); }
+  .footer-cta { background: var(--orange); color: var(--white); padding: 10px 22px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+  .footer-cta:hover { background: var(--orange-dark); }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-cta { display: none; }
+    .projects-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body class="lang-en">
+
+<nav>
+  <a href="index.html" class="nav-logo">Evita Huang</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#work"><span data-zh>作品</span><span data-en>Work</span></a></li>
+      <li><a href="about.html"><span data-zh>關於我</span><span data-en>About</span></a></li>
+    </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中</button>
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="mailto:evita.tyh@gmail.com" class="nav-cta">
+      <span data-zh>聯絡我</span><span data-en>Get in Touch</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">
+    <span data-zh>UX 研究・洞察系統・工作坊設計</span>
+    <span data-en>UX Research · Insight Systems · Workshop Design</span>
+  </div>
+  <h1 data-zh>讓研究成為<br><em>可以被使用的決策工具。</em></h1>
+  <h1 data-en>Research that turns<br><em>behavior into decisions.</em></h1>
+  <p class="hero-desc" data-zh>我設計端對端的研究流程，不只是理解使用者<br>——<strong>讓洞察可以被團隊使用</strong>，支撐產品與服務的關鍵決策。</p>
+  <p class="hero-desc" data-en>I design end-to-end research that goes beyond understanding users<br>— <strong>making insight usable</strong> by the teams who build products and services.</p>
+  <div class="hero-actions">
+    <a href="#work" class="btn-primary"><span data-zh>查看作品集 →</span><span data-en>View Case Studies →</span></a>
+    <a href="mailto:evita.tyh@gmail.com" class="btn-secondary"><span data-zh>聯絡我</span><span data-en>Get in Touch</span></a>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects" id="work">
+  <div class="section-header">
+    <div>
+      <div class="section-tag"><span data-zh>作品集</span><span data-en>Portfolio</span></div>
+      <h2><span data-zh>精選作品</span><span data-en>Featured Work</span></h2>
+    </div>
+  </div>
+  <div class="projects-grid">
+
+    <a href="project-caregiver.html" class="project-card">
+      <div class="project-card-top">
+        <span class="project-type">UX Research</span>
+        <span class="project-arrow">↗</span>
+      </div>
+      <h3 data-zh>從行為觀測到採買情境設計</h3>
+      <h3 data-en>Bridging Behavior and the Shelf</h3>
+      <p data-zh>導入 Living Lab 情境式研究法，捕捉消費者真實行為——將難以量化的決策關鍵轉譯為具體且可落地的產品溝通策略與行銷語言。</p>
+      <p data-en>Deployed Living Lab contextual research to capture real consumer behavior — translating hard-to-quantify decision moments into concrete, actionable product communication and marketing language.</p>
+      <div class="project-metrics">
+        <div class="metric-badge">Living Lab<span data-zh>研究方法</span><span data-en>Method</span></div>
+        <div class="metric-badge">Vibe Coding<span data-zh>熱力圖工具</span><span data-en>Heatmap Tool</span></div>
+        <div class="metric-badge">5<span data-zh>設計方向</span><span data-en>Design Directions</span></div>
+      </div>
+      <span class="view-case"><span data-zh>查看案例 →</span><span data-en>View Case Study →</span></span>
+    </a>
+
+    <a href="project-athlete.html" class="project-card">
+      <div class="project-card-top">
+        <span class="project-type">UX Research</span>
+        <span class="project-arrow">↗</span>
+      </div>
+      <h3 data-zh>將質性洞察轉譯為 B2B 設計工具</h3>
+      <h3 data-en>Making Research Usable and Actionable</h3>
+      <p data-zh>將消費者的質性洞察，轉化為 Persona 卡片與 B2B 共創工作坊——讓跨企業能以使用者為中心進行產品創新。</p>
+      <p data-en>Translated consumer qualitative insights into Persona cards and a B2B co-creation workshop — enabling companies to drive user-centered product innovation.</p>
+      <div class="project-metrics">
+        <div class="metric-badge">17<span data-zh>家企業</span><span data-en>Companies</span></div>
+        <div class="metric-badge">4.83 / 5<span data-zh>工作坊評分</span><span data-en>Workshop Rating</span></div>
+        <div class="metric-badge">B2B<span data-zh>共創</span><span data-en>Co-creation</span></div>
+      </div>
+      <span class="view-case"><span data-zh>查看案例 →</span><span data-en>View Case Study →</span></span>
+    </a>
+
+    <a href="project-database.html" class="project-card">
+      <div class="project-card-top">
+        <span class="project-type">Research Ops</span>
+        <span class="project-arrow">↗</span>
+      </div>
+      <h3 data-zh>架構可規模化的洞察知識庫</h3>
+      <h3 data-en>Architecting a Scalable Insight Repository</h3>
+      <p data-zh>將歷年散落的質性訪談資料，系統化為可篩選、AI 輔助分析的洞察資料庫——讓過往研究成為可持續使用的團隊決策資產。</p>
+      <p data-en>Transformed fragmented qualitative interview data into a filterable, AI-assisted insight database — turning past research into a persistently reusable team decision asset.</p>
+      <div class="project-metrics">
+        <div class="metric-badge">7<span data-zh>年歷史資料</span><span data-en>Years of Data</span></div>
+        <div class="metric-badge">AI<span data-zh>標籤分析流程</span><span data-en>Tagging Pipeline</span></div>
+        <div class="metric-badge">Airtable<span data-zh>儀表板</span><span data-en>Dashboard</span></div>
+      </div>
+      <span class="view-case"><span data-zh>查看案例 →</span><span data-en>View Case Study →</span></span>
+    </a>
+
+    <a href="project-pdis.html" class="project-card">
+      <div class="project-card-top">
+        <span class="project-type student">Student Project</span>
+        <span class="project-arrow">↗</span>
+      </div>
+      <h3 data-zh>教育部青年署官網數位體驗改善</h3>
+      <h3 data-en>Youth Development Administration Web Redesign</h3>
+      <p data-zh>透過易用性測試、卡片分類與迭代設計，重新設計政府網站以吸引青年族群。</p>
+      <p data-en>Redesigned a government website to attract youth audiences through usability testing, card sorting, and iterative design.</p>
+      <div class="project-metrics">
+        <div class="metric-badge">+42<span>SUS</span></div>
+        <div class="metric-badge">+75%<span data-zh>滿意度</span><span data-en>Satisfaction</span></div>
+        <div class="metric-badge">PDIS Ray 4.0<span></span></div>
+      </div>
+      <span class="view-case"><span data-zh>查看案例 →</span><span data-en>View Case Study →</span></span>
+    </a>
+
+    <a href="project-invisible.html" class="project-card">
+      <div class="project-card-top">
+        <span class="project-type student">Student Project</span>
+        <span class="project-arrow">↗</span>
+      </div>
+      <h3 data-zh>國小學童隱性特殊需求資源指南</h3>
+      <h3 data-en>Invisible Disabilities Resource Guide</h3>
+      <p data-zh>透過社會設計與參與式工作坊，促進隱性特殊生家長與學校教師的相互理解。</p>
+      <p data-en>Through social design and participatory workshops, bridged the understanding gap between parents of children with invisible disabilities and their school teachers.</p>
+      <div class="project-metrics">
+        <div class="metric-badge">15<span data-zh>萬份發行</span><span data-en>0K Copies</span></div>
+        <div class="metric-badge">151<span data-zh>所學校</span><span data-en>Schools</span></div>
+        <div class="metric-badge"><span data-zh>社會設計</span><span data-en>Social Design</span><span data-zh> 影響力</span><span data-en> Impact</span></div>
+      </div>
+      <span class="view-case"><span data-zh>查看案例 →</span><span data-en>View Case Study →</span></span>
+    </a>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills">
+  <div class="skills-inner">
+    <div class="section-tag"><span data-zh>核心能力</span><span data-en>Capabilities</span></div>
+    <h2 class="skills-title"><span data-zh>我能為團隊帶來的價值</span><span data-en>What I bring to the table</span></h2>
+    <div class="skills-grid">
+      <div class="skill-item">
+        <div class="skill-icon">🔍</div>
+        <h4 data-zh>混合研究方法</h4>
+        <h4 data-en>Mixed-method Research</h4>
+        <p data-zh>深度訪談、行為觀測、問卷、易用性測試——針對不同研究問題設計最合適的方法組合。</p>
+        <p data-en>Deep interviews, behavioral observation, surveys, usability testing — designed to answer the right question at the right layer.</p>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">🗺</div>
+        <h4 data-zh>洞察轉譯</h4>
+        <h4 data-en>Insight Translation</h4>
+        <p data-zh>人物誌、旅程地圖、行為洞察卡——讓質性資料能被非研究背景的成員直接使用。</p>
+        <p data-en>Persona development, journey mapping, and behavioral card systems that make qualitative data usable by non-researchers.</p>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">🧩</div>
+        <h4 data-zh>工作坊設計</h4>
+        <h4 data-en>Workshop Design</h4>
+        <p data-zh>B2B 與 B2C 共創引導設計——從同理使用者到概念收斂，促進跨部門決策對齊。</p>
+        <p data-en>Co-creation facilitation for both B2B and B2C contexts — from empathy to concept convergence to decision alignment.</p>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">⚙️</div>
+        <h4 data-zh>研究營運</h4>
+        <h4 data-en>Research Ops</h4>
+        <p data-zh>洞察資料庫、標籤化系統、AI 輔助分析流程——建立能長期累積價值的研究基礎設施。</p>
+        <p data-en>Insight databases, tagging systems, AI-assisted analysis pipelines — building research infrastructure that compounds over time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-strip" id="about">
+  <div class="about-label"><span data-zh>關於我</span><span data-en>About</span></div>
+  <div class="about-name"><span data-zh>黃采媛</span><span data-en>Evita Huang</span></div>
+  <p class="about-bio" data-zh>UX researcher，專注於混合研究方法設計，以及將複雜的使用者行為轉化為驅動產品決策的工具與框架。</p>
+  <p class="about-bio" data-en>UX researcher specializes in mixed-method research and translating complex user behavior into tools and frameworks that drive product decisions.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="logo">Evita Huang</div>
+  </div>
+  <div class="footer-right">
+    <a href="mailto:evita.tyh@gmail.com" class="footer-link">evita.tyh@gmail.com</a>
+    <a href="mailto:evita.tyh@gmail.com" class="footer-cta"><span data-zh>聯絡我 →</span><span data-en>Let's Talk →</span></a>
+  </div>
+  <div style="width:100%;border-top:1px solid rgba(255,255,255,0.1);margin-top:24px;padding-top:20px;display:flex;justify-content:flex-end;">
+    <p style="font-size:12px;color:rgba(255,255,255,0.3);">Portfolio design inspired by <a href="https://lovable.dev/templates/websites/portfolio/compound-content-strategist-portfolio-website-template" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.4);text-decoration:underline;text-underline-offset:3px;">Compound</a> via Lovable</p>
+  </div>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  }
+</script>
+</body>
+</html>
