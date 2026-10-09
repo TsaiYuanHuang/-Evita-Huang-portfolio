@@ -76,6 +76,9 @@
   .project-card:hover::before { transform: scaleX(1); }
   .project-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
   .project-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange-dark); background: var(--orange-light); padding: 4px 10px; border-radius: var(--radius-pill); }
+  .project-meta-left { display: flex; align-items: center; gap: 10px; }
+  .project-year { font-size: 12px; font-weight: 600; color: var(--orange); }
+  .project-year.student { color: #0F6E56; }
   .project-type.student { color: #0F6E56; background: var(--teal-light); }
   .project-arrow { font-size: 18px; color: var(--ink-60); transition: transform 0.2s, color 0.2s; }
   .project-card:hover .project-arrow { transform: translate(3px, -3px); color: var(--orange); }
@@ -130,7 +133,7 @@
   <a href="index.html" class="nav-logo">Evita Huang</a>
   <div class="nav-right">
     <ul class="nav-links">
-      <li><a href="#work"><span data-zh>作品</span><span data-en>Work</span></a></li>
+      <li><a href="#work"><span data-zh>專案</span><span data-en>Projects</span></a></li>
       <li><a href="about.html"><span data-zh>關於我</span><span data-en>About</span></a></li>
     </ul>
     <div class="lang-toggle">
@@ -146,13 +149,13 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-tag">
-    <span data-zh>UX 研究・洞察系統・工作坊設計</span>
-    <span data-en>UX Research · Insight Systems · Workshop Design</span>
+    <span data-zh>專案管理・UX 研究・AI 知識系統設計</span>
+    <span data-en>Project Management · UX Research · AI Knowledge System Design</span>
   </div>
-  <h1 data-zh>讓研究成為<br><em>可以被使用的決策工具。</em></h1>
-  <h1 data-en>Research that turns<br><em>behavior into decisions.</em></h1>
-  <p class="hero-desc" data-zh>我設計端對端的研究流程，不只是理解使用者——<strong>讓洞察可以被團隊使用</strong>，支撐產品與服務的關鍵決策。</p>
-  <p class="hero-desc" data-en>I design end-to-end research that goes beyond understanding users — <strong>making insight usable</strong> by the teams who build products and services.</p>
+  <h1 data-zh>我是 Evita。<br>我讓散落的知識<br><em>成為組織可以調用的能力。</em></h1>
+  <h1 data-en>I'm Evita.<br>I turn scattered knowledge<br><em>into capability an organization can draw on.</em></h1>
+  <p class="hero-desc" data-zh>我的工作橫跨質性研究與系統建置——從洞察資料庫到需求評估 Agent，<strong>讓知識不只被產出，而是被檢索、被複用、被決策引用。</strong></p>
+  <p class="hero-desc" data-en>My work spans qualitative research and system building — from an insight database to a requirement-assessment agent, <strong>so knowledge is not just produced, but retrieved, reused and cited in decisions.</strong></p>
   <div class="hero-actions">
     <a href="#work" class="btn-primary"><span data-zh>查看作品集 →</span><span data-en>View Case Studies →</span></a>
     <a href="mailto:evita.tyh@gmail.com" class="btn-secondary"><span data-zh>聯絡我</span><span data-en>Get in Touch</span></a>
@@ -169,9 +172,43 @@
   </div>
   <div class="projects-grid">
 
+    <a href="project-agent.html" class="project-card">
+      <div class="project-card-top">
+        <div class="project-meta-left"><span class="project-type">AI Workflow</span><span class="project-year">2026</span></div>
+        <span class="project-arrow">↗</span>
+      </div>
+      <h3 data-zh>建置 PM 專案需求評估 AI Agent</h3>
+      <h3 data-en>Building a PM Project Requirement Assessment AI Agent</h3>
+      <p data-zh>將散落的專案筆記與 SOP 結構化為關鍵字庫、檢核庫與角色表，並導入內部 AI 平台——讓各層級 PM 在需求前期快速掌握重點、風險與待確認事項。</p>
+      <p data-en>Structured scattered project notes and SOPs into keyword, checklist and role libraries, then deployed them on an internal AI platform — helping PMs of any level see key points, risks and open questions early.</p>
+      <div class="project-metrics">
+        <div class="metric-badge">20<span data-zh>跨部門需求單位</span><span data-en>Requesting Units</span></div>
+        <div class="metric-badge">17+<span data-zh>產品類型</span><span data-en>Product Types</span></div>
+        <div class="metric-badge">AI Agent<span data-zh>需求評估</span><span data-en>Requirement Review</span></div>
+      </div>
+      <span class="view-case"><span data-zh>查看案例 →</span><span data-en>View Case Study →</span></span>
+    </a>
+
+    <a href="project-database.html" class="project-card">
+      <div class="project-card-top">
+        <div class="project-meta-left"><span class="project-type">Research Ops</span><span class="project-year">2024</span></div>
+        <span class="project-arrow">↗</span>
+      </div>
+      <h3 data-zh>架構可規模化的洞察知識庫</h3>
+      <h3 data-en>Architecting a Scalable Insight Repository</h3>
+      <p data-zh>將 7 年散落的質性訪談資料，系統化為可篩選、AI 輔助分析的洞察資料庫——讓過往研究成為可持續使用的團隊決策資產。</p>
+      <p data-en>Transformed 7 years of fragmented qualitative interviews into a structured, AI-enabled insight database — turning one-time research into a team-wide, reusable decision asset.</p>
+      <div class="project-metrics">
+        <div class="metric-badge">7<span data-zh>年歷史資料</span><span data-en>Years of Data</span></div>
+        <div class="metric-badge">AI<span data-zh>標籤分析流程</span><span data-en>Tagging Pipeline</span></div>
+        <div class="metric-badge">Airtable<span data-zh>儀表板</span><span data-en>Dashboard</span></div>
+      </div>
+      <span class="view-case"><span data-zh>查看案例 →</span><span data-en>View Case Study →</span></span>
+    </a>
+
     <a href="project-caregiver.html" class="project-card">
       <div class="project-card-top">
-        <span class="project-type">UX Research</span>
+        <div class="project-meta-left"><span class="project-type">UX Research</span><span class="project-year">2025</span></div>
         <span class="project-arrow">↗</span>
       </div>
       <h3 data-zh>從行為觀測到採買情境設計</h3>
@@ -188,7 +225,7 @@
 
     <a href="project-athlete.html" class="project-card">
       <div class="project-card-top">
-        <span class="project-type">UX Research</span>
+        <div class="project-meta-left"><span class="project-type">UX Research</span><span class="project-year">2024</span></div>
         <span class="project-arrow">↗</span>
       </div>
       <h3 data-zh>將質性洞察轉譯為 B2B 設計工具</h3>
@@ -203,26 +240,9 @@
       <span class="view-case"><span data-zh>查看案例 →</span><span data-en>View Case Study →</span></span>
     </a>
 
-    <a href="project-database.html" class="project-card">
-      <div class="project-card-top">
-        <span class="project-type">Research Ops</span>
-        <span class="project-arrow">↗</span>
-      </div>
-      <h3 data-zh>架構可規模化的洞察知識庫</h3>
-      <h3 data-en>Architecting a Scalable Insight Repository</h3>
-      <p data-zh>將 7 年散落的質性訪談資料，系統化為可篩選、AI 輔助分析的洞察資料庫——讓過往研究成為可持續使用的團隊決策資產。</p>
-      <p data-en>Transformed 7 years of fragmented qualitative interviews into a structured, AI-enabled insight database — turning one-time research into a team-wide, reusable decision asset.</p>
-      <div class="project-metrics">
-        <div class="metric-badge">7<span data-zh>年歷史資料</span><span data-en>Years of Data</span></div>
-        <div class="metric-badge">AI<span data-zh>標籤分析流程</span><span data-en>Tagging Pipeline</span></div>
-        <div class="metric-badge">Airtable<span data-zh>儀表板</span><span data-en>Dashboard</span></div>
-      </div>
-      <span class="view-case"><span data-zh>查看案例 →</span><span data-en>View Case Study →</span></span>
-    </a>
-
     <a href="project-pdis.html" class="project-card">
       <div class="project-card-top">
-        <span class="project-type student">Student Project</span>
+        <div class="project-meta-left"><span class="project-type student">Student Project</span><span class="project-year student">2020</span></div>
         <span class="project-arrow">↗</span>
       </div>
       <h3 data-zh>教育部青年署官網數位體驗改善</h3>
@@ -230,16 +250,16 @@
       <p data-zh>重新設計政府網站以吸引青年族群——透過易用性測試、卡片分類與迭代設計，SUS 易用性提升 42 分、整體滿意度提升 75%。</p>
       <p data-en>Redesigned a government website to attract youth audiences — through usability tests, card sorting, and iterative prototyping. Achieved a 42-point SUS improvement and 75% satisfaction rate.</p>
       <div class="project-metrics">
+        <div class="metric-badge">UX<span data-zh>網頁設計</span><span data-en>Web Design</span></div>
         <div class="metric-badge">+42<span>SUS</span></div>
         <div class="metric-badge">+75%<span data-zh>滿意度</span><span data-en>Satisfaction</span></div>
-        <div class="metric-badge">PDIS Ray 4.0<span></span></div>
       </div>
       <span class="view-case"><span data-zh>查看案例 →</span><span data-en>View Case Study →</span></span>
     </a>
 
     <a href="project-invisible.html" class="project-card">
       <div class="project-card-top">
-        <span class="project-type student">Student Project</span>
+        <div class="project-meta-left"><span class="project-type student">Student Project</span><span class="project-year student">2021</span></div>
         <span class="project-arrow">↗</span>
       </div>
       <h3 data-zh>國小學童隱性特殊需求資源指南</h3>
@@ -257,57 +277,11 @@
   </div>
 </section>
 
-<!-- SKILLS -->
-<section class="skills">
-  <div class="skills-inner">
-    <div class="section-tag"><span data-zh>核心能力</span><span data-en>Capabilities</span></div>
-    <h2 class="skills-title"><span data-zh>我能為團隊帶來的價值</span><span data-en>What I bring to the table</span></h2>
-    <div class="skills-grid">
-      <div class="skill-item">
-        <div class="skill-icon">🔍</div>
-        <h4 data-zh>混合研究方法</h4>
-        <h4 data-en>Mixed-method Research</h4>
-        <p data-zh>深度訪談、行為觀測、問卷、易用性測試——針對不同研究問題設計最合適的方法組合。</p>
-        <p data-en>Deep interviews, behavioral observation, surveys, usability testing — designed to answer the right question at the right layer.</p>
-      </div>
-      <div class="skill-item">
-        <div class="skill-icon">🗺</div>
-        <h4 data-zh>洞察轉譯</h4>
-        <h4 data-en>Insight Translation</h4>
-        <p data-zh>人物誌、旅程地圖、行為洞察卡——讓質性資料能被非研究背景的成員直接使用。</p>
-        <p data-en>Persona development, journey mapping, and behavioral card systems that make qualitative data usable by non-researchers.</p>
-      </div>
-      <div class="skill-item">
-        <div class="skill-icon">🧩</div>
-        <h4 data-zh>工作坊設計</h4>
-        <h4 data-en>Workshop Design</h4>
-        <p data-zh>B2B 與 B2C 共創引導設計——從同理使用者到概念收斂，促進跨部門決策對齊。</p>
-        <p data-en>Co-creation facilitation for both B2B and B2C contexts — from empathy to concept convergence to decision alignment.</p>
-      </div>
-      <div class="skill-item">
-        <div class="skill-icon">⚙️</div>
-        <h4 data-zh>研究營運</h4>
-        <h4 data-en>Research Ops</h4>
-        <p data-zh>洞察資料庫、標籤化系統、AI 輔助分析流程——建立能長期累積價值的研究基礎設施。</p>
-        <p data-en>Insight databases, tagging systems, AI-assisted analysis pipelines — building research infrastructure that compounds over time.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section class="about-strip" id="about">
-  <div class="about-label"><span data-zh>關於我</span><span data-en>About</span></div>
-  <div class="about-name">黃采媛 Evita Huang</div>
-  <p class="about-bio" data-zh>UX researcher，專注於混合研究方法設計，以及將複雜的使用者行為轉化為驅動產品決策的工具與框架。</p>
-  <p class="about-bio" data-en>UX researcher specializes in mixed-method research and translating complex user behavior into tools and frameworks that drive product decisions.</p>
-</section>
-
-<!-- FOOTER -->
 <footer>
   <div class="footer-left">
     <div class="logo">Evita Huang</div>
-    <p>UX Research · Product · Insight Systems</p>
+    <p data-zh>專案管理・UX 研究・AI 知識系統設計</p>
+    <p data-en>Project Management · UX Research · AI Knowledge System Design</p>
   </div>
   <div class="footer-right">
     <a href="mailto:evita.tyh@gmail.com" class="footer-link">evita.tyh@gmail.com</a>

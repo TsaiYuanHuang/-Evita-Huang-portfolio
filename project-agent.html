@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building a PM Project Requirement Assessment AI Agent — Evita Huang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #E8622A; --orange-light: #FDF0EA; --orange-mid: #F5A07A; --orange-dark: #B84A1B;
+    --teal: #1D9E75; --teal-light: #E1F5EE;
+    --ink: #1C1A18; --ink-60: #6B6760; --ink-20: #E8E6E2;
+    --surface: #FAF9F7; --white: #FFFFFF;
+    --radius-sm: 8px; --radius-md: 14px; --radius-lg: 24px; --radius-pill: 999px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); line-height: 1.6; font-size: 16px; }
+  body.lang-zh { font-family: 'Noto Sans TC', 'DM Sans', sans-serif; }
+
+  [data-zh], [data-en] { display: none; }
+  span[data-zh], span[data-en] { display: none; }
+  body.lang-zh span[data-zh] { display: inline; }
+  body.lang-en span[data-en] { display: inline; }
+  p[data-zh], p[data-en], h1[data-zh], h1[data-en], h2[data-zh], h2[data-en],
+  h3[data-zh], h3[data-en], h4[data-zh], h4[data-en], li[data-zh], li[data-en],
+  div[data-zh], div[data-en] { display: none; }
+  body.lang-zh p[data-zh], body.lang-zh h1[data-zh], body.lang-zh h2[data-zh],
+  body.lang-zh h3[data-zh], body.lang-zh h4[data-zh], body.lang-zh li[data-zh],
+  body.lang-zh div[data-zh] { display: block; }
+  body.lang-en p[data-en], body.lang-en h1[data-en], body.lang-en h2[data-en],
+  body.lang-en h3[data-en], body.lang-en h4[data-en], body.lang-en li[data-en],
+  body.lang-en div[data-en] { display: block; }
+
+  nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 64px; background: rgba(250,249,247,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ink-20); }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ink-60); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .lang-toggle { display: flex; align-items: center; border: 1.5px solid var(--ink-20); border-radius: var(--radius-pill); overflow: hidden; }
+  .lang-btn { padding: 5px 13px; cursor: pointer; color: var(--ink-60); background: transparent; border: none; font-size: 13px; font-weight: 600; font-family: inherit; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+  .lang-btn.active { background: var(--orange); color: var(--white); }
+  .lang-btn:not(.active):hover { background: var(--ink-20); color: var(--ink); }
+
+  /* HERO */
+  .case-hero { padding: 72px 5% 64px; max-width: 1000px; margin: 0 auto; }
+  .case-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .case-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange-dark); background: var(--orange-light); padding: 4px 12px; border-radius: var(--radius-pill); }
+  .case-year { display: inline-flex; align-items: center; font-size: 13px; font-weight: 600; color: var(--orange); }
+  .case-year::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--orange); margin-left: 10px; }
+  .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
+  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
+  body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
+  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; max-width: 640px; margin-bottom: 40px; }
+  .case-kpis { display: flex; gap: 12px; flex-wrap: wrap; }
+  .kpi-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 22px; min-width: 130px; }
+  .kpi-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
+  .kpi-label { font-size: 12px; color: var(--ink-60); font-weight: 500; }
+
+  /* BODY */
+  .case-body { max-width: 1000px; margin: 0 auto; padding: 0 5% 96px; }
+  .case-section { margin-bottom: 72px; }
+  .section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+  .section-icon { width: 44px; height: 44px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .section-icon svg { width: 22px; height: 22px; }
+  .case-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
+  body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 30px); }
+  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
+  .case-section p:last-child { margin-bottom: 0; }
+  .case-section p strong { color: var(--ink); font-weight: 600; }
+  .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
+
+  /* PROBLEM CALLOUT */
+  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; max-width: 680px; }
+  .problem-callout p { color: var(--ink); font-size: 16px; line-height: 1.75; margin: 0; }
+  .problem-callout p strong { color: var(--orange-dark); }
+
+  /* BEFORE / AFTER */
+  .before-after { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; border-radius: var(--radius-lg); overflow: hidden; margin: 28px 0; }
+  .ba-col { padding: 28px 30px; }
+  .ba-col.before { background: #F0EEE9; }
+  .ba-col.after { background: var(--orange-light); }
+  .ba-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .ba-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .ba-col.before .ba-dot { background: #B4B2A9; }
+  .ba-col.after .ba-dot { background: var(--orange); }
+  .ba-title { font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; }
+  .ba-col.before .ba-title { color: var(--ink-60); }
+  .ba-col.after .ba-title { color: var(--orange-dark); }
+  .ba-subtitle { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: -0.3px; margin-bottom: 16px; color: var(--ink); }
+  body.lang-zh .ba-subtitle { font-family: 'Noto Serif TC', serif; font-size: 16px; font-weight: 600; letter-spacing: 0; }
+  .ba-group { margin-bottom: 16px; }
+  .ba-group-label { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink-60); margin-bottom: 6px; }
+  .ba-col.after .ba-group-label { color: var(--orange-dark); }
+  .ba-col ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .ba-col ul li { font-size: 13px; line-height: 1.55; padding-left: 18px; position: relative; }
+  .ba-col.before ul li { color: var(--ink-60); }
+  .ba-col.before ul li::before { content: ''; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: #C8C5BC; }
+  .ba-col.after ul li { color: var(--ink); }
+  .ba-col.after ul li::before { content: ''; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
+
+  /* THREE LAYERS */
+  .three-layers { display: flex; flex-direction: column; gap: 1px; border-radius: var(--radius-lg); overflow: hidden; margin: 28px 0; }
+  .layer-row { background: var(--white); padding: 22px 26px; display: flex; align-items: flex-start; gap: 20px; }
+  .layer-row:hover { background: #FEFDFB; }
+  .layer-badge { flex-shrink: 0; width: 36px; height: 36px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+  .layer-badge svg { width: 18px; height: 18px; }
+  .layer-content { flex: 1; }
+  .layer-num { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); margin-bottom: 4px; }
+  .layer-content h4 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; line-height: 1.3; }
+  body.lang-zh .layer-content h4 { font-size: 14px; }
+  .layer-content p { font-size: 13px; color: var(--ink-60); line-height: 1.6; margin: 0; }
+  .layer-separator { height: 1px; background: var(--ink-20); }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-lg); padding: 32px; margin: 28px 0; }
+  .highlight-box h3 { font-family: 'DM Serif Display', serif; font-size: 20px; letter-spacing: -0.3px; margin-bottom: 20px; color: var(--ink); }
+  body.lang-zh .highlight-box h3 { font-family: 'Noto Serif TC', serif; font-weight: 600; letter-spacing: 0; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .col-card { background: var(--surface); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 22px; }
+  .col-card-icon { width: 32px; height: 32px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+  .col-card-icon svg { width: 16px; height: 16px; }
+  .col-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+  body.lang-zh .col-card h4 { font-size: 13px; }
+  .col-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .col-card ul li { font-size: 13px; color: var(--ink-60); line-height: 1.55; padding-left: 16px; position: relative; }
+  .col-card ul li::before { content: '—'; position: absolute; left: 0; color: var(--orange-mid); }
+
+  /* CONTRIBUTION CARDS */
+  .contribution-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin: 24px 0; }
+  .contribution-card { background: var(--white); border: 1px solid var(--ink-20); border-top: 3px solid var(--orange); border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 22px; }
+  .c-label { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 0.5px; margin-bottom: 8px; }
+  .contribution-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 8px; line-height: 1.35; }
+  body.lang-zh .contribution-card h4 { font-size: 13px; }
+  .contribution-card p { font-size: 13px; color: var(--ink-60); line-height: 1.6; margin: 0; }
+
+  /* IMPACT LIST */
+  .impact-list { display: flex; flex-direction: column; gap: 10px; margin: 24px 0; max-width: 680px; }
+  .impact-item { display: flex; align-items: flex-start; gap: 14px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 20px; }
+  .impact-icon { width: 32px; height: 32px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .impact-icon svg { width: 16px; height: 16px; }
+  .impact-item p { font-size: 14px; color: var(--ink-60); line-height: 1.6; margin: 0; }
+  .impact-item p strong { color: var(--ink); font-weight: 600; }
+
+  /* REFLECTION */
+  .reflection-box { background: var(--ink); color: var(--white); border-radius: var(--radius-lg); padding: 40px; margin: 28px 0; }
+  .reflection-box .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-mid); margin-bottom: 16px; }
+  .reflection-box blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(20px, 2.5vw, 28px); line-height: 1.35; letter-spacing: -0.4px; color: var(--white); margin-bottom: 24px; font-style: italic; }
+  body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 600; letter-spacing: 0; }
+  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; }
+  .reflection-box p strong { color: rgba(255,255,255,0.9); font-weight: 600; }
+  .reflection-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+  .reflection-list li { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.6; padding-left: 18px; position: relative; }
+  .reflection-list li::before { content: ''; position: absolute; left: 0; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--orange-mid); }
+
+  /* NAV FOOTER */
+  .case-nav-footer { border-top: 1px solid var(--ink-20); padding: 40px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; max-width: 1000px; margin: 0 auto; }
+  .cnf-back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--ink-60); text-decoration: none; transition: color 0.2s; }
+  .cnf-back:hover { color: var(--ink); }
+  .cnf-next { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: var(--white); padding: 12px 24px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+  .cnf-next:hover { background: var(--orange-dark); }
+
+  @media (max-width: 700px) {
+    .two-col, .before-after { grid-template-columns: 1fr; }
+  }
+
+  /* FLOW */
+  .flow { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; margin: 28px 0; }
+  .flow-step { flex: 1 1 150px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 18px 18px 16px; position: relative; }
+  .flow-step.in, .flow-step.out { background: var(--orange-light); border-color: var(--orange-mid); }
+  .flow-num { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
+  .flow-step h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; line-height: 1.35; }
+  .flow-step p { font-size: 12.5px; color: var(--ink-60); line-height: 1.55; margin: 0; }
+  .flow-arrow { align-self: center; color: var(--orange-mid); font-size: 18px; }
+  @media (max-width: 700px) { .flow-arrow { display: none; } }
+  /* DOMAIN CHIPS */
+  .domain-list { display: flex; flex-direction: column; gap: 10px; margin: 24px 0; }
+  .domain-row { display: grid; grid-template-columns: 140px 1fr; gap: 16px; align-items: start; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 20px; }
+  .domain-name { font-size: 13px; font-weight: 700; color: var(--orange-dark); line-height: 1.4; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: 12px; color: var(--ink); background: var(--surface); border: 1px solid var(--ink-20); border-radius: var(--radius-pill); padding: 3px 11px; }
+  @media (max-width: 700px) { .domain-row { grid-template-columns: 1fr; gap: 8px; } }
+  .domain-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin: 24px 0; }
+  .domain-card { background: var(--white); border: 1px solid var(--ink-20); border-top: 3px solid var(--orange); border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 18px 20px; font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+  @media (min-width: 900px) { .flow { flex-wrap: nowrap; } .flow-step { flex: 1 1 0; min-width: 0; } }
+  .three-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px 0; }
+</style>
+</head>
+<body class="lang-zh">
+
+<nav>
+  <a href="index.html" class="nav-logo">Evita Huang</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← <span data-zh>返回</span><span data-en>Back</span></a>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')">中</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="case-hero">
+  <div class="case-meta">
+    <span class="case-type">AI Workflow</span>
+    <span class="case-year">2026</span>
+    <span class="case-role">
+      <span data-zh>知識庫架構・AI Agent 規劃・跨部門需求釐清</span>
+      <span data-en>Knowledge Architecture · AI Agent Planning · Cross-team Requirement Alignment</span>
+    </span>
+  </div>
+  <h1 data-zh>建置 PM 專案需求評估 AI Agent</h1>
+  <h1 data-en>Building a PM Project Requirement Assessment AI Agent</h1>
+  <p class="subtitle" data-zh>將設計中心散落在專案筆記、會議記錄與 SOP 中的需求評估經驗，結構化為關鍵字庫、檢核庫與角色表，並導入公司內部 AI 平台——讓不同資歷的 PM 在需求前期，都能快速掌握重點、風險與待確認事項。</p>
+  <p class="subtitle" data-en>Structured the requirement-evaluation experience scattered across project notes, meeting records and SOPs into a keyword library, checklist library and role table, then deployed it on the company's internal AI platform — so PMs of any seniority can quickly see key points, risks and open questions at the start of a request.</p>
+  <div class="case-kpis">
+    <div class="kpi-card"><div class="kpi-num">20</div><div class="kpi-label"><span data-zh>跨部門需求單位</span><span data-en>Cross-department Requesting Units</span></div></div>
+    <div class="kpi-card"><div class="kpi-num">90+</div><div class="kpi-label"><span data-zh>列檢核項目</span><span data-en>Checklist Rows</span></div></div>
+    <div class="kpi-card"><div class="kpi-num">17+</div><div class="kpi-label"><span data-zh>種產品類型</span><span data-en>Product Types</span></div></div>
+    <div class="kpi-card"><div class="kpi-num">3 <span style="font-size:18px;">mo</span></div><div class="kpi-label"><span data-zh>入職三個月內完成</span><span data-en>Delivered Within 3 Months of Joining</span></div></div>
+  </div>
+</header>
+
+<div class="case-body">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>專案背景</span><span data-en>Context</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+    <h2 data-zh>每封需求信，都要重新判斷一次「哪裡要注意」</h2>
+    <h2 data-en>Every Request Email Means Re-judging "What to Watch For"</h2>
+
+    <p data-zh>友達設計中心的專案橫跨車載、AR 眼鏡、醫療、零售與展會活動，需求來自不同的需求單位，內容與限制各不相同。要在收到需求的第一時間判斷「重點在哪、風險是什麼、還缺什麼資訊」，目前主要仰賴 PM 個人的經驗與記憶。</p>
+    <p data-en>The Design Center's projects span in-vehicle systems, AR glasses, medical, retail and exhibitions, with requests coming from many requesting units, each with different content and constraints. Spotting the key points, risks and missing information the moment a request arrives relied mostly on individual PMs' experience and memory.</p>
+    <div class="problem-callout">
+      <p data-zh>經驗存在個人腦中，<strong>資淺 PM 容易遺漏、資深 PM 也要花時間回想，需求對焦的前置作業因此被拉長。</strong></p>
+      <p data-en>Experience lived in individual heads, so <strong>junior PMs could miss things and senior PMs still spent time recalling — stretching the preparation before a request is aligned.</strong></p>
+    </div>
+    <p data-zh>我給自己的問題是：<strong>怎麼讓「經驗」變成一份誰都能查、AI 也能讀的資料？</strong></p>
+    <p data-en>The question I set myself: <strong>how do we turn "experience" into something anyone can look up and an AI can read?</strong></p>
+  </section>
+
+  <div class="before-after">
+    <div class="ba-col before">
+      <div class="ba-header"><div class="ba-dot"></div><div class="ba-title">Before</div></div>
+      <div class="ba-subtitle" data-zh>依賴個人經驗</div>
+      <div class="ba-subtitle" data-en>Reliant on Individual Experience</div>
+      <div class="ba-group">
+        <ul>
+          <li data-zh>經驗散落在專案筆記、會議記錄與 SOP</li>
+          <li data-en>Experience scattered across project notes, meeting records and SOPs</li>
+          <li data-zh>風險與待確認事項靠 PM 自行回想</li>
+          <li data-en>Risks and open questions recalled by each PM</li>
+          <li data-zh>不同資歷的 PM 判斷基準不一</li>
+          <li data-en>Judgment standards differ by seniority</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ba-col after">
+      <div class="ba-header"><div class="ba-dot"></div><div class="ba-title">After</div></div>
+      <div class="ba-subtitle" data-zh>結構化 · 可查詢 · 可被 AI 讀取</div>
+      <div class="ba-subtitle" data-en>Structured, Searchable, AI-readable</div>
+      <div class="ba-group">
+        <ul>
+          <li data-zh>統一的關鍵字、檢核項目與角色對照</li>
+          <li data-en>One shared set of keywords, checks and role mapping</li>
+          <li data-zh>需求一進來，Agent 即比對出重點、風險與待確認問題</li>
+          <li data-en>When a request arrives, the agent surfaces key points, risks and open questions</li>
+          <li data-zh>所有 PM 共用同一套判斷基準</li>
+          <li data-en>All PMs share the same baseline</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>資料庫設計</span><span data-en>Database Design</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+    <h2 data-zh>以三層專案架構，整理成三張工作表</h2>
+    <h2 data-en>A Three-layer Project Framework, Organized into Three Sheets</h2>
+
+    <p data-zh>依據歷史專案筆記、會議與 SOP、部門名詞表，我把需求拆成三個層級，再加上需求單位與通用類別，讓任何一封需求信都能被對回標準關鍵字：</p>
+    <p data-en>Drawing on historical project notes, meeting records, SOPs and the department glossary, I broke requests into three layers, plus requesting units and a general category, so any request can be mapped back to standard keywords:</p>
+    <div class="three-layers">
+      <div class="layer-row">
+        <div class="layer-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+        <div class="layer-content">
+          <div class="layer-num">L1</div>
+          <h4 data-zh>設計內容與產出</h4>
+          <h4 data-en>Design Content & Deliverables</h4>
+          <p data-zh>ID、UX、UI、Animation，以及 KV、Teaser、Rendering 等交付物——對應「要做什麼設計」。</p>
+          <p data-en>ID, UX, UI, Animation, plus deliverables such as KV, Teaser and Rendering — "what design is needed".</p>
+        </div>
+      </div>
+      <div class="layer-separator"></div>
+      <div class="layer-row">
+        <div class="layer-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+        <div class="layer-content">
+          <div class="layer-num">L2</div>
+          <h4 data-zh>產品與技術</h4>
+          <h4 data-en>Product & Technology</h4>
+          <p data-zh>產品類型與技術限制（Placement、Dimension、Lens、FPC、法規等）——對應「針對哪一種產品設計」。</p>
+          <p data-en>Product types and technical constraints (placement, dimension, lens, FPC, regulations…) — "which kind of product it is designed for".</p>
+        </div>
+      </div>
+      <div class="layer-separator"></div>
+      <div class="layer-row">
+        <div class="layer-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+        <div class="layer-content">
+          <div class="layer-num">L3</div>
+          <h4 data-zh>使用情境</h4>
+          <h4 data-en>Usage Scenario</h4>
+          <p data-zh>展會、Showroom、Customer Demo、POC、Proposal——對應「用在哪裡」，決定時程與交付形式。</p>
+          <p data-en>Exhibitions, showrooms, customer demos, POCs and proposals — "where it is used", which drives schedule and delivery form.</p>
+        </div>
+      </div>
+    </div>
+    <div class="three-col">
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>工作表 01</span><span data-en>Sheet 01</span></div>
+        <h4 data-zh>關鍵字庫（辨識層）</h4>
+        <h4 data-en>Keyword Library (Recognition)</h4>
+        <p data-zh>把信中各種寫法對回標準關鍵字，並標明所屬層級。</p>
+        <p data-en>Maps the many ways a request is worded back to a standard keyword and its layer.</p>
+      </div>
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>工作表 02</span><span data-en>Sheet 02</span></div>
+        <h4 data-zh>檢核庫（知識層）</h4>
+        <h4 data-en>Checklist Library (Knowledge)</h4>
+        <p data-zh>每列是「某個關鍵字出現時要注意的一件事」：類型（重點／風險／待確認）、現象 → 影響、可直接詢問的問題、嚴重度。</p>
+        <p data-en>Each row is one thing to watch for when a keyword appears: type (key point / risk / to-confirm), cause → impact, a ready-to-send question and severity.</p>
+      </div>
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>工作表 03</span><span data-en>Sheet 03</span></div>
+        <h4 data-zh>角色表（指派層）</h4>
+        <h4 data-en>Role Table (Assignment)</h4>
+        <p data-zh>把「該找誰確認」對應到角色與負責範圍，不綁定人名，方便長期維護。</p>
+        <p data-en>Maps "who to ask" to roles and scopes of responsibility — no personal names, so it stays maintainable.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>跨領域覆蓋</span><span data-en>Domain Coverage</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+    <h2 data-zh>一套框架，涵蓋 17+ 種產品類型、7 大領域</h2>
+    <h2 data-en>One Framework, 17+ Product Types Across 7 Domains</h2>
+
+    <p data-zh>入職後我同步補足各需求單位的產品與技術知識，並把它們寫進資料庫，讓 Agent 不只知道「有哪些詞」，也知道「這個詞背後要注意什麼」。</p>
+    <p data-en>After joining, I built up product and technical knowledge across the requesting units and wrote it into the database, so the agent knows not just which terms exist but what each of them implies.</p>
+    <div class="domain-grid">
+      <div class="domain-card"><span data-zh>車載與智慧座艙</span><span data-en>In-vehicle & Smart Cockpit</span></div>
+      <div class="domain-card"><span data-zh>AR 光波導</span><span data-en>AR Waveguide</span></div>
+      <div class="domain-card"><span data-zh>透明顯示</span><span data-en>Transparent Display</span></div>
+      <div class="domain-card"><span data-zh>通訊</span><span data-en>Communication</span></div>
+      <div class="domain-card"><span data-zh>醫療健康</span><span data-en>Medical & Health</span></div>
+      <div class="domain-card"><span data-zh>零售</span><span data-en>Retail</span></div>
+      <div class="domain-card"><span data-zh>博弈顯示</span><span data-en>Gaming Display</span></div>
+    </div>
+    <p data-zh>設計面則涵蓋 <strong>ID、UX、UI、Animation 與商業設計</strong>，使用情境涵蓋展會、展示間、客戶 Demo 與提案——一份資料庫串起從硬體機構到軟體介面的完整視角。</p>
+    <p data-en>On the design side it covers <strong>ID, UX, UI, animation and commercial design</strong>; on the usage side, exhibitions, showrooms, customer demos and proposals — one database linking hardware mechanisms to software interfaces.</p>
+  </section>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>驗證與迭代</span><span data-en>Validation & Iteration</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h2 data-zh>用新的需求資料，找出資料庫的缺口</h2>
+    <h2 data-en>Using a New Request to Find Gaps in the Database</h2>
+
+    <p data-zh>資料庫做好後，我拿一份<strong>全新的需求資料</strong>來測試：在不修改檔案的前提下，檢視現有關鍵字與檢核項目無法涵蓋之處，共提出 <strong>5 個新關鍵字與 10 列新檢核項目</strong>。</p>
+    <p data-en>Once the database was built, I tested it with a <strong>brand-new request</strong>: without editing the file, I checked what the existing keywords and checks failed to cover, which surfaced <strong>5 new keywords and 10 new checklist rows</strong>.</p>
+    <p data-zh>這個流程確保資料庫<strong>易於擴充</strong>，也讓日後維護有明確可行的做法：每一份新的需求，都是一次補強資料庫的機會。</p>
+    <p data-en>This loop keeps the database <strong>easy to extend</strong> and gives future maintenance a clear, practical routine: every new request is a chance to strengthen it.</p>
+  </section>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>Agent 導入</span><span data-en>AI Agent Deployment</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 12h4l4-5M11 12l4 5"/></svg></div>
+    <h2 data-zh>在公司內部 AI 平台，建置「專案需求評估助理」</h2>
+    <h2 data-en>Building the "Project Requirement Assistant" on the Internal AI Platform</h2>
+
+    <p data-zh>資料留在 ExcelLM，規則放在 Digital Entity，流程放在 Skill。需求信進來後，Agent 依資料庫比對、撈取、指派，輸出可直接使用的分析：</p>
+    <p data-en>Data stays in ExcelLM, rules live in the Digital Entity, and the process lives in a Skill. When a request arrives, the agent matches, retrieves and assigns against the database and outputs a ready-to-use analysis:</p>
+    <div class="flow">
+      <div class="flow-step in">
+        <div class="flow-num">Input</div>
+        <h4 data-zh>需求信／文件／會議記錄</h4>
+        <h4 data-en>Request / Document / Meeting Notes</h4>
+        <p data-zh>PM 貼上原始內容</p>
+        <p data-en>PM pastes the raw content</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step ">
+        <div class="flow-num">Node 1</div>
+        <h4 data-zh>辨識</h4>
+        <h4 data-en>Recognize</h4>
+        <p data-zh>用關鍵字與同義詞比對全文，歧義詞依上下文判斷</p>
+        <p data-en>Match keywords and synonyms; resolve ambiguous terms by context</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step ">
+        <div class="flow-num">Node 2</div>
+        <h4 data-zh>撈取與比對</h4>
+        <h4 data-en>Retrieve & Compare</h4>
+        <p data-zh>撈出相關檢核項目，並比對信中已知資訊，只列尚未確認的</p>
+        <p data-en>Pull related checks and compare with what the request already states — list only what is unconfirmed</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step ">
+        <div class="flow-num">Node 3</div>
+        <h4 data-zh>指派與彙整</h4>
+        <h4 data-en>Assign & Summarize</h4>
+        <p data-zh>依嚴重度排序，對應「找誰」並整理輸出</p>
+        <p data-en>Sort by severity, map "who to ask" and compile the output</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step out">
+        <div class="flow-num">Output</div>
+        <h4 data-zh>重點・風險・待確認・找誰</h4>
+        <h4 data-en>Key Points · Risks · Open Questions · Who to Ask</h4>
+        <p data-zh>待確認問題可直接轉寄需求方</p>
+        <p data-en>Questions ready to forward to the requester</p>
+      </div>
+    </div>
+    <div class="highlight-box">
+      <h3 data-zh>Agent 的行為規範</h3>
+    <h3 data-en>Guardrails Built into the Agent</h3>
+      <div class="col-card" style="background:transparent;border:none;padding:0;">
+        <ul>
+          <li data-zh>只使用資料庫查得到的內容，查不到就明說，不自行編造風險</li>
+          <li data-en>Uses only what the database contains; says so when nothing matches instead of inventing risks</li>
+          <li data-zh>引用信中原句作為「已知資訊」，方便 PM 抽查</li>
+          <li data-en>Quotes the original sentence for each "known" item so PMs can spot-check</li>
+          <li data-zh>每個風險與問題附檢核庫 ID，可回查來源</li>
+          <li data-en>Every risk and question carries a checklist ID for traceability</li>
+          <li data-zh>發現資料庫缺口時，建議新增內容，由 PM 決定是否回填</li>
+          <li data-en>Flags database gaps and suggests additions; the PM decides what to add back</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>設計決策</span><span data-en>Design Decisions</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+    <h2 data-zh>三個關鍵決策</h2>
+    <h2 data-en>Three Key Decisions</h2>
+
+    <div class="contribution-grid">
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>決策 01</span><span data-en>Decision 01</span></div>
+        <h4 data-zh>把隱性經驗結構化，再導入 Agent</h4>
+        <h4 data-en>Structure Tacit Experience First, Then Automate</h4>
+        <p data-zh>先把「PM 腦中的判斷」拆成可填寫的欄位（現象 → 影響、可問的問題、找誰、嚴重度），再交給 AI。Agent 的品質取決於知識的品質，而不是 prompt 寫得多精巧。</p>
+        <p data-en>Before handing anything to AI, I turned "what PMs know" into fillable fields (cause → impact, question to ask, who to ask, severity). The agent is only as good as the knowledge behind it, not how clever the prompt is.</p>
+      </div>
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>決策 02</span><span data-en>Decision 02</span></div>
+        <h4 data-zh>設計成「通用版」，而非特定年度版</h4>
+        <h4 data-en>General-purpose, Not Tied to One Year</h4>
+        <p data-zh>資料庫不寫年度日期與人名，改用角色與一般性描述，並以單一關鍵字庫搭配「層級」欄，降低日後擴充與填寫的負擔。</p>
+        <p data-en>No dated or named entries — only roles and general descriptions — and a single keyword sheet with a "layer" column, keeping future expansion and data entry light.</p>
+      </div>
+      <div class="contribution-card">
+        <div class="c-label"><span data-zh>決策 03</span><span data-en>Decision 03</span></div>
+        <h4 data-zh>為平台效能簡化流程</h4>
+        <h4 data-en>Simplify the Flow for Platform Performance</h4>
+        <p data-zh>過於複雜的多重依賴流程在內部平台上會跑得較慢，因此 Skill 刻意只保留 3 個線性節點，必要時還能再合併。</p>
+        <p data-en>Heavily interdependent workflows ran slowly on the internal platform, so the Skill deliberately keeps just 3 linear nodes, which can be merged further if needed.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>價值</span><span data-en>Impact</span></div>
+    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+    <h2 data-zh>設計出的價值</h2>
+    <h2 data-en>What This Design Delivers</h2>
+
+    <div class="impact-list">
+      <div class="impact-item">
+        <div class="impact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <p data-zh><strong>建立</strong>部門內部 PM 首套需求評估知識庫，把分散的經驗集中成可持續擴充的資料資產</p>
+        <p data-en><strong>Established</strong> the first requirement-evaluation knowledge base for the department's PMs, consolidating scattered experience into an expandable asset</p>
+      </div>
+      <div class="impact-item">
+        <div class="impact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <p data-zh><strong>提供</strong>不同資歷的 PM 在需求前期共用同一套判斷基準，減少遺漏並縮短需求對焦的前置作業</p>
+        <p data-en><strong>Provided</strong> PMs of any seniority a shared baseline at the start of a request, reducing omissions and shortening alignment preparation</p>
+      </div>
+      <div class="impact-item">
+        <div class="impact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <p data-zh><strong>內建</strong>缺口回報與回填機制，每個結案專案都能讓資料庫與 Agent 持續進化</p>
+        <p data-en><strong>Built in</strong> gap reporting and back-fill, so every closed project can keep improving both the database and the agent</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="case-section">
+    <div class="section-eyebrow"><span data-zh>反思</span><span data-en>Reflection</span></div>
+    <div class="reflection-box">
+      <div class="eyebrow"><span data-zh>核心學習</span><span data-en>Key Learning</span></div>
+      <blockquote data-zh>「PM 的經驗，不該只存在 PM 的腦中。」</blockquote>
+      <blockquote data-en>"A PM's experience shouldn't live only in the PM's head."</blockquote>
+      <p data-zh>從洞察知識庫到需求評估資料庫，在職涯中我不斷累積：<strong>把隱性知識轉譯為結構，讓它能被查詢、被傳承，也能被 AI 使用。</strong>不同的是，這次的使用者是每天面對需求的 PM，因此我更在意填寫的門檻與判斷的可追溯性。</p>
+      <p data-en>From the insight knowledge base to this requirement-evaluation database, what I keep building throughout my career is the same thing: <strong>translate tacit knowledge into structure so it can be queried, passed on and used by AI.</strong> This time the users are PMs facing requests every day, so I paid closer attention to how easy it is to fill in and how traceable each judgment is.</p>
+      <p data-zh><strong>未來若再優化：</strong></p>
+      <p data-en><strong>If I were to iterate:</strong></p>
+      <ul class="reflection-list">
+        <li data-zh>建立使用成效指標，追蹤需求對焦時間與遺漏事項的變化</li>
+        <li data-en>Establish metrics to track alignment time and missed items</li>
+        <li data-zh>定期依結案專案回填檢核庫，並校準嚴重度</li>
+        <li data-en>Regularly back-fill the checklist from closed projects and calibrate severity</li>
+        <li data-zh>擴充更多需求單位與產品類型，進一步支援跨部門協作</li>
+        <li data-en>Expand to more requesting units and product types to support cross-team collaboration</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<div class="case-nav-footer">
+  <a href="project-database.html" class="cnf-back">← <span data-zh>上一個案例</span><span data-en>Previous Case</span></a>
+  <a href="index.html" class="cnf-next"><span data-zh>返回作品集 →</span><span data-en>Back to Portfolio →</span></a>
+</div>
+
+<script>
+  function applyLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
+    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  }
+  function setLang(lang) {
+    applyLang(lang);
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+  }
+  (function () {
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    applyLang(saved === 'en' ? 'en' : 'zh');
+  })();
+</script>
+</body>
+</html>

@@ -47,6 +47,8 @@
   .case-hero { padding: 72px 5% 64px; max-width: 1000px; margin: 0 auto; }
   .case-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
   .case-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange-dark); background: var(--orange-light); padding: 4px 12px; border-radius: var(--radius-pill); }
+  .case-year { display: inline-flex; align-items: center; font-size: 13px; font-weight: 600; color: var(--orange); }
+  .case-year::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--orange); margin-left: 10px; }
   .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
   .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
   body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
@@ -183,6 +185,7 @@
 <header class="case-hero">
   <div class="case-meta">
     <span class="case-type">Research Ops</span>
+    <span class="case-year">2024</span>
     <span class="case-role">
       <span data-zh>工具規劃・資料架構・儀表板設計</span>
       <span data-en>Tool Planning · Data Architecture · Dashboard Design</span>
