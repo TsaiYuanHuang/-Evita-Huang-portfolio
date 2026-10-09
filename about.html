@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,7 +53,7 @@
   .about-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange); margin-bottom: 16px; }
   .about-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 56px); line-height: 1.05; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 24px; }
   body.lang-zh .about-hero h1 { font-family: 'Noto Serif TC', serif; font-weight: 600; letter-spacing: 0; font-size: clamp(28px, 4vw, 44px); }
-  .about-hero .bio { font-size: 17px; color: var(--ink-60); line-height: 1.8; margin-bottom: 28px; }
+  .about-hero .bio { font-size: 17px; color: var(--ink-60); line-height: 1.8; margin-bottom: 28px; max-width: 520px; }
   .about-hero .bio strong { color: var(--ink); font-weight: 600; }
   .contact-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .contact-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--ink); text-decoration: none; border: 1.5px solid var(--ink-20); padding: 9px 18px; border-radius: var(--radius-pill); transition: border-color 0.2s; }
@@ -126,7 +126,7 @@
   }
 </style>
 </head>
-<body class="lang-en">
+<body class="lang-zh">
 
 <nav>
   <a href="index.html" class="nav-logo">Evita Huang</a>
@@ -136,8 +136,8 @@
       <li><a href="about.html" class="active"><span data-zh>關於我</span><span data-en>About</span></a></li>
     </ul>
     <div class="lang-toggle">
-      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中</button>
-      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')">中</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
     </div>
     <a href="mailto:evita.tyh@gmail.com" class="nav-cta">
       <span data-zh>聯絡我</span><span data-en>Get in Touch</span>
@@ -176,7 +176,27 @@
     <div class="timeline">
       <div class="timeline-item">
         <div class="tl-left">
-          <div class="tl-period">2024.02 – <span data-zh>至今</span><span data-en>Present</span></div>
+          <div class="tl-period"><span data-zh>2026.07 – 至今</span><span data-en>2026.07 – Present</span></div>
+          <div class="tl-org"><span data-zh>友達光電</span><span data-en>AUO Corporation</span></div>
+          <span class="tl-badge work"><span data-zh>全職</span><span data-en>Full-time</span></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title" data-zh>設計專案管理 PM</div>
+          <div class="tl-title" data-en>Design Project Manager</div>
+          <ul class="tl-bullets">
+            <li data-zh><strong>跨領域專案統籌：</strong>管理設計中心 20+ 件專案，橫跨車載系統、AR glasses、零售與展會活動，串接工業設計、UX、UI 與動畫團隊，掌握從硬體機構到軟體介面的設計開發流程</li>
+            <li data-en><strong>Cross-functional project leadership:</strong> Managed 20+ projects across the Design Center, spanning in-vehicle systems, AR glasses, retail, and exhibition events. Coordinated industrial design, UX, UI, and animation teams across the full design-development process, from hardware mechanisms to software interfaces</li>
+            <li data-zh><strong>AI 工作流程導入：</strong>基於公司內部 AI 平台，規劃並建置專案需求評估 Agent，將歷史會議記錄與 SOP 結構化為知識庫，協助 PM 於需求前期掌握已知資訊並預判潛在風險，縮短需求對焦的前置作業</li>
+            <li data-en><strong>AI workflow adoption:</strong> Designed and built a project-requirement assessment agent on the company's internal AI platform, structuring historical meeting records and SOPs into a knowledge base so PMs can surface known information and anticipate risks early, shortening the preparation needed for requirement alignment</li>
+            <li data-zh><strong>跨部門需求協調：</strong>與 RD、機構、行銷及海外需求單位窗口進行需求訪談，釐清專案目標、規格限制與交付範圍，協調多團隊排程，確保設計交付物如期如質達成</li>
+            <li data-en><strong>Cross-department requirement coordination:</strong> Interviewed contacts in R&amp;D, mechanical engineering, marketing, and overseas requesting units to clarify project goals, spec constraints, and delivery scope, and coordinated schedules across teams to ensure design deliverables were met on time and at quality</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-left">
+          <div class="tl-period">2024.02 – 2026.06</div>
           <div class="tl-org"><span data-zh>財團法人食品工業發展研究所</span><span data-en>Food Industry Research and Development Institute</span></div>
           <span class="tl-badge work"><span data-zh>全職</span><span data-en>Full-time</span></span>
         </div>
@@ -187,7 +207,7 @@
             <li data-zh><strong>混合研究法實踐：</strong>整合深度訪談、問卷調查與情境觀測，建構族群行為決策模型，為產品進入市場提供數據支撐與設計建議</li>
             <li data-en><strong>Mixed-method research:</strong> Integrated in-depth interviews, surveys, and behavioral observation to build group decision models and provide market-entry data support and design recommendations</li>
             <li data-zh><strong>洞察轉譯與產品化：</strong>研發 Persona 與行為卡片工具，將研究發現轉化為產品規格模組設計，成功導入跨職能團隊（行銷／研發）之產品開發決策流程</li>
-            <li data-en><strong>Insight translation:</strong> Developed Persona and behavioral card tools to convert research findings into product specification modules, successfully adopted by cross-functional teams (marketing/R&D)</li>
+            <li data-en><strong>Insight translation:</strong> Developed Persona and behavioral card tools to convert research findings into product specification modules, successfully adopted by cross-functional teams (marketing/R&amp;D)</li>
             <li data-zh><strong>主持策略共創工作坊：</strong>引導利害關係人從使用者需求出發，收斂模糊問題並定義具體的產品功能開發重點</li>
             <li data-en><strong>Co-creation workshop facilitation:</strong> Led stakeholders from user needs to converged product priorities, defining concrete development focus areas</li>
             <li data-zh><strong>優化研究營運：</strong>整合 Airtable 及協作 AI Tagging 系統，將非結構化訪談轉化為結構化洞察資料庫，大幅提升研究資料重用率</li>
@@ -358,11 +378,21 @@
 </footer>
 
 <script>
-  function setLang(lang) {
+  function applyLang(lang) {
     document.body.className = 'lang-' + lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
     document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   }
+  function setLang(lang) {
+    applyLang(lang);
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+  }
+  (function () {
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    applyLang(saved === 'en' ? 'en' : 'zh');
+  })();
 </script>
 </body>
 </html>

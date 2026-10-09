@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,9 +48,9 @@
   .case-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
   .case-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange-dark); background: var(--orange-light); padding: 4px 12px; border-radius: var(--radius-pill); }
   .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
-  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; }
+  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
   body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
-  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; margin-bottom: 40px; }
+  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; max-width: 640px; margin-bottom: 40px; }
   .case-kpis { display: flex; gap: 12px; flex-wrap: wrap; }
   .kpi-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 22px; min-width: 130px; }
   .kpi-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
@@ -64,13 +64,13 @@
   .section-icon svg { width: 22px; height: 22px; }
   .case-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
   body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 30px); }
-  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; }
+  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
   .case-section p:last-child { margin-bottom: 0; }
   .case-section p strong { color: var(--ink); font-weight: 600; }
   .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
 
   /* PROBLEM CALLOUT */
-  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; }
+  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; max-width: 680px; }
   .problem-callout p { color: var(--ink); font-size: 16px; line-height: 1.75; margin: 0; }
   .problem-callout p strong { color: var(--orange-dark); }
 
@@ -136,9 +136,9 @@
   .contribution-card p { font-size: 13px; color: var(--ink-60); line-height: 1.6; margin: 0; }
 
   /* IMPACT LIST */
-  .impact-list { display: flex; flex-direction: column; gap: 10px; margin: 24px 0; }
-  .impact-item { display: flex; align-items: center; gap: 14px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 20px; }
-  .impact-icon { width: 32px; height: 32px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .impact-list { display: flex; flex-direction: column; gap: 10px; margin: 24px 0; max-width: 680px; }
+  .impact-item { display: flex; align-items: flex-start; gap: 14px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 20px; }
+  .impact-icon { width: 32px; height: 32px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
   .impact-icon svg { width: 16px; height: 16px; }
   .impact-item p { font-size: 14px; color: var(--ink-60); line-height: 1.6; margin: 0; }
   .impact-item p strong { color: var(--ink); font-weight: 600; }
@@ -148,7 +148,7 @@
   .reflection-box .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-mid); margin-bottom: 16px; }
   .reflection-box blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(20px, 2.5vw, 28px); line-height: 1.35; letter-spacing: -0.4px; color: var(--white); margin-bottom: 24px; font-style: italic; }
   body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 600; letter-spacing: 0; }
-  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; }
+  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; max-width: 600px; }
   .reflection-box p strong { color: rgba(255,255,255,0.9); font-weight: 600; }
   .reflection-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 16px; max-width: 560px; }
   .reflection-list li { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.6; padding-left: 18px; position: relative; }
@@ -166,15 +166,15 @@
   }
 </style>
 </head>
-<body class="lang-en">
+<body class="lang-zh">
 
 <nav>
   <a href="index.html" class="nav-logo">Evita Huang</a>
   <div class="nav-right">
     <a href="index.html" class="nav-back">← <span data-zh>返回</span><span data-en>Back</span></a>
     <div class="lang-toggle">
-      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中</button>
-      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')">中</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
     </div>
   </div>
 </nav>
@@ -184,16 +184,17 @@
   <div class="case-meta">
     <span class="case-type">Research Ops</span>
     <span class="case-role">
-      2024 · <span data-zh>工具規劃・資料架構・儀表板設計</span>
+      <span data-zh>工具規劃・資料架構・儀表板設計</span>
       <span data-en>Tool Planning · Data Architecture · Dashboard Design</span>
     </span>
   </div>
   <h1 data-zh>架構可規模化的洞察知識庫</h1>
   <h1 data-en>Architecting a Scalable Insight Repository</h1>
-  <p class="subtitle" data-zh>將歷年散落的質性訪談資料，系統化轉化為可篩選、可視覺化、可供 AI 分析的消費洞察資產——讓過往研究不再沉睡。</p>
-  <p class="subtitle" data-en>Transforming fragmented qualitative interview data into a structured, filterable, and AI-ready consumer insight asset — making past research persistently valuable.</p>
+  <p class="subtitle" data-zh>將七年散落的質性訪談資料，系統化轉化為可篩選、可視覺化、可供 AI 分析的消費洞察資產——讓過往研究不再沉睡。</p>
+  <p class="subtitle" data-en>Transforming seven years of fragmented qualitative interviews into a structured, searchable, and AI-ready consumer insight asset — making past research persistently valuable.</p>
   <div class="case-kpis">
     <div class="kpi-card"><div class="kpi-num">7 <span style="font-size:18px;">yrs</span></div><div class="kpi-label"><span data-zh>歷年研究資料整合</span><span data-en>of Research Integrated</span></div></div>
+    <div class="kpi-card"><div class="kpi-num">6</div><div class="kpi-label"><span data-zh>份質性研究計畫</span><span data-en>Research Projects</span></div></div>
     <div class="kpi-card"><div class="kpi-num">AI</div><div class="kpi-label"><span data-zh>輔助標籤分析流程</span><span data-en>Tagging Pipeline</span></div></div>
     <div class="kpi-card"><div class="kpi-num">Airtable</div><div class="kpi-label"><span data-zh>多維度篩選儀表板</span><span data-en>Multi-dim Dashboard</span></div></div>
   </div>
@@ -207,8 +208,8 @@
     <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
     <h2 data-zh>七年的洞察，正在沉睡</h2>
     <h2 data-en>Seven Years of Insight, Sitting Idle</h2>
-    <p data-zh>研究團隊自 2017 年起累積多元議題的質性研究，但這些珍貴的訪談逐字稿，長期以散落的紙本或個人資料夾形式保存。</p>
-    <p data-en>Since 2017, the research team had accumulated qualitative studies across diverse topics. But these valuable interview transcripts sat scattered across paper documents and individual folders.</p>
+    <p data-zh>研究團隊自 2017 年起累積了六份針對銀髮族群的質性研究，涵蓋便利餐食、孝親者輪廓、點心、罐頭、低醣與高纖等多個議題——但這些珍貴的訪談逐字稿，長期以散落的紙本或個人資料夾形式保存。</p>
+    <p data-en>Since 2017, the research team had accumulated six qualitative studies on elderly consumer groups — covering convenience meals, caregiver profiles, snacks, canned food, low-carb and high-fiber products. But these valuable interview transcripts sat scattered across paper documents and individual folders.</p>
     <div class="problem-callout">
       <p data-zh>每次啟動新研究，研究員都需要重新從零開始——<strong>難以快速調閱歷年洞察、無法跨研究比對、知識無法累積，造成重複投入與資源浪費。</strong></p>
       <p data-en>Every new research project meant starting from scratch — <strong>unable to quickly retrieve past insights, unable to compare across studies, knowledge failing to accumulate, leading to duplicated effort and wasted resources.</strong></p>
@@ -486,11 +487,21 @@
 </div>
 
 <script>
-  function setLang(lang) {
+  function applyLang(lang) {
     document.body.className = 'lang-' + lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
     document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   }
+  function setLang(lang) {
+    applyLang(lang);
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+  }
+  (function () {
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    applyLang(saved === 'en' ? 'en' : 'zh');
+  })();
 </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,12 +48,12 @@
   .case-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
   .case-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #0F6E56; background: var(--teal-light); padding: 4px 12px; border-radius: var(--radius-pill); }
   .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
-  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; }
+  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
   body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
-  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; margin-bottom: 32px; }
+  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; max-width: 640px; margin-bottom: 32px; }
 
   /* TEAM CREDIT */
-  .team-credit { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 40px; padding: 20px 24px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); }
+  .team-credit { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 40px; padding: 20px 24px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); max-width: 640px; }
   .credit-group { display: flex; flex-direction: column; gap: 4px; }
   .credit-label { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); }
   .credit-value { font-size: 13px; color: var(--ink-60); line-height: 1.5; }
@@ -73,18 +73,18 @@
   .section-icon svg { width: 22px; height: 22px; }
   .case-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
   body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 30px); }
-  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; }
+  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
   .case-section p:last-child { margin-bottom: 0; }
   .case-section p strong { color: var(--ink); font-weight: 600; }
   .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
 
   /* PROBLEM CALLOUT */
-  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; }
+  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; max-width: 680px; }
   .problem-callout p { color: var(--ink); font-size: 16px; line-height: 1.75; margin: 0; }
   .problem-callout p strong { color: var(--orange-dark); }
 
   /* QUOTE */
-  .user-quote { background: var(--surface); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 18px 22px; margin: 10px 0; }
+  .user-quote { background: var(--surface); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 18px 22px; margin: 10px 0; max-width: 640px; }
   .user-quote p { font-size: 14px; color: var(--ink); line-height: 1.65; margin: 0; font-style: italic; }
   .user-quote .quote-src { font-size: 12px; color: var(--ink-60); margin-top: 8px; font-style: normal; font-weight: 500; }
 
@@ -99,7 +99,7 @@
   .problem-card p { font-size: 13px; color: var(--ink-60); line-height: 1.55; margin: 0; }
 
   /* HMW */
-  .hmw-grid { display: flex; flex-direction: column; gap: 10px; margin: 28px 0; }
+  .hmw-grid { display: flex; flex-direction: column; gap: 10px; margin: 28px 0; max-width: 680px; }
   .hmw-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); }
   .hmw-badge { flex-shrink: 0; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; background: var(--orange-light); color: var(--orange-dark); padding: 4px 8px; border-radius: var(--radius-sm); margin-top: 2px; white-space: nowrap; }
   .hmw-item p { font-size: 14px; color: var(--ink); line-height: 1.6; margin: 0; }
@@ -117,7 +117,7 @@
 
   /* RESULT CARDS */
   .result-row { display: flex; gap: 20px; flex-wrap: wrap; margin: 28px 0; }
-  .result-card { flex: 1; min-width: 140px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 22px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+  .result-card { flex: 1; min-width: 140px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 22px; text-align: center; }
   .result-before { font-size: 13px; color: var(--ink-60); margin-bottom: 8px; }
   .result-arrow { font-size: 20px; color: var(--orange-mid); margin: 4px 0; }
   .result-after { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
@@ -129,7 +129,7 @@
   .reflection-box .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-mid); margin-bottom: 16px; }
   .reflection-box blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(18px, 2.5vw, 26px); line-height: 1.35; letter-spacing: -0.4px; color: var(--white); margin-bottom: 24px; font-style: italic; }
   body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 600; letter-spacing: 0; }
-  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; }
+  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; max-width: 600px; }
 
   /* NAV FOOTER */
   .case-nav-footer { border-top: 1px solid var(--ink-20); padding: 40px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; max-width: 1000px; margin: 0 auto; }
@@ -141,26 +141,17 @@
   @media (max-width: 700px) {
     .two-col, .problem-grid { grid-template-columns: 1fr; }
   }
-
-  /* IMAGE STYLES */
-  .img-full { width: 100%; border-radius: var(--radius-lg); overflow: hidden; margin: 28px 0; border: 1px solid var(--ink-20); }
-  .img-full img { width: 100%; display: block; }
-  .img-caption { font-size: 13px; color: var(--ink-60); margin-top: 10px; font-style: italic; line-height: 1.5; }
-  .img-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 28px 0; }
-  .img-two .img-item { border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--ink-20); }
-  .img-two .img-item img { width: 100%; display: block; }
-  @media (max-width: 600px) { .img-two { grid-template-columns: 1fr; } }
 </style>
 </head>
-<body class="lang-en">
+<body class="lang-zh">
 
 <nav>
   <a href="index.html" class="nav-logo">Evita Huang</a>
   <div class="nav-right">
     <a href="index.html" class="nav-back">← <span data-zh>返回</span><span data-en>Back</span></a>
     <div class="lang-toggle">
-      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中</button>
-      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')">中</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
     </div>
   </div>
 </nav>
@@ -201,13 +192,6 @@
   </div>
 </header>
 
-<!-- HERO IMAGE -->
-<div style="max-width:1000px;margin:0 auto;padding:0 5% 0;">
-  <div class="img-full">
-    <img src="images/pdis-hero.png" alt="YDA website redesign final design displayed on laptop">
-  </div>
-</div>
-
 <div class="case-body">
 
   <!-- CONTEXT -->
@@ -245,35 +229,18 @@
         <p data-en>Registration links were buried in document text, forcing students to call the YDA helpline for assistance.</p>
       </div>
     </div>
-
-    <div class="img-full">
-      <img src="images/pdis-before-after.png" alt="YDA website before and after redesign comparison">
-    </div>
-    <p class="img-caption" data-zh>▲ 改版前後對比——從條列式政令宣導風格，到以活動卡片為核心的年輕化設計</p>
-    <p class="img-caption" data-en>▲ Before and after — from a bulletin-board layout to an activity-card-centered youthful design</p>
   </section>
 
   <hr class="divider">
 
+  <!-- STRATEGY -->
   <section class="case-section">
     <div class="section-eyebrow"><span data-zh>設計策略</span><span data-en>Design Strategy</span></div>
     <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
     <h2 data-zh>三個 HMW，對應三個核心問題</h2>
     <h2 data-en>Three HMWs Addressing Three Core Problems</h2>
-    <p data-zh>首先透過使用者旅程地圖釐清使用者在哪個階段遇到阻礙，再以 How Might We 框架定義設計機會：</p>
-    <p data-en>We first mapped the user journey to identify where friction occurred, then framed design opportunities using How Might We questions:</p>
-
-    <div class="img-full">
-      <img src="images/pdis-cjm.png" alt="User story and customer journey map">
-    </div>
-    <p class="img-caption" data-zh>▲ 使用者旅程地圖——從產生參加活動的想法，到最終完成報名，識別各階段的痛點與設計機會</p>
-    <p class="img-caption" data-en>▲ Customer journey map — from idea to enrollment, identifying pain points and design opportunities at each stage</p>
-
-    <div class="img-full">
-      <img src="images/pdis-hmw.png" alt="Five-layer design framework mapped to HMW questions">
-    </div>
-    <p class="img-caption" data-zh>▲ 以五層設計架構（戰略層到表現層）對應三個 HMW，確保設計決策有明確的問題根據</p>
-    <p class="img-caption" data-en>▲ Five-layer design framework (strategy to surface) mapped to three HMWs</p>
+    <p data-zh>鎖定「無特定目標、不熟悉官網的青年族群」，以 How Might We 框架定義設計機會：</p>
+    <p data-en>Targeting youth with no specific goal and unfamiliar with the website, we framed design opportunities using How Might We questions:</p>
 
     <div class="hmw-grid">
       <div class="hmw-item">
@@ -351,23 +318,6 @@
         </ul>
       </div>
     </div>
-
-    <div class="img-full">
-      <img src="images/pdis-design-process.png" alt="Design process: card sorting, wireframe, lo-fi prototype, hi-fi prototype">
-    </div>
-    <p class="img-caption" data-zh>▲ 設計迭代流程——從卡片分類、線框稿到 Lo-fi／Hi-fi 原型，每輪測試後持續收斂設計方向</p>
-    <p class="img-caption" data-en>▲ Iterative design process — from card sorting and wireframes to Lo-fi/Hi-fi prototypes, refining direction after each testing round</p>
-
-    <div class="img-two">
-      <div class="img-item">
-        <img src="images/pdis-testing-1.png" alt="Usability testing session photo 1">
-      </div>
-      <div class="img-item">
-        <img src="images/pdis-testing-2.png" alt="Usability testing session photo 2">
-      </div>
-    </div>
-    <p class="img-caption" data-zh>▲ 易用性測試現場——邀請 18–25 歲青年執行網站任務測試，記錄操作過程與反應</p>
-    <p class="img-caption" data-en>▲ Usability testing sessions — youth aged 18–25 completing website task tests while we observed and recorded their interactions</p>
   </section>
 
   <hr class="divider">
@@ -397,22 +347,18 @@
         <div class="result-delta">+75%</div>
       </div>
       <div class="result-card">
-        <div class="result-after" style="font-size:22px;"><span data-zh>上線</span><span data-en>Live</span></div>
-        <div class="result-label" style="margin-top:6px;"><span data-zh>與教育部青年署協作推動上線</span><span data-en>Launched in collaboration with YDA</span></div>
+        <div class="result-before" style="opacity:0">—</div>
+        <div class="result-arrow" style="opacity:0">↓</div>
+        <div class="result-after" style="font-size:22px;padding-top:8px;"><span data-zh>上線</span><span data-en>Live</span></div>
+        <div class="result-label"><span data-zh>與教育部青年署協作推動上線</span><span data-en>Launched in collaboration with YDA</span></div>
+        <div class="result-delta" style="opacity:0">—</div>
       </div>
     </div>
-
-    <div style="margin-top:24px;display:flex;flex-wrap:wrap;gap:10px;">
-      <a href="https://www.yda.gov.tw/docDetail.aspx?uid=30312&pid=30312&docid=56451&rn=-5413" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--orange);border:1.5px solid var(--orange-mid);padding:9px 16px;border-radius:var(--radius-pill);text-decoration:none;background:var(--orange-light);">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        <span data-zh>教育部青年署網站改版公告 ↗</span><span data-en>YDA Website Redesign Announcement ↗</span>
-      </a>
-      <a href="https://ray2020.pdis.nat.gov.tw/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-60);border:1.5px solid var(--ink-20);padding:9px 16px;border-radius:var(--radius-pill);text-decoration:none;background:var(--white);">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        <span data-zh>更多資訊 ↗</span><span data-en>More Info ↗</span>
-      </a>
-    </div>
   </section>
+
+  <hr class="divider">
+
+  <!-- REFLECTION -->
   <section class="case-section">
     <div class="section-eyebrow"><span data-zh>反思</span><span data-en>Reflection</span></div>
     <div class="reflection-box">
@@ -434,11 +380,21 @@
 </div>
 
 <script>
-  function setLang(lang) {
+  function applyLang(lang) {
     document.body.className = 'lang-' + lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
     document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   }
+  function setLang(lang) {
+    applyLang(lang);
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+  }
+  (function () {
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    applyLang(saved === 'en' ? 'en' : 'zh');
+  })();
 </script>
 </body>
 </html>

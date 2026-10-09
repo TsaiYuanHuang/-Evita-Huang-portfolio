@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,12 +33,6 @@
   body.lang-en h3[data-en], body.lang-en h4[data-en], body.lang-en li[data-en],
   body.lang-en div[data-en] { display: block; }
 
-  /* Override display:flex on spectrum li */
-  body.lang-zh .spectrum-card ul li[data-zh] { display: flex; }
-  body.lang-en .spectrum-card ul li[data-en] { display: flex; }
-  body.lang-zh .spectrum-card ul li[data-en] { display: none; }
-  body.lang-en .spectrum-card ul li[data-zh] { display: none; }
-
   nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 64px; background: rgba(250,249,247,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ink-20); }
   .nav-logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
   .nav-right { display: flex; align-items: center; gap: 20px; }
@@ -53,7 +47,7 @@
   .case-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
   .case-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #0F6E56; background: var(--teal-light); padding: 4px 12px; border-radius: var(--radius-pill); }
   .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
-  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; }
+  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
   body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
   .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; max-width: 640px; margin-bottom: 32px; }
 
@@ -75,12 +69,12 @@
   .section-icon svg { width: 22px; height: 22px; }
   .case-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
   body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 30px); }
-  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; }
+  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
   .case-section p:last-child { margin-bottom: 0; }
   .case-section p strong { color: var(--ink); font-weight: 600; }
   .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
 
-  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; }
+  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; max-width: 680px; }
   .problem-callout p { color: var(--ink); font-size: 16px; line-height: 1.75; margin: 0; }
   .problem-callout p strong { color: var(--orange-dark); }
 
@@ -135,7 +129,7 @@
   .reflection-box .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-mid); margin-bottom: 16px; }
   .reflection-box blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(18px, 2.5vw, 26px); line-height: 1.35; letter-spacing: -0.4px; color: var(--white); margin-bottom: 24px; font-style: italic; }
   body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 600; letter-spacing: 0; }
-  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; }
+  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; max-width: 600px; }
 
   .case-nav-footer { border-top: 1px solid var(--ink-20); padding: 40px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; max-width: 1000px; margin: 0 auto; }
   .cnf-back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--ink-60); text-decoration: none; transition: color 0.2s; }
@@ -146,22 +140,17 @@
   @media (max-width: 700px) {
     .two-col, .stakeholder-grid, .spectrum-row, .deliverable-grid { grid-template-columns: 1fr; }
   }
-
-  /* IMAGE STYLES */
-  .img-full { width: 100%; border-radius: var(--radius-lg); overflow: hidden; margin: 28px 0; border: 1px solid var(--ink-20); }
-  .img-full img { width: 100%; display: block; }
-  .img-caption { font-size: 13px; color: var(--ink-60); margin-top: 10px; font-style: italic; line-height: 1.5; }
 </style>
 </head>
-<body class="lang-en">
+<body class="lang-zh">
 
 <nav>
   <a href="index.html" class="nav-logo">Evita Huang</a>
   <div class="nav-right">
     <a href="index.html" class="nav-back">← <span data-zh>返回</span><span data-en>Back</span></a>
     <div class="lang-toggle">
-      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中</button>
-      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')">中</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
     </div>
   </div>
 </nav>
@@ -189,12 +178,6 @@
 
   <div class="case-kpis" style="display:none;"></div>
 </header>
-
-<div style="max-width:1000px;margin:0 auto;padding:0 5% 0;">
-  <div class="img-full">
-    <img src="images/invisible-web-hero.png" alt="Invisible Disabilities Resource Guide web version">
-  </div>
-</div>
 
 <div class="case-body">
 
@@ -342,25 +325,11 @@
         </ul>
       </div>
     </div>
-
-    <div class="img-full">
-      <img src="images/invisible-paper.png" alt="Print resource guide full layout">
-    </div>
-    <p class="img-caption" data-zh>▲ 紙本資源指南完整版面——分為初期評估、就診須知、其他資源、家長社群四個區塊，可於新生入學時由老師發放給家長</p>
-    <p class="img-caption" data-en>▲ Full print resource guide layout — four sections covering early assessment, medical consultation, additional resources, and parent community; distributed by teachers at enrollment</p>
-
-    <div class="img-full">
-      <img src="images/invisible-paper-explanation.png" alt="Print resource guide with design explanation annotations">
-    </div>
-    <p class="img-caption" data-zh>▲ 紙本指南設計說明——每個區塊對應不同的家長使用情境與需求，設計邏輯以「降低資訊焦慮、引導逐步行動」為核心</p>
-    <p class="img-caption" data-en>▲ Print guide design rationale — each section addresses distinct parental use cases, designed around the principle of reducing information anxiety and guiding step-by-step action</p>
-
-    <div class="img-full">
-      <img src="images/invisible-web-explanation.png" alt="Web resource guide with design explanation annotations">
-    </div>
-    <p class="img-caption" data-zh>▲ 網頁版指南設計說明——以情境化問題為導引、一鍵下載為核心功能，搭配清晰的步驟指引，讓家長能隨時在手機上快速取得所需資源</p>
-    <p class="img-caption" data-en>▲ Web guide design rationale — contextualized questions as entry points, one-click downloads as the core function, with clear step-by-step guidance for parents to quickly access resources on mobile</p>
   </section>
+
+  <hr class="divider">
+
+  <!-- IMPACT -->
   <section class="case-section">
     <div class="section-eyebrow"><span data-zh>社會影響</span><span data-en>Impact</span></div>
     <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
@@ -382,27 +351,12 @@
       </div>
       <div class="impact-stat">
         <div class="i-num">2023</div>
-        <div class="i-label"><span data-zh>台南市教育局來信洽談擴展</span><span data-en>Tainan City Education Bureau reached out</span></div>
-      </div>
-      <div class="impact-stat">
-        <div class="i-num">2026</div>
-        <div class="i-label"><span data-zh>臺東縣教育局來信洽談擴展</span><span data-en>Taitung County Education Bureau reached out</span></div>
+        <div class="i-label"><span data-zh>台南市教育局來信洽談擴展</span><span data-en>Tainan City Education Bureau reached out for local expansion</span></div>
       </div>
     </div>
 
-    <p data-zh>2022 年成果正式發行後，2023 年收到台南市教育局、2026 年收到臺東縣教育局的來信，接洽製作在地版本——這代表這份指南的價值被持續認可，並成為一個可複製推廣的社會設計模板。</p>
-    <p data-en>After the 2022 launch, the Tainan City Education Bureau reached out in 2023, and the Taitung County Education Bureau in 2026, both to discuss creating local versions — demonstrating that the guide's value has been continuously recognized, becoming a replicable social design template.</p>
-
-    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;align-items:center;">
-      <a href="https://ntusoc5016.wixsite.com/website-1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--orange);border:1.5px solid var(--orange-mid);padding:9px 16px;border-radius:var(--radius-pill);text-decoration:none;background:var(--orange-light);transition:background 0.2s;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        <span data-zh>查看網頁版資源指南 ↗</span><span data-en>View Web Resource Guide ↗</span>
-      </a>
-      <a href="https://www.ji-co-design.com/blog/categories/ntusd_109-1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-60);border:1.5px solid var(--ink-20);padding:9px 16px;border-radius:var(--radius-pill);text-decoration:none;background:var(--white);transition:background 0.2s;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        <span data-zh>更多資訊 ↗</span><span data-en>More Info ↗</span>
-      </a>
-    </div>
+    <p data-zh>2022 年成果正式發行後，2023 年收到台南市教育局的來信，接洽製作台南版本——這代表這份指南的價值被跨城市認可，並成為一個可複製推廣的社會設計模板。</p>
+    <p data-en>After the 2022 launch, the Tainan City Education Bureau reached out in 2023 to discuss creating a Tainan version — demonstrating that the guide's value was recognized across cities, and that it had become a replicable social design template.</p>
   </section>
 
   <hr class="divider">
@@ -429,11 +383,21 @@
 </div>
 
 <script>
-  function setLang(lang) {
+  function applyLang(lang) {
     document.body.className = 'lang-' + lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
     document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   }
+  function setLang(lang) {
+    applyLang(lang);
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+  }
+  (function () {
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    applyLang(saved === 'en' ? 'en' : 'zh');
+  })();
 </script>
 </body>
 </html>

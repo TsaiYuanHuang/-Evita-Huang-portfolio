@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,9 +50,9 @@
   .case-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
   .case-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange-dark); background: var(--orange-light); padding: 4px 12px; border-radius: var(--radius-pill); }
   .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
-  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; }
+  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
   body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
-  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; margin-bottom: 40px; }
+  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; max-width: 640px; margin-bottom: 40px; }
   .case-kpis { display: flex; gap: 12px; flex-wrap: wrap; }
   .kpi-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 22px; min-width: 140px; }
   .kpi-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
@@ -66,7 +66,7 @@
   .section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
   .case-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
   body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 30px); }
-  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; }
+  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
   .case-section p:last-child { margin-bottom: 0; }
   .case-section p strong { color: var(--ink); font-weight: 600; }
 
@@ -74,7 +74,7 @@
   .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
 
   /* PROBLEM CALLOUT */
-  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; }
+  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; max-width: 680px; }
   .problem-callout p { color: var(--ink); font-size: 16px; line-height: 1.75; margin: 0; font-style: italic; }
   .problem-callout p strong { color: var(--orange-dark); }
 
@@ -94,16 +94,16 @@
 
   /* PROCESS FLOW — proper diagram */
   .process-flow-wrap { margin: 28px 0; overflow-x: auto; padding-bottom: 8px; }
-  .process-flow { display: flex; align-items: stretch; gap: 0; min-width: 580px; }
-  .pf-step { flex: 1; display: flex; align-items: stretch; }
+  .process-flow { display: flex; align-items: flex-start; gap: 0; min-width: 580px; }
+  .pf-step { flex: 1; display: flex; align-items: flex-start; }
   .pf-node { flex: 1; background: var(--white); border: 1.5px solid var(--ink-20); border-radius: var(--radius-md); padding: 18px 14px 16px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
   .pf-node:hover { border-color: var(--orange-mid); }
   .pf-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); background: var(--orange-light); display: flex; align-items: center; justify-content: center; margin-bottom: 2px; flex-shrink: 0; }
   .pf-icon svg { width: 18px; height: 18px; }
   .pf-phase { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); }
   .pf-node h4 { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; margin: 0; }
-  .pf-node p { font-size: 11px; color: var(--ink-60); line-height: 1.5; margin: 0; flex: 1; word-break: keep-all; overflow-wrap: break-word; }
-  .pf-arrow { display: flex; align-items: center; align-self: center; padding: 0 2px; flex-shrink: 0; color: var(--orange-mid); }
+  .pf-node p { font-size: 11px; color: var(--ink-60); line-height: 1.5; margin: 0; }
+  .pf-arrow { display: flex; align-items: center; padding: 0 2px; padding-top: 26px; flex-shrink: 0; color: var(--orange-mid); }
   .pf-arrow svg { width: 22px; height: 22px; }
 
   /* HIGHLIGHT BOX */
@@ -160,7 +160,7 @@
   .reflection-box .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-mid); margin-bottom: 16px; }
   .reflection-box blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(20px, 2.5vw, 28px); line-height: 1.35; letter-spacing: -0.4px; color: var(--white); margin-bottom: 24px; font-style: italic; }
   body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 600; letter-spacing: 0; }
-  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; }
+  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; max-width: 600px; }
 
   /* NAV FOOTER */
   .case-nav-footer { border-top: 1px solid var(--ink-20); padding: 40px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; max-width: 1000px; margin: 0 auto; }
@@ -175,15 +175,15 @@
   }
 </style>
 </head>
-<body class="lang-en">
+<body class="lang-zh">
 
 <nav>
   <a href="index.html" class="nav-logo">Evita Huang</a>
   <div class="nav-right">
     <a href="index.html" class="nav-back">← <span data-zh>返回</span><span data-en>Back</span></a>
     <div class="lang-toggle">
-      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中</button>
-      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')">中</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
     </div>
   </div>
 </nav>
@@ -193,7 +193,6 @@
   <div class="case-meta">
     <span class="case-type">UX Research</span>
     <span class="case-role">
-      2025 ·
       <span data-zh>UX 研究・行為數據分析・工作坊設計</span>
       <span data-en>UX Research · Behavior Analysis · Workshop Design</span>
     </span>
@@ -211,16 +210,16 @@
       <div class="kpi-label"><span data-zh>首次導入沉浸式研究法</span><span data-en>Immersive Method</span></div>
     </div>
     <div class="kpi-card">
+      <div class="kpi-num">5</div>
+      <div class="kpi-label"><span data-zh>設計建議方向</span><span data-en>Design Directions</span></div>
+    </div>
+    <div class="kpi-card">
       <div class="kpi-num">Vibe Coding</div>
       <div class="kpi-label"><span data-zh>自建互動熱力圖工具</span><span data-en>Custom Heatmap Tool</span></div>
     </div>
     <div class="kpi-card">
       <div class="kpi-num">2C</div>
       <div class="kpi-label"><span data-zh>團隊首次共創工作坊</span><span data-en>First 2C Co-creation</span></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-num">5</div>
-      <div class="kpi-label"><span data-zh>設計建議方向</span><span data-en>Design Directions</span></div>
     </div>
   </div>
 </header>
@@ -334,7 +333,7 @@
 
     <div class="insight-grid">
       <div class="insight-card">
-        <div class="ic-num"><span data-zh>維度 01</span><span data-en>Dimension 01</span></div>
+        <div class="ic-num">維度 01 · Dimension 01</div>
         <div style="font-size:24px;margin:6px 0 10px;">📍</div>
         <h4 data-zh>互動次數<br>Interaction Count</h4>
         <h4 data-en>Interaction Count</h4>
@@ -342,7 +341,7 @@
         <p data-en>Attention hotspots by shelf position — reflects visibility and accessibility of display location, not purchase intent.</p>
       </div>
       <div class="insight-card">
-        <div class="ic-num"><span data-zh>維度 02</span><span data-en>Dimension 02</span></div>
+        <div class="ic-num">維度 02 · Dimension 02</div>
         <div style="font-size:24px;margin:6px 0 10px;">🛒</div>
         <h4 data-zh>購買轉換率<br>Purchase Rate</h4>
         <h4 data-en>Purchase Rate</h4>
@@ -350,7 +349,7 @@
         <p data-en>Product's persuasive power — high interaction + low purchase rate is a "high traffic, low conversion" signal worth investigating.</p>
       </div>
       <div class="insight-card">
-        <div class="ic-num"><span data-zh>維度 03</span><span data-en>Dimension 03</span></div>
+        <div class="ic-num">維度 03 · Dimension 03</div>
         <div style="font-size:24px;margin:6px 0 10px;">🤔</div>
         <h4 data-zh>考慮深度<br>Consideration Depth</h4>
         <h4 data-en>Consideration Depth</h4>
@@ -449,7 +448,7 @@
               <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
               <div class="pf-phase"><span data-zh>階段 03</span><span data-en>Phase 03</span></div>
               <h4 data-zh>概念測試</h4><h4 data-en>Concept Testing</h4>
-              <p data-zh>實體教具展示假設</p><p data-en>Test via props</p>
+              <p data-zh>實體教具展示假設</p><p data-en>Props to surface hypotheses</p>
             </div>
             <div class="pf-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#F5A07A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
           </div>
@@ -459,7 +458,7 @@
               <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
               <div class="pf-phase"><span data-zh>階段 04</span><span data-en>Phase 04</span></div>
               <h4 data-zh>協作發想</h4><h4 data-en>Co-creation</h4>
-              <p data-zh>質地卡 × 命名卡</p><p data-en>Texture &amp; naming cards</p>
+              <p data-zh>質地卡 × 命名卡引導</p><p data-en>Texture &amp; naming cards</p>
             </div>
             <div class="pf-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#F5A07A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
           </div>
@@ -469,7 +468,7 @@
               <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
               <div class="pf-phase"><span data-zh>階段 05</span><span data-en>Phase 05</span></div>
               <h4 data-zh>假設驗證</h4><h4 data-en>Validation</h4>
-              <p data-zh>確認方向可行性</p><p data-en>Confirm feasibility</p>
+              <p data-zh>確認設計方向可行性</p><p data-en>Confirm feasibility</p>
             </div>
           </div>
 
@@ -540,11 +539,21 @@
 </div>
 
 <script>
-  function setLang(lang) {
+  function applyLang(lang) {
     document.body.className = 'lang-' + lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
     document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   }
+  function setLang(lang) {
+    applyLang(lang);
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+  }
+  (function () {
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    applyLang(saved === 'en' ? 'en' : 'zh');
+  })();
 </script>
 </body>
 </html>
