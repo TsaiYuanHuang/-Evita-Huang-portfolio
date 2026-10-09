@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>黃采媛 Evita Huang — UX Research & Product</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -52,10 +52,10 @@
   .hero-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--orange-light); color: var(--orange-dark); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: var(--radius-pill); margin-bottom: 28px; letter-spacing: 0.2px; }
   .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--orange); border-radius: 50%; }
   .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(42px, 6vw, 72px); line-height: 1.08; letter-spacing: -1.5px; color: var(--ink); margin-bottom: 28px; max-width: 820px; }
-  body.lang-zh .hero h1 { font-family: 'Noto Serif TC', serif; letter-spacing: -0.5px; font-size: clamp(36px, 5vw, 62px); font-weight: 600; }
+  body.lang-zh .hero h1 { font-family: 'Noto Serif TC', serif; letter-spacing: -0.5px; font-size: clamp(36px, 5vw, 62px); font-weight: 900; }
   .hero h1 em { font-style: italic; color: var(--orange); }
   body.lang-zh .hero h1 em { font-style: normal; }
-  .hero-desc { font-size: 18px; color: var(--ink-60); max-width: 560px; line-height: 1.75; margin-bottom: 40px; font-weight: 400; }
+  .hero-desc { font-size: 18px; color: var(--ink-60); max-width: 760px; line-height: 1.75; margin-bottom: 40px; font-weight: 400; }
   .hero-desc strong { color: var(--ink); font-weight: 600; }
   .hero-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: var(--white); padding: 14px 28px; border-radius: var(--radius-pill); font-size: 15px; font-weight: 600; text-decoration: none; transition: background 0.2s, transform 0.15s; }
@@ -68,7 +68,7 @@
   .section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 36px; flex-wrap: wrap; gap: 16px; }
   .section-tag { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange); margin-bottom: 8px; }
   .section-header h2 { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 3.5vw, 42px); letter-spacing: -0.8px; line-height: 1.1; }
-  body.lang-zh .section-header h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; }
+  body.lang-zh .section-header h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 700; }
   .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
   .project-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-lg); padding: 28px; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
   .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--orange); transform: scaleX(0); transition: transform 0.2s; transform-origin: left; }
@@ -83,7 +83,7 @@
   .project-arrow { font-size: 18px; color: var(--ink-60); transition: transform 0.2s, color 0.2s; }
   .project-card:hover .project-arrow { transform: translate(3px, -3px); color: var(--orange); }
   .project-card h3 { font-family: 'DM Serif Display', serif; font-size: 22px; letter-spacing: -0.3px; line-height: 1.2; margin-bottom: 10px; color: var(--ink); }
-  body.lang-zh .project-card h3 { font-family: 'Noto Serif TC', serif; font-size: 18px; letter-spacing: 0; line-height: 1.4; font-weight: 600; }
+  body.lang-zh .project-card h3 { font-family: 'Noto Serif TC', serif; font-size: 18px; letter-spacing: 0; line-height: 1.4; font-weight: 700; }
   .project-card p { font-size: 14px; color: var(--ink-60); line-height: 1.65; flex: 1; margin-bottom: 24px; }
   .project-metrics { display: flex; gap: 10px; flex-wrap: wrap; }
   .metric-badge { background: var(--surface); border: 1px solid var(--ink-20); border-radius: var(--radius-sm); padding: 6px 12px; font-size: 12px; font-weight: 600; color: var(--orange-dark); display: flex; flex-direction: column; gap: 1px; }
@@ -94,7 +94,7 @@
   .skills { background: var(--white); border-top: 1px solid var(--ink-20); border-bottom: 1px solid var(--ink-20); padding: 72px 5%; }
   .skills-inner { max-width: 1100px; margin: 0 auto; }
   .skills-title { font-family: 'DM Serif Display', serif; font-size: clamp(28px,3.5vw,42px); letter-spacing: -0.8px; line-height: 1.1; margin-top: 8px; }
-  body.lang-zh .skills-title { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; }
+  body.lang-zh .skills-title { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 700; }
   .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 40px; }
   .skill-item { border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 20px 22px; background: var(--surface); }
   .skill-icon { width: 36px; height: 36px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 16px; }
@@ -105,7 +105,7 @@
   .about-strip { padding: 96px 5%; max-width: 800px; margin: 0 auto; }
   .about-label { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--orange); margin-bottom: 16px; }
   .about-name { font-family: 'DM Serif Display', 'Noto Serif TC', serif; font-size: clamp(32px, 4vw, 52px); letter-spacing: -1px; line-height: 1.05; color: var(--ink); margin-bottom: 20px; }
-  body.lang-zh .about-name { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; }
+  body.lang-zh .about-name { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 700; }
   .about-bio { font-size: 17px; color: var(--ink-60); line-height: 1.8; max-width: 640px; margin-bottom: 32px; }
   .about-tags { display: flex; flex-wrap: wrap; gap: 8px; }
   .about-tag { font-size: 13px; font-weight: 500; color: var(--ink-60); border: 1px solid var(--ink-20); padding: 5px 12px; border-radius: var(--radius-pill); background: var(--white); }
@@ -154,8 +154,8 @@
   </div>
   <h1 data-zh>我是 Evita。<br>我讓散落的知識<br><em>成為組織可以調用的能力。</em></h1>
   <h1 data-en>I'm Evita.<br>I turn scattered knowledge<br><em>into capability an organization can draw on.</em></h1>
-  <p class="hero-desc" data-zh>我的工作橫跨質性研究與系統建置——從洞察資料庫到需求評估 Agent，<strong>讓知識不只被產出，而是被檢索、被複用、被決策引用。</strong></p>
-  <p class="hero-desc" data-en>My work spans qualitative research and system building — from an insight database to a requirement-assessment agent, <strong>so knowledge is not just produced, but retrieved, reused and cited in decisions.</strong></p>
+  <p class="hero-desc" data-zh>我的工作橫跨質性研究與系統建置——從洞察資料庫到需求評估 Agent，<br><strong>讓知識不只被產出，而是被檢索、被複用、被決策引用。</strong></p>
+  <p class="hero-desc" data-en>My work spans qualitative research and system building — from an insight database to a requirement-assessment agent,<br><strong>so knowledge is not just produced, but retrieved, reused and cited in decisions.</strong></p>
   <div class="hero-actions">
     <a href="#work" class="btn-primary"><span data-zh>查看作品集 →</span><span data-en>View Case Studies →</span></a>
     <a href="mailto:evita.tyh@gmail.com" class="btn-secondary"><span data-zh>聯絡我</span><span data-en>Get in Touch</span></a>

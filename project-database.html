@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Architecting a Scalable Insight Repository — Evita Huang</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -50,9 +50,9 @@
   .case-year { display: inline-flex; align-items: center; font-size: 13px; font-weight: 600; color: var(--orange); }
   .case-year::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--orange); margin-left: 10px; }
   .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
-  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
-  body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
-  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; max-width: 640px; margin-bottom: 40px; }
+  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px;  }
+  body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 900; }
+  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7;  margin-bottom: 40px; }
   .case-kpis { display: flex; gap: 12px; flex-wrap: wrap; }
   .kpi-card { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 22px; min-width: 130px; }
   .kpi-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
@@ -65,14 +65,14 @@
   .section-icon { width: 44px; height: 44px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
   .section-icon svg { width: 22px; height: 22px; }
   .case-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
-  body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 30px); }
-  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
+  body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 700; font-size: clamp(22px, 2.5vw, 30px); }
+  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px;  }
   .case-section p:last-child { margin-bottom: 0; }
   .case-section p strong { color: var(--ink); font-weight: 600; }
   .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
 
   /* PROBLEM CALLOUT */
-  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; max-width: 680px; }
+  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0;  }
   .problem-callout p { color: var(--ink); font-size: 16px; line-height: 1.75; margin: 0; }
   .problem-callout p strong { color: var(--orange-dark); }
 
@@ -89,7 +89,7 @@
   .ba-col.before .ba-title { color: var(--ink-60); }
   .ba-col.after .ba-title { color: var(--orange-dark); }
   .ba-subtitle { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: -0.3px; margin-bottom: 16px; color: var(--ink); }
-  body.lang-zh .ba-subtitle { font-family: 'Noto Serif TC', serif; font-size: 16px; font-weight: 600; letter-spacing: 0; }
+  body.lang-zh .ba-subtitle { font-family: 'Noto Serif TC', serif; font-size: 16px; font-weight: 700; letter-spacing: 0; }
   .ba-group { margin-bottom: 16px; }
   .ba-group-label { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink-60); margin-bottom: 6px; }
   .ba-col.after .ba-group-label { color: var(--orange-dark); }
@@ -116,7 +116,7 @@
   /* HIGHLIGHT BOX */
   .highlight-box { background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-lg); padding: 32px; margin: 28px 0; }
   .highlight-box h3 { font-family: 'DM Serif Display', serif; font-size: 20px; letter-spacing: -0.3px; margin-bottom: 20px; color: var(--ink); }
-  body.lang-zh .highlight-box h3 { font-family: 'Noto Serif TC', serif; font-weight: 600; letter-spacing: 0; }
+  body.lang-zh .highlight-box h3 { font-family: 'Noto Serif TC', serif; font-weight: 700; letter-spacing: 0; }
 
   /* TWO COL */
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
@@ -138,7 +138,7 @@
   .contribution-card p { font-size: 13px; color: var(--ink-60); line-height: 1.6; margin: 0; }
 
   /* IMPACT LIST */
-  .impact-list { display: flex; flex-direction: column; gap: 10px; margin: 24px 0; max-width: 680px; }
+  .impact-list { display: flex; flex-direction: column; gap: 10px; margin: 24px 0; }
   .impact-item { display: flex; align-items: flex-start; gap: 14px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); padding: 16px 20px; }
   .impact-icon { width: 32px; height: 32px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
   .impact-icon svg { width: 16px; height: 16px; }
@@ -149,10 +149,10 @@
   .reflection-box { background: var(--ink); color: var(--white); border-radius: var(--radius-lg); padding: 40px; margin: 28px 0; }
   .reflection-box .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-mid); margin-bottom: 16px; }
   .reflection-box blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(20px, 2.5vw, 28px); line-height: 1.35; letter-spacing: -0.4px; color: var(--white); margin-bottom: 24px; font-style: italic; }
-  body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 600; letter-spacing: 0; }
-  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; max-width: 600px; }
+  body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 700; letter-spacing: 0; }
+  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px;  }
   .reflection-box p strong { color: rgba(255,255,255,0.9); font-weight: 600; }
-  .reflection-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 16px; max-width: 560px; }
+  .reflection-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 16px;  }
   .reflection-list li { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.6; padding-left: 18px; position: relative; }
   .reflection-list li::before { content: ''; position: absolute; left: 0; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--orange-mid); }
 
@@ -465,7 +465,7 @@
       <div class="eyebrow"><span data-zh>核心學習</span><span data-en>Key Learning</span></div>
       <blockquote data-zh>「研究的價值不只在於產生洞察，而在於能否被持續使用與累積。」</blockquote>
       <blockquote data-en>"The value of research lies not just in generating insights — but in whether those insights can be persistently used and accumulated."</blockquote>
-      <p data-zh>這個專案讓我意識到，<strong>研究本身也能夠產品化（productization）</strong>。過去的研究多半以報告作為最終交付，但我觀察到：即使內容有價值，仍難以在不同專案間被快速調用；知識往往隨時間與人員流動而流失。</p>
+      <p data-zh>這個專案讓我意識到，<strong>研究本身也能夠產品化</strong>。過去的研究多半以報告作為最終交付，但我觀察到：即使內容有價值，仍難以在不同專案間被快速調用；知識往往隨時間與人員流動而流失。</p>
       <p data-en>This project made me realize that <strong>research itself can be productized</strong>. Most research ends with a report — but I observed that even valuable content is hard to retrieve across projects, and knowledge tends to erode with time and personnel changes.</p>
       <p data-zh>這也讓我從「單一研究專案思維」轉向「設計可長期運作的資料系統」——不只是解決當下問題，而是讓資料結構能持續擴充與應用。</p>
       <p data-en>This shifted my thinking from "individual research project" to "designing systems that operate long-term" — not just solving today's problem, but building data structures that can continuously expand and be applied.</p>

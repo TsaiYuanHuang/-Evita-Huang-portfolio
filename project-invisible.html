@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invisible Disabilities Resource Guide — Evita Huang</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -33,6 +33,12 @@
   body.lang-en h3[data-en], body.lang-en h4[data-en], body.lang-en li[data-en],
   body.lang-en div[data-en] { display: block; }
 
+  /* Override display:flex on spectrum li */
+  body.lang-zh .spectrum-card ul li[data-zh] { display: flex; }
+  body.lang-en .spectrum-card ul li[data-en] { display: flex; }
+  body.lang-zh .spectrum-card ul li[data-en] { display: none; }
+  body.lang-en .spectrum-card ul li[data-zh] { display: none; }
+
   nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 64px; background: rgba(250,249,247,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ink-20); }
   .nav-logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
   .nav-right { display: flex; align-items: center; gap: 20px; }
@@ -46,16 +52,14 @@
   .case-hero { padding: 72px 5% 64px; max-width: 1000px; margin: 0 auto; }
   .case-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
   .case-type { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #0F6E56; background: var(--teal-light); padding: 4px 12px; border-radius: var(--radius-pill); }
-  .case-year { display: inline-flex; align-items: center; font-size: 13px; font-weight: 600; color: var(--orange); }
-  .case-year::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--orange); margin-left: 10px; }
-  .case-year.student { color: #0F6E56; }
-  .case-year.student::after { background: #0F6E56; }
+  .case-year { display: inline-flex; align-items: center; font-size: 13px; font-weight: 600; color: #0F6E56; }
+  .case-year::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #0F6E56; margin-left: 10px; }
   .case-role { font-size: 13px; color: var(--ink-60); font-weight: 500; }
-  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px; max-width: 760px; }
-  body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 600; }
-  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7; max-width: 640px; margin-bottom: 32px; }
+  .case-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1.08; letter-spacing: -1.2px; color: var(--ink); margin-bottom: 20px;  }
+  body.lang-zh .case-hero h1 { font-family: 'Noto Serif TC', serif; font-size: clamp(28px, 4vw, 48px); letter-spacing: 0; font-weight: 900; }
+  .case-hero .subtitle { font-size: 18px; color: var(--ink-60); line-height: 1.7;  margin-bottom: 32px; }
 
-  .team-credit { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 40px; padding: 20px 24px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md); max-width: 680px; }
+  .team-credit { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 40px; padding: 20px 24px; background: var(--white); border: 1px solid var(--ink-20); border-radius: var(--radius-md);  }
   .credit-group { display: flex; flex-direction: column; gap: 4px; }
   .credit-label { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); }
   .credit-value { font-size: 13px; color: var(--ink-60); line-height: 1.5; }
@@ -72,13 +76,13 @@
   .section-icon { width: 44px; height: 44px; background: var(--orange-light); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
   .section-icon svg { width: 22px; height: 22px; }
   .case-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
-  body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 600; font-size: clamp(22px, 2.5vw, 30px); }
-  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
+  body.lang-zh .case-section h2 { font-family: 'Noto Serif TC', serif; letter-spacing: 0; font-weight: 700; font-size: clamp(22px, 2.5vw, 30px); }
+  .case-section p { font-size: 16px; color: var(--ink-60); line-height: 1.8; margin-bottom: 16px;  }
   .case-section p:last-child { margin-bottom: 0; }
   .case-section p strong { color: var(--ink); font-weight: 600; }
   .divider { border: none; border-top: 1px solid var(--ink-20); margin: 64px 0; }
 
-  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0; max-width: 680px; }
+  .problem-callout { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 24px 28px; margin: 28px 0;  }
   .problem-callout p { color: var(--ink); font-size: 16px; line-height: 1.75; margin: 0; }
   .problem-callout p strong { color: var(--orange-dark); }
 
@@ -117,7 +121,7 @@
   .deliverable-icon svg { width: 22px; height: 22px; }
   .deliverable-tag { font-size: 11px; font-weight: 700; color: var(--orange-dark); background: var(--orange-light); padding: 3px 10px; border-radius: var(--radius-pill); margin-bottom: 6px; display: inline-block; }
   .deliverable-card h3 { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: -0.3px; color: var(--ink); margin: 0; }
-  body.lang-zh .deliverable-card h3 { font-family: 'Noto Serif TC', serif; font-size: 16px; font-weight: 600; letter-spacing: 0; }
+  body.lang-zh .deliverable-card h3 { font-family: 'Noto Serif TC', serif; font-size: 16px; font-weight: 700; letter-spacing: 0; }
   .deliverable-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
   .deliverable-card ul li { font-size: 13px; color: var(--ink-60); line-height: 1.55; padding-left: 16px; position: relative; }
   .deliverable-card ul li::before { content: '—'; position: absolute; left: 0; color: var(--orange-mid); }
@@ -132,8 +136,8 @@
   .reflection-box { background: var(--ink); color: var(--white); border-radius: var(--radius-lg); padding: 40px; margin: 28px 0; }
   .reflection-box .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-mid); margin-bottom: 16px; }
   .reflection-box blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(18px, 2.5vw, 26px); line-height: 1.35; letter-spacing: -0.4px; color: var(--white); margin-bottom: 24px; font-style: italic; }
-  body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 600; letter-spacing: 0; }
-  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px; max-width: 600px; }
+  body.lang-zh .reflection-box blockquote { font-family: 'Noto Serif TC', serif; font-style: normal; font-weight: 700; letter-spacing: 0; }
+  .reflection-box p { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 12px;  }
 
   .case-nav-footer { border-top: 1px solid var(--ink-20); padding: 40px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; max-width: 1000px; margin: 0 auto; }
   .cnf-back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--ink-60); text-decoration: none; transition: color 0.2s; }
@@ -144,6 +148,11 @@
   @media (max-width: 700px) {
     .two-col, .stakeholder-grid, .spectrum-row, .deliverable-grid { grid-template-columns: 1fr; }
   }
+
+  /* IMAGE STYLES */
+  .img-full { width: 100%; border-radius: var(--radius-lg); overflow: hidden; margin: 28px 0; border: 1px solid var(--ink-20); }
+  .img-full img { width: 100%; display: block; }
+  .img-caption { font-size: 13px; color: var(--ink-60); margin-top: 10px; font-style: italic; line-height: 1.5; }
 </style>
 </head>
 <body class="lang-zh">
@@ -183,6 +192,12 @@
 
   <div class="case-kpis" style="display:none;"></div>
 </header>
+
+<div style="max-width:1000px;margin:0 auto;padding:0 5% 0;">
+  <div class="img-full">
+    <img src="images/invisible-web-hero.png" alt="Invisible Disabilities Resource Guide web version">
+  </div>
+</div>
 
 <div class="case-body">
 
@@ -330,11 +345,25 @@
         </ul>
       </div>
     </div>
+
+    <div class="img-full">
+      <img src="images/invisible-paper.png" alt="Print resource guide full layout">
+    </div>
+    <p class="img-caption" data-zh>▲ 紙本資源指南完整版面——分為初期評估、就診須知、其他資源、家長社群四個區塊，可於新生入學時由老師發放給家長</p>
+    <p class="img-caption" data-en>▲ Full print resource guide layout — four sections covering early assessment, medical consultation, additional resources, and parent community; distributed by teachers at enrollment</p>
+
+    <div class="img-full">
+      <img src="images/invisible-paper-explanation.png" alt="Print resource guide with design explanation annotations">
+    </div>
+    <p class="img-caption" data-zh>▲ 紙本指南設計說明——每個區塊對應不同的家長使用情境與需求，設計邏輯以「降低資訊焦慮、引導逐步行動」為核心</p>
+    <p class="img-caption" data-en>▲ Print guide design rationale — each section addresses distinct parental use cases, designed around the principle of reducing information anxiety and guiding step-by-step action</p>
+
+    <div class="img-full">
+      <img src="images/invisible-web-explanation.png" alt="Web resource guide with design explanation annotations">
+    </div>
+    <p class="img-caption" data-zh>▲ 網頁版指南設計說明——以情境化問題為導引、一鍵下載為核心功能，搭配清晰的步驟指引，讓家長能隨時在手機上快速取得所需資源</p>
+    <p class="img-caption" data-en>▲ Web guide design rationale — contextualized questions as entry points, one-click downloads as the core function, with clear step-by-step guidance for parents to quickly access resources on mobile</p>
   </section>
-
-  <hr class="divider">
-
-  <!-- IMPACT -->
   <section class="case-section">
     <div class="section-eyebrow"><span data-zh>社會影響</span><span data-en>Impact</span></div>
     <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E8622A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
